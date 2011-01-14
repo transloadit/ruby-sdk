@@ -84,7 +84,7 @@ Methods suffixed by a question mark provide a more readable way of quering
 state (e.g., `assembly.completed` vs. checking the result of `assembly[:ok]`).
 Methods suffixed by a bang make a live query against the Transloadit HTTP API.
 
-### 2. Uploading multiple images
+### 2. Uploading multiple files
 
     Multiple files can be given to the `assembly` method in order to upload more
     than one file in the same request. You can pass a single robot for the
