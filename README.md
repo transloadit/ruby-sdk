@@ -97,3 +97,7 @@ Methods suffixed by a bang make a live query against the Transloadit HTTP API.
           steps: store
         )
 
+## Compatibility
+
+This gem should work on 1.8.6, 1.8.7, and 1.9.2. If it doesn't, please file a
+[bug report](https://github.com/stouset/transloadit/issues).
