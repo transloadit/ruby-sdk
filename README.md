@@ -49,7 +49,7 @@ Now that we have the robots, we create an assembly (which is just a request to
 process a file or set of files) and let Transloadit do the rest.
 
     assembly = transloadit.assembly open('image.jpg'),
-      :steps => [ resize, store ]
+      steps: [ resize, store ]
 
 When the `assembly` method returns, the file has been uploaded but may not yet
 be done processing. We can use the returned object to check if processing has
@@ -94,5 +94,6 @@ Methods suffixed by a bang make a live query against the Transloadit HTTP API.
           open('puppies.jpg'),
           open('kittens.jpg'),
           open('ferrets.jpg'),
-          :steps => store
+          steps: store
         )
+
