@@ -24,8 +24,8 @@ Then create a Transloadit instance, which will maintain your authentication
 credentials and allow us to make requests to the API.
 
     transloadit = Transloadit.new(
-      :key    => 'transloadit-auth-key',
-      :secret => 'transloadit-auth-secret'
+      key:    'transloadit-auth-key',
+      secret: 'transloadit-auth-secret'
     )
 
 ### 1. Resize and store an image
