@@ -56,27 +56,33 @@ be done processing. We can use the returned object to check if processing has
 completed, or examine other attributes of the request.
 
     # returns the unique API ID of the assembly
-    assembly.id # => '9bd733a...'
+    assembly[:id] # => '9bd733a...'
     
     # returns the API URL endpoint for the assembly
-    assembly.url # => 'http://api2.vivian.transloadit.com/assemblies/9bd733a...'
+    assembly[:url] # => 'http://api2.vivian.transloadit.com/assemblies/9bd733a...'
+    
+    # checks how many bytes were expected / received by transloadit
+    assembly[:bytes_expected] # => 92933
+    assembly[:bytes_received] # => 92933
     
     # checks if all processing has been completed
     assembly.completed? # => false
     
     # cancels further processing on the assembly
     assembly.cancel! # => true
-    
-    # checks how many bytes were expected / received by transloadit
-    assembly.bytes_expected # => 92933
-    assembly.bytes_received # => 92933
-    
+
 It's important to note that none of these queries are "live" (with the
 exception of the `cancel!` method). They all check the response given by the
 API at the time the assembly was created. You have to explicitly ask the
 assembly to reload its results from the API.
 
     assembly.reload!
+
+In general, you use hash accessor syntax to query any direct attribute from
+the [response](http://transloadit.com/docs/assemblies#response-format).
+Methods suffixed by a question mark provide a more readable way of quering
+state (e.g., `assembly.completed` vs. checking the result of `assembly[:ok]`).
+Methods suffixed by a bang make a live query against the Transloadit HTTP API.
 
 ### 2. Uploading multiple images
 
