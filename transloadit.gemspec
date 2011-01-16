@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.require_paths = %w{ lib }
   
+  gem.add_dependency 'json'
   gem.add_development_dependency 'yard'
   gem.add_development_dependency 'bluecloth' # for YARD rdoc formatting
 end

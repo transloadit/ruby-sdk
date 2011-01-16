@@ -1,4 +1,6 @@
 class Transloadit
+  autoload :Robot, 'transloadit/robot'
+  
   attr_accessor :key
   attr_accessor :secret
   
