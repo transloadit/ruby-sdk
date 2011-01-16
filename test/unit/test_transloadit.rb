@@ -1,28 +1,40 @@
 require 'test_helper'
 
-class TestTransloadit < MiniTest::Unit::TestCase
-  def test_initializer_works
-    key    = 'a'
-    secret = 'b'
-    t      = Transloadit.new(:key => key, :secret => secret)
-    
-    assert_equal key,    t.key
-    assert_equal secret, t.secret
+describe Transloadit do
+  before do
+    @key    = 'a'
+    @secret = 'b'
   end
   
-  def test_initializer_requires_key
-    assert_raises ArgumentError do
-      Transloadit.new(:secret => 'x')
+  it 'must allow initialization' do
+    t = Transloadit.new(:key => @key, :secret => @secret)
+    t.must_be_kind_of Transloadit
+  end
+  
+  it 'must not be initialized with no arguments' do
+    lambda { Transloadit.new }.must_raise ArgumentError
+  end
+  
+  it 'must require a key' do
+    lambda { Transloadit.new(:secret => @secret) }.must_raise ArgumentError
+  end
+  
+  it 'must not require a secret' do
+    t = Transloadit.new(:key => @key)
+    t.must_be_kind_of Transloadit
+  end
+  
+  describe 'when initialized' do
+    before do
+      @transloadit = Transloadit.new(:key => @key, :secret => @secret)
     end
-  end
-  
-  def test_initializer_does_not_require_secret
-    assert_kind_of Transloadit, Transloadit.new(:key => 'x')
-  end
-  
-  def test_initializer_with_no_arguments
-    assert_raises ArgumentError do
-      Transloadit.new
+    
+    it 'must allow access to the key' do
+      @transloadit.key.must_equal @key
+    end
+    
+    it 'must allow access to the secret' do
+      @transloadit.secret.must_equal @secret
     end
   end
 end
