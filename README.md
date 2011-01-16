@@ -86,16 +86,16 @@ Transloadit HTTP API.
 
 ### 2. Uploading multiple files
 
-    Multiple files can be given to the `assembly` method in order to upload more
-    than one file in the same request. You can pass a single robot for the
-    `steps` parameter, without having to wrap it in an Array.
+Multiple files can be given to the `assembly` method in order to upload more
+than one file in the same request. You can pass a single robot for the
+`steps` parameter, without having to wrap it in an Array.
 
-        assembly = transloadit.assembly(
-          open('puppies.jpg'),
-          open('kittens.jpg'),
-          open('ferrets.jpg'),
-          steps: store
-        )
+    assembly = transloadit.assembly(
+      open('puppies.jpg'),
+      open('kittens.jpg'),
+      open('ferrets.jpg'),
+      steps: store
+    )
 
 ## Compatibility
 
