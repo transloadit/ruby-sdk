@@ -36,5 +36,13 @@ describe Transloadit do
     it 'must allow access to the secret' do
       @transloadit.secret.must_equal @secret
     end
+    
+    it 'must create robots' do
+      robot = @transloadit.robot('/image/resize', :width => 320)
+
+      robot.must_be_kind_of Transloadit::Robot
+      robot.type.   must_equal('/image/resize')
+      robot.options.must_equal(:width => 320)
+    end
   end
 end

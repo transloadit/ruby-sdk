@@ -23,6 +23,16 @@ class Transloadit
     _ensure_key_provided
   end
   
+  #
+  # Creates a Transloadit::Robot describing a step in an upload assembly.
+  #
+  # @param [String] type the type of robot to create (e.g., '/image/resize')
+  # @param [Hash] options a hash of options to customize the robot.
+  #
+  def robot(type, options = {})
+    Transloadit::Robot.new(type, options)
+  end
+  
   private
   
   def _ensure_key_provided
