@@ -4,9 +4,8 @@ Fantastic file uploading for your web application
 
 ## Description
 
-This is the official Ruby gem for the [Transloadit](transloadit.com) API. You
-can use it to upload files to the REST API and to ease the creation of
-Transloadit-enabled upload forms.
+This is the official Ruby gem for [Transloadit](transloadit.com). It allows
+you to automate uploading files through the Transloadit REST API
 
 ## Install
 
@@ -81,8 +80,9 @@ assembly to reload its results from the API.
 In general, you use hash accessor syntax to query any direct attribute from
 the [response](http://transloadit.com/docs/assemblies#response-format).
 Methods suffixed by a question mark provide a more readable way of quering
-state (e.g., `assembly.completed` vs. checking the result of `assembly[:ok]`).
-Methods suffixed by a bang make a live query against the Transloadit HTTP API.
+state (e.g., `assembly.completed?` vs. checking the result of
+`assembly[:ok]`). Methods suffixed by a bang make a live query against the
+Transloadit HTTP API.
 
 ### 2. Uploading multiple files
 
