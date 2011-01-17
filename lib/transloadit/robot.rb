@@ -28,12 +28,15 @@ class Transloadit::Robot
   end
   
   #
-  # Automatically generates a unique name for the step that uses this robot.
+  # Automatically generates a unique, 32-character hex name for the step that
+  # uses this robot.
   #
   # @return [String] a randomly generated name
   #
   def name
-    @name ||= rand(2 ** 160).to_s(16)
+    # rand() is "good enough" for this; we generate 128 random bits (same
+    # length as a UUID for future compatibility) and convert it to hex
+    @name ||= rand(2 ** 128).to_s(16).rjust(32, '0')
   end
   
   #

@@ -26,6 +26,10 @@ describe Transloadit::Robot do
       @robot.name.wont_equal Transloadit::Robot.new('').name
     end
     
+    it 'must generate a name with 32 hex characters' do
+      @robot.name.length.must_equal 32
+    end
+    
     it 'must remember the type' do
       @robot.type.must_equal @type
     end
