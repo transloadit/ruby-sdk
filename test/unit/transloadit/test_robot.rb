@@ -60,14 +60,14 @@ describe Transloadit::Robot do
     end
     
     it 'must allow using the original file as input' do
-      @robot.use :original
+      @robot.use(:original).must_equal ':original'
       @robot.options[:use].must_equal ':original'
     end
     
     it 'must allow using another robot' do
       input = Transloadit::Robot.new '/video/thumbnail'
       
-      @robot.use input
+      @robot.use(input).must_equal [ input.name ]
       @robot.options[:use].must_equal [ input.name ]
     end
     
@@ -77,18 +77,18 @@ describe Transloadit::Robot do
         Transloadit::Robot.new('/image/resize')
       ]
       
-      @robot.use inputs
+      @robot.use(inputs).must_equal inputs.map(&:name)
       @robot.options[:use].must_equal inputs.map(&:name)
     end
     
     it 'must allow using nothing' do
       @robot.use :original
-      @robot.use nil
+      @robot.use(nil).must_equal nil
       @robot.options.keys.wont_include(:use)
     end
     
     it 'must include the used robots in the hash output' do
-      @robot.use :original
+      @robot.use(:original).must_equal ':original'
       @robot.to_h[@robot.name][:use].must_equal ':original'
     end
   end
