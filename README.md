@@ -97,6 +97,33 @@ than one file in the same request. You can pass a single robot for the
       steps: store
     )
 
+### 3. Parallel Assembly
+
+Transloadit allows you to perform several processing steps in parallel. You
+simply need to `use` other steps. Following 
+[their example](http://transloadit.com/docs/assemblies#special-parameters):
+
+    encode = transloadit.robot '/video/encode', { ... }
+    thumbs = transloadit.robot '/video/thumbs', { ... }
+    export = transloadit.robot '/s3/store',     { ... }
+    
+    export.use [ encode, thumbs ]
+    
+    transloadit.assembly(
+      open('ninja-cat.mpg'),
+      steps: [ encode, thumbs, export ]
+    )
+
+You can also use the original uploaded file by passing the Symbol `:original`.
+
+Check the YARD documentation for more information on using
+[use](http://rubydoc.info/github/stouset/transloadit/master/Transloadit/Robot#use-instance_method).
+
+## Documentation
+
+Up-to-date YARD documentation is
+[automatically generated](http://rubydoc.info/github/stouset/transloadit/master/frames).
+
 ## Compatibility
 
 This gem should work on 1.8.6, 1.8.7, and 1.9.2. If it doesn't, please file a
