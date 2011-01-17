@@ -15,6 +15,9 @@ namespace :test do
     desc 'Run tests against all supported Rubies'
     task :multiruby do
       system "rvm #{RUBIES.join(',')} ruby bundle exec rake test"
+      
+      require 'pathname'
+      Pathname.glob('**/*.rbc').each {|path| path.unlink }
     end
     
     namespace :multiruby do
@@ -26,10 +29,6 @@ namespace :test do
         RUBIES.each {|ruby| system "rvm #{ruby} gemset create transloadit" }
         system "rvm #{RUBIES.join(',')} gem install bundler --no-ri --no-rdoc"
         system "rvm #{RUBIES.join(',')} ruby bundle install"
-        
-        # clean up after Rubinius
-        require 'pathname'
-        Pathname.glob('**/*.rbc').each {|path| path.unlink }
       end
     end
   rescue Errno::ENOENT
