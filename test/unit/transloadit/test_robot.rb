@@ -77,8 +77,8 @@ describe Transloadit::Robot do
         Transloadit::Robot.new('/image/resize')
       ]
       
-      @robot.use(inputs).must_equal inputs.map(&:name)
-      @robot.options[:use].must_equal inputs.map(&:name)
+      @robot.use(inputs).must_equal inputs.map {|i| i.name }
+      @robot.options[:use].must_equal inputs.map {|i| i.name }
     end
     
     it 'must allow using nothing' do

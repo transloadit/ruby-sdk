@@ -22,6 +22,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = %w{ lib }
   
   gem.add_dependency 'json'
+  gem.add_development_dependency 'rake'
   gem.add_development_dependency 'minitest' # needed for < 1.9.2
   gem.add_development_dependency 'yard'
   gem.add_development_dependency 'bluecloth' # for YARD rdoc formatting

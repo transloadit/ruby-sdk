@@ -57,7 +57,7 @@ class Transloadit::Robot
     
     self.options[:use] = case input
       when Symbol then input.inspect
-      when Array  then input.map(&:name)
+      when Array  then input.map {|i| i.name }
       else             [ input.name ]
     end
   end
