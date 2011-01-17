@@ -1,11 +1,11 @@
 # transloadit
 
-Fantastic file uploading for your web application
+Fantastic file uploading for your web application.
 
 ## Description
 
 This is the official Ruby gem for [Transloadit](transloadit.com). It allows
-you to automate uploading files through the Transloadit REST API
+you to automate uploading files through the Transloadit REST API.
 
 ## Install
 
