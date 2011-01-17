@@ -43,6 +43,9 @@ class Transloadit
   
   private
   
+  #
+  # Raises an ArgumentError if no {#key} has been assigned.
+  #
   def _ensure_key_provided
     unless self.key
       raise ArgumentError, 'an authentication key must be provided'
