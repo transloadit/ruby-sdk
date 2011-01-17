@@ -130,3 +130,8 @@ for the latest [git master](http://rubydoc.info/github/stouset/transloadit/maste
 At a minimum, this gem should work on 1.9.2, 1.8.7, 1.8.6, and Rubinius. If it
 doesn't, please file a [bug report](https://github.com/stouset/transloadit/issues).
 Compatibility patches for other Rubies are welcomed.
+
+You can also run `rake test:multiruby` to test transloadit against all
+supported Rubies. Run `rake test:multiruby:setup` once beforehand, though, to
+set up the RVM environments. [RVM](rvm.beginrescueend.com/) must be installed
+in order to test against multiple Rubies.
