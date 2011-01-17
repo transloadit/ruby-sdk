@@ -127,8 +127,8 @@ for the latest [git master](http://rubydoc.info/github/stouset/transloadit/maste
 
 ## Compatibility
 
-At a minimum, this gem should work on 1.9.2, 1.8.7, 1.8.6, and Rubinius. If it
-doesn't, please file a [bug report](https://github.com/stouset/transloadit/issues).
+At a minimum, this gem should work on MRI 1.9.2, 1.8.7, 1.8.6, and Rubinius
+1.2.0. If it doesn't, please file a [bug report](https://github.com/stouset/transloadit/issues).
 Compatibility patches for other Rubies are welcomed.
 
 You can also run `rake test:multiruby` to test transloadit against all
