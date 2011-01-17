@@ -21,9 +21,15 @@ namespace :test do
       desc 'Prepare supported rubiesfor testing'
       task :setup do
         warn 'Preparing multiruby. This may take awhile...'
+        
+        # create gemsets, install bundler, bundle
         RUBIES.each {|ruby| system "rvm #{ruby} gemset create transloadit" }
         system "rvm #{RUBIES.join(',')} gem install bundler --no-ri --no-rdoc"
         system "rvm #{RUBIES.join(',')} ruby bundle install"
+        
+        # clean up after Rubinius
+        require 'pathname'
+        Pathname.glob('**/*.rbc').each {|path| path.unlink }
       end
     end
   rescue Errno::ENOENT
