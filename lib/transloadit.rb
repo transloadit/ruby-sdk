@@ -1,7 +1,10 @@
 class Transloadit
   autoload :Robot, 'transloadit/robot'
   
+  # @return [String] your Transloadit auth key
   attr_accessor :key
+  
+  # @return [String] your Transloadit auth secret, for signing requests
   attr_accessor :secret
   
   #
@@ -26,8 +29,9 @@ class Transloadit
   #
   # Creates a Transloadit::Robot describing a step in an upload assembly.
   #
-  # @param [String] type the type of robot to create (e.g., '/image/resize')
-  # @param [Hash] options a hash of options to customize the robot.
+  # @param  [String] type the type of robot to create (e.g., '/image/resize')
+  # @param  [Hash]   options a hash of options to customize the robot.
+  # @return [Robot]  the created Robot
   #
   def robot(type, options = {})
     Transloadit::Robot.new(type, options)
