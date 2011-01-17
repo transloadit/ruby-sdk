@@ -117,12 +117,13 @@ simply need to `use` other steps. Following
 You can also use the original uploaded file by passing the Symbol `:original`.
 
 Check the YARD documentation for more information on using
-[use](http://rubydoc.info/github/stouset/transloadit/master/Transloadit/Robot#use-instance_method).
+[use](http://rubydoc.info/gems/transloadit/frames/Transloadit/Robot#use-instance_method).
 
 ## Documentation
 
-Up-to-date YARD documentation is
-[automatically generated](http://rubydoc.info/github/stouset/transloadit/master/frames).
+Up-to-date YARD documentation is automatically generated. You can view the
+docs for the [released gem](http://rubydoc.info/gems/transloadit/frames) or
+for the latest [git master](http://rubydoc.info/github/stouset/transloadit/master/frames).
 
 ## Compatibility
 
