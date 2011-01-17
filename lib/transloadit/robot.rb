@@ -7,7 +7,7 @@ require 'json'
 # specific to the Robot's type.
 #
 # See the Transloadit {documentation}[http://transloadit.com/docs/assemblies]
-# for futher information on specific robots and their parameters.
+# for futher information robot types and their parameters.
 #
 class Transloadit::Robot
   # @return [String] the type of robot
