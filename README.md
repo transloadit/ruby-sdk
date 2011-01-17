@@ -47,35 +47,39 @@ to store the image in our S3 bucket.
 Now that we have the robots, we create an assembly (which is just a request to
 process a file or set of files) and let Transloadit do the rest.
 
-    assembly = transloadit.assembly open('image.jpg'),
+    assembly = transloadit.assembly(
       steps: [ resize, store ]
+    )
+    
+    response = assembly.process! open('lolcat.jpg')
 
-When the `assembly` method returns, the file has been uploaded but may not yet
+When the `process!` method returns, the file has been uploaded but may not yet
 be done processing. We can use the returned object to check if processing has
 completed, or examine other attributes of the request.
 
     # returns the unique API ID of the assembly
-    assembly[:id] # => '9bd733a...'
+    response[:assembly_id] # => '9bd733a...'
     
     # returns the API URL endpoint for the assembly
-    assembly[:url] # => 'http://api2.vivian.transloadit.com/assemblies/9bd733a...'
+    response[:assembly_url] # => 'http://api2.vivian.transloadit.com/assemblies/9bd733a...'
     
     # checks how many bytes were expected / received by transloadit
-    assembly[:bytes_expected] # => 92933
-    assembly[:bytes_received] # => 92933
+    response[:bytes_expected] # => 92933
+    response[:bytes_received] # => 92933
     
     # checks if all processing has been completed
-    assembly.completed? # => false
+    response.completed? # => false
     
     # cancels further processing on the assembly
-    assembly.cancel! # => true
+    response.cancel! # => true
 
 It's important to note that none of these queries are "live" (with the
 exception of the `cancel!` method). They all check the response given by the
 API at the time the assembly was created. You have to explicitly ask the
 assembly to reload its results from the API.
 
-    assembly.reload!
+    # reloads the response's contents from the REST API
+    response.reload!
 
 In general, you use hash accessor syntax to query any direct attribute from
 the [response](http://transloadit.com/docs/assemblies#response-format).
@@ -86,15 +90,16 @@ Transloadit HTTP API.
 
 ### 2. Uploading multiple files
 
-Multiple files can be given to the `assembly` method in order to upload more
-than one file in the same request. You can pass a single robot for the
+Multiple files can be given to the `process!` method in order to upload more
+than one file in the same request. You can also pass a single robot for the
 `steps` parameter, without having to wrap it in an Array.
-
-    assembly = transloadit.assembly(
+    
+    assembly = transloadit.assembly(steps: store)
+    
+    response = assembly.process!(
       open('puppies.jpg'),
       open('kittens.jpg'),
-      open('ferrets.jpg'),
-      steps: store
+      open('ferrets.jpg')
     )
 
 ### 3. Parallel Assembly
@@ -110,9 +115,8 @@ simply need to `use` other steps. Following
     export.use [ encode, thumbs ]
     
     transloadit.assembly(
-      open('ninja-cat.mpg'),
       steps: [ encode, thumbs, export ]
-    )
+    ).process! open('ninja-cat.mpg')
 
 You can also use the original uploaded file by passing the Symbol `:original`.
 
