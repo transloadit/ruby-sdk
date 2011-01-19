@@ -51,9 +51,9 @@ process a file or set of files) and let Transloadit do the rest.
       steps: [ resize, store ]
     )
     
-    response = assembly.process! open('lolcat.jpg')
+    response = assembly.submit! open('lolcat.jpg')
 
-When the `process!` method returns, the file has been uploaded but may not yet
+When the `submit!` method returns, the file has been uploaded but may not yet
 be done processing. We can use the returned object to check if processing has
 completed, or examine other attributes of the request.
 
@@ -90,13 +90,13 @@ Transloadit HTTP API.
 
 ### 2. Uploading multiple files
 
-Multiple files can be given to the `process!` method in order to upload more
+Multiple files can be given to the `submit!` method in order to upload more
 than one file in the same request. You can also pass a single step for the
 `steps` parameter, without having to wrap it in an Array.
     
     assembly = transloadit.assembly(steps: store)
     
-    response = assembly.process!(
+    response = assembly.submit!(
       open('puppies.jpg'),
       open('kittens.jpg'),
       open('ferrets.jpg')
@@ -116,7 +116,7 @@ simply need to `use` other steps. Following
     
     transloadit.assembly(
       steps: [ encode, thumbs, export ]
-    ).process! open('ninja-cat.mpg')
+    ).submit! open('ninja-cat.mpg')
 
 You can also use the original uploaded file by passing the Symbol `:original`.
 
