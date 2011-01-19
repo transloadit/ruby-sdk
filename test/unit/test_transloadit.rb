@@ -37,12 +37,20 @@ describe Transloadit do
       @transloadit.secret.must_equal @secret
     end
     
-    it 'must create robots' do
-      robot = @transloadit.robot('/image/resize', :width => 320)
+    it 'must create steps' do
+      step = @transloadit.step('/image/resize', :width => 320)
 
-      robot.must_be_kind_of Transloadit::Robot
-      robot.type.   must_equal('/image/resize')
-      robot.options.must_equal(:width => 320)
+      step.must_be_kind_of Transloadit::Step
+      step.robot.  must_equal '/image/resize'
+      step.options.must_equal :width => 320
+    end
+    
+    it 'must create assemblies' do                     
+      step     = @transloadit.step('')
+      assembly = @transloadit.assembly :steps => step
+      
+      assembly.must_be_kind_of Transloadit::Assembly
+      assembly.steps.must_equal [ step ]
     end
   end
 end

@@ -32,19 +32,19 @@ credentials and allow us to make requests to the API.
 This example demonstrates how you can create an assembly to resize an image
 and store the result on [Amazon S3](http://aws.amazon.com/s3/).
 
-First, we create two robots: one to resize the image to 320x240, and another
-to store the image in our S3 bucket.
+First, we create two steps: one to resize the image to 320x240, and another to
+store the image in our S3 bucket.
 
-    resize = transloadit.robot '/image/resize',
+    resize = transloadit.step '/image/resize',
       width:  320,
       height: 240
 
-    store  = transloadit.robot '/s3/store',
+    store  = transloadit.step '/s3/store',
       key:    'aws-access-key-id',
       secret: 'aws-secret-access-key
       bucket: 'bucket-name'
 
-Now that we have the robots, we create an assembly (which is just a request to
+Now that we have the steps, we create an assembly (which is just a request to
 process a file or set of files) and let Transloadit do the rest.
 
     assembly = transloadit.assembly(
@@ -91,7 +91,7 @@ Transloadit HTTP API.
 ### 2. Uploading multiple files
 
 Multiple files can be given to the `process!` method in order to upload more
-than one file in the same request. You can also pass a single robot for the
+than one file in the same request. You can also pass a single step for the
 `steps` parameter, without having to wrap it in an Array.
     
     assembly = transloadit.assembly(steps: store)
@@ -108,9 +108,9 @@ Transloadit allows you to perform several processing steps in parallel. You
 simply need to `use` other steps. Following 
 [their example](http://transloadit.com/docs/assemblies#special-parameters):
 
-    encode = transloadit.robot '/video/encode', { ... }
-    thumbs = transloadit.robot '/video/thumbs', { ... }
-    export = transloadit.robot '/s3/store',     { ... }
+    encode = transloadit.step '/video/encode', { ... }
+    thumbs = transloadit.step '/video/thumbs', { ... }
+    export = transloadit.step '/s3/store',     { ... }
     
     export.use [ encode, thumbs ]
     
@@ -121,7 +121,7 @@ simply need to `use` other steps. Following
 You can also use the original uploaded file by passing the Symbol `:original`.
 
 Check the YARD documentation for more information on using
-[use](http://rubydoc.info/gems/transloadit/frames/Transloadit/Robot#use-instance_method).
+[use](http://rubydoc.info/gems/transloadit/frames/Transloadit/Step#use-instance_method).
 
 ## Documentation
 

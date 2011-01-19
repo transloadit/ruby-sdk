@@ -3,7 +3,7 @@
 # for usage instructions.
 #
 class Transloadit
-  autoload :Robot, 'transloadit/robot'
+  autoload :Step,     'transloadit/step'
   
   # @return [String] your Transloadit auth key
   attr_accessor :key
@@ -31,14 +31,14 @@ class Transloadit
   end
   
   #
-  # Creates a Transloadit::Robot describing a step in an upload assembly.
+  # Creates a Transloadit::Step describing a step in an upload assembly.
   #
-  # @param  [String] type the type of robot to create (e.g., '/image/resize')
-  # @param  [Hash]   options a hash of options to customize the robot.
-  # @return [Robot]  the created Robot
+  # @param  [String] robot the robot to use in this step (e.g., '/image/resize')
+  # @param  [Hash]   options a hash of options to customize the robot
+  # @return [Step]   the created Step
   #
-  def robot(type, options = {})
-    Transloadit::Robot.new(type, options)
+  def step(robot, options = {})
+    Transloadit::Step.new(robot, options)
   end
   
   private
