@@ -127,12 +127,12 @@ Check the YARD documentation for more information on using
 
 Up-to-date YARD documentation is automatically generated. You can view the
 docs for the [released gem](http://rubydoc.info/gems/transloadit/frames) or
-for the latest [git master](http://rubydoc.info/github/stouset/transloadit/master/frames).
+for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/master/frames).
 
 ## Compatibility
 
 At a minimum, this gem should work on MRI 1.9.2, 1.8.7, 1.8.6, and Rubinius
-1.2.0. If it doesn't, please file a [bug report](https://github.com/stouset/transloadit/issues).
+1.2.0. If it doesn't, please file a [bug report](https://github.com/transloadit/ruby-sdk/issues).
 Compatibility patches for other Rubies are welcomed.
 
 You can also run `rake test:multiruby` to test transloadit against all
