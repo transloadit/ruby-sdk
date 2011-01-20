@@ -41,7 +41,7 @@ store the image in our S3 bucket.
 
     store  = transloadit.step '/s3/store',
       key:    'aws-access-key-id',
-      secret: 'aws-secret-access-key
+      secret: 'aws-secret-access-key',
       bucket: 'bucket-name'
 
 Now that we have the steps, we create an assembly (which is just a request to
