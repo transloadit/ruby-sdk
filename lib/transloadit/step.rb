@@ -69,13 +69,13 @@ class Transloadit::Step
   # @return [String] a human-readable version of the Step
   #
   def inspect
-    self.to_h[self.name].inspect
+    self.to_hash[self.name].inspect
   end
   
   #
   # @return [Hash] a Transloadit-compatible Hash of the Step's contents
   #
-  def to_h
+  def to_hash
     { self.name => options.merge(:robot => self.robot) }
   end
   
@@ -83,7 +83,7 @@ class Transloadit::Step
   # @return [String] JSON-encoded String containing the Step's hash contents
   #
   def to_json
-    self.to_h.to_json
+    self.to_hash.to_json
   end
   
   protected

@@ -53,22 +53,22 @@ describe Transloadit do
       assembly = @transloadit.assembly :steps => step
       
       assembly.must_be_kind_of Transloadit::Assembly
-      assembly.steps.must_equal step.to_h
+      assembly.steps.must_equal step.to_hash
     end
     
     it 'must inspect like a hash' do
-      @transloadit.inspect.must_equal @transloadit.to_h.inspect
+      @transloadit.inspect.must_equal @transloadit.to_hash.inspect
     end
     
     it 'must produce Transloadit-compatible hash output' do
-      @transloadit.to_h.must_equal(
+      @transloadit.to_hash.must_equal(
         :key    => @key,
         :secret => @secret
       )
     end
     
     it 'must produce Transloadit-compatible JSON output' do
-      @transloadit.to_json.must_equal @transloadit.to_h.to_json
+      @transloadit.to_json.must_equal @transloadit.to_hash.to_json
     end
   end
   
@@ -78,11 +78,11 @@ describe Transloadit do
     end
     
     it 'must not include a secret in its hash output' do
-      @transloadit.to_h.keys.wont_include :secret
+      @transloadit.to_hash.keys.wont_include :secret
     end
     
     it 'must not include a secret in its JSON output' do
-      @transloadit.to_json.must_equal @transloadit.to_h.to_json
+      @transloadit.to_json.must_equal @transloadit.to_hash.to_json
     end
   end
 end

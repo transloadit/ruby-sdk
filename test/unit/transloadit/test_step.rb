@@ -43,11 +43,11 @@ describe Transloadit::Step do
     end
     
     it 'must inspect like a hash' do
-      @step.inspect.must_equal @step.to_h[@step.name].inspect
+      @step.inspect.must_equal @step.to_hash[@step.name].inspect
     end
     
     it 'must produce Transloadit-compatible hash output' do
-      @step.to_h.must_equal(
+      @step.to_hash.must_equal(
         @step.name => {
           :robot  => @robot,
           :key    => @key,
@@ -58,7 +58,7 @@ describe Transloadit::Step do
     end
     
     it 'must produce Transloadit-compatible JSON output' do
-      @step.to_json.must_equal @step.to_h.to_json
+      @step.to_json.must_equal @step.to_hash.to_json
     end
   end
   
@@ -96,8 +96,8 @@ describe Transloadit::Step do
     end
     
     it 'must include the used steps in the hash output' do
-      @step.use(:original).        must_equal ':original'
-      @step.to_h[@step.name][:use].must_equal ':original'
+      @step.use(:original).           must_equal ':original'
+      @step.to_hash[@step.name][:use].must_equal ':original'
     end
   end
 end
