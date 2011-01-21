@@ -7,7 +7,7 @@ require 'json'
 # +options+ specific to the chosen robot.
 #
 # See the Transloadit {documentation}[http://transloadit.com/docs/assemblies]
-# for futher information robot types and their parameters.
+# for futher information on robot types and their parameters.
 #
 class Transloadit::Step
   # @return [String] the robot to use
@@ -19,7 +19,7 @@ class Transloadit::Step
   #
   # Creates a new Step with the given +robot+.
   #
-  # @param [String] the robot to use
+  # @param [String] robot   the robot to use
   # @param [Hash]   options the step's configuration options
   #
   def initialize(robot, options = {})
