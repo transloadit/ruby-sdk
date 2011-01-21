@@ -41,6 +41,28 @@ class Transloadit
     Transloadit::Step.new(robot, options)
   end
   
+  #
+  # @return [String] a human-readable version of the Transloadit.
+  #
+  def inspect
+    self.to_h.inspect
+  end
+  
+  #
+  # @return [Hash] a Transloadit-compatible Hash of the instance's contents
+  #
+  def to_h
+    { :key    => self.key,
+      :secret => self.secret }.delete_if {|_,v| v.nil? }
+  end
+  
+  #
+  # @return [String] JSON-encoded String containing the object's hash contents
+  #
+  def to_json
+    self.to_h.to_json
+  end
+  
   private
   
   #

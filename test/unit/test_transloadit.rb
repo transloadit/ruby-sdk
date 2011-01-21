@@ -26,7 +26,10 @@ describe Transloadit do
   
   describe 'when initialized' do
     before do
-      @transloadit = Transloadit.new(:key => @key, :secret => @secret)
+      @transloadit = Transloadit.new(
+        :key    => @key,
+        :secret => @secret
+      )
     end
     
     it 'must allow access to the key' do
@@ -50,7 +53,36 @@ describe Transloadit do
       assembly = @transloadit.assembly :steps => step
       
       assembly.must_be_kind_of Transloadit::Assembly
-      assembly.steps.must_equal [ step ]
+      assembly.steps.must_equal step.to_h
+    end
+    
+    it 'must inspect like a hash' do
+      @transloadit.inspect.must_equal @transloadit.to_h.inspect
+    end
+    
+    it 'must produce Transloadit-compatible hash output' do
+      @transloadit.to_h.must_equal(
+        :key    => @key,
+        :secret => @secret
+      )
+    end
+    
+    it 'must produce Transloadit-compatible JSON output' do
+      @transloadit.to_json.must_equal @transloadit.to_h.to_json
+    end
+  end
+  
+  describe 'with no secret' do
+    before do
+      @transloadit = Transloadit.new(:key => @key)
+    end
+    
+    it 'must not include a secret in its hash output' do
+      @transloadit.to_h.keys.wont_include :secret
+    end
+    
+    it 'must not include a secret in its JSON output' do
+      @transloadit.to_json.must_equal @transloadit.to_h.to_json
     end
   end
 end
