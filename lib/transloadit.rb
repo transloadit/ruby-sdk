@@ -16,12 +16,12 @@ class Transloadit
   #
   # @param [Hash] options a hash of options, which can be any of:
   #
-  #   [key]    your auth key from the 
-  #            {credentials}[https://transloadit.com/accounts/credentials]
-  #            page (required)
-  #   [secret] your auth secret from the
-  #            {credentials}[https://transloadit.com/accounts/credentials]
-  #            page, for signing requests (optional)
+  #   [+:key+]    your auth key from the 
+  #               {credentials}[https://transloadit.com/accounts/credentials]
+  #               page (required)
+  #   [+:secret+] your auth secret from the
+  #               {credentials}[https://transloadit.com/accounts/credentials]
+  #               page, for signing requests (optional)
   #
   def initialize(options = {})
     self.key    = options[:key]
