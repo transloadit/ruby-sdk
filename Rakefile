@@ -5,17 +5,17 @@ RUBIES = %w{ 1.9.2 1.8.7 1.8.6 rbx-1.2.0 }
 Rake::TestTask.new do |test|
   test.libs   << 'test'
   test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
 end
 
 namespace :test do
   begin
-    `rvm -v`
+    `rvm -v` # raise an exception if RVM isn't installed
     
     desc 'Run tests against all supported Rubies'
     task :multiruby do
-      system "rvm #{RUBIES.join(',')} ruby bundle exec rake test"
+      system "rvm #{RUBIES.join(',')} ruby bundle exec rake -s test"
       
+      # clean up after Rubinius
       require 'pathname'
       Pathname.glob('**/*.rbc').each {|path| path.unlink }
     end
