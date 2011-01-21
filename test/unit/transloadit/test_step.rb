@@ -42,6 +42,10 @@ describe Transloadit::Step do
       )
     end
     
+    it 'must inspect like a hash' do
+      @step.inspect.must_equal @step.to_h[@step.name].inspect
+    end
+    
     it 'must produce Transloadit-compatible hash output' do
       @step.to_h.must_equal(
         @step.name => {
