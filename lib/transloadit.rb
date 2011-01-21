@@ -3,6 +3,7 @@
 # for usage instructions.
 #
 class Transloadit
+  autoload :Assembly, 'transloadit/assembly'
   autoload :Step,     'transloadit/step'
   
   # @return [String] your Transloadit auth key
@@ -39,6 +40,23 @@ class Transloadit
   #
   def step(robot, options = {})
     Transloadit::Step.new(robot, options)
+  end
+  
+  #
+  # Creates a Transloadit::Assembly ready to be sent to the REST API.
+  #
+  # @param [Hash] options a hash of options taken by the API, including:
+  #
+  #   [+:steps+]       a Step or Array of Steps that describes the processing
+  #                    to be performed by this assembly
+  #   [+:notify_url+]  a URL to be POST to when the Assembly has completed
+  #   [+:template_id+] the ID of a {template}[http://transloadit.com/docs/templates]
+  #                    to base this assembly off of from, which can be found on
+  #                    your account's {templates}[https://transloadit.com/templates]
+  #                    page
+  #
+  def assembly(*options)
+    Transloadit::Assembly.new(self, *options)
   end
   
   #

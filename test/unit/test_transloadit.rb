@@ -56,6 +56,16 @@ describe Transloadit do
       assembly.steps.must_equal step.to_hash
     end
     
+    it 'must create assemblies with multiple steps' do
+      steps = [
+        @transloadit.step(''),
+        @transloadit.step(''),
+      ]
+      
+      assembly = @transloadit.assembly :steps => steps
+      assembly.steps.must_equal steps.inject({}) {|h,s| h.merge s }
+    end
+    
     it 'must inspect like a hash' do
       @transloadit.inspect.must_equal @transloadit.to_hash.inspect
     end
