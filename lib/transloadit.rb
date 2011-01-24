@@ -7,6 +7,7 @@ require 'json'
 class Transloadit
   autoload :Assembly, 'transloadit/assembly'
   autoload :Step,     'transloadit/step'
+  autoload :VERSION,  'transloadit/version'
   
   # @return [String] your Transloadit auth key
   attr_accessor :key
