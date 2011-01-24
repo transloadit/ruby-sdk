@@ -73,8 +73,9 @@ class Transloadit
   # @return [Hash] a Transloadit-compatible Hash of the instance's contents
   #
   def to_hash
-    { :key    => self.key,
-      :secret => self.secret }.delete_if {|_,v| v.nil? }
+    { :key => self.key }.tap do |hash|
+      hash.update(:expires => _generate_expiry) unless self.secret.nil?
+    end
   end
   
   #
@@ -93,5 +94,9 @@ class Transloadit
     unless self.key
       raise ArgumentError, 'an authentication key must be provided'
     end
+  end
+  
+  def _generate_expiry(duration = 5 * 60)
+    (Time.now + duration).utc.strftime('%Y/%m/%d %H:%M:%S+00:00')
   end
 end
