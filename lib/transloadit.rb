@@ -1,3 +1,5 @@
+require 'json'
+
 #
 # Implements the Transloadit REST API in Ruby. Check the {file:README.md README}
 # for usage instructions.

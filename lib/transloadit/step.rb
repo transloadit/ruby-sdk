@@ -1,5 +1,4 @@
 require 'transloadit'
-require 'json'
 
 #
 # Implements the concept of a step in the Transloadit API. Each Step has a
