@@ -6,6 +6,8 @@ require 'json'
 #
 class Transloadit
   autoload :Assembly, 'transloadit/assembly'
+  autoload :Request,  'transloadit/request'
+  autoload :Response, 'transloadit/response'
   autoload :Step,     'transloadit/step'
   autoload :VERSION,  'transloadit/version'
   

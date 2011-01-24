@@ -21,7 +21,9 @@ Gem::Specification.new do |gem|
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.require_paths = %w{ lib }
   
+  gem.add_dependency 'rest-client'
   gem.add_dependency 'json'
+  
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'minitest' # needed for < 1.9.2
   gem.add_development_dependency 'yard'
