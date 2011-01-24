@@ -53,8 +53,8 @@ class Transloadit::Assembly
   def to_hash
     self.options.merge(
       :auth  => self.transloadit.to_hash,
-      :steps => self.steps
-    )
+      :steps => self.steps,
+    ).delete_if {|k,v| v.nil? }
   end
   
   #
