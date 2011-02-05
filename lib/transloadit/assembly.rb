@@ -36,8 +36,24 @@ class Transloadit::Assembly
     _wrap_steps_in_hash options[:steps]
   end
   
+  #
+  # Submits the assembly for processing.
+  #
+  # @param [Array<IO>] *ios   the files for the assembly to process
+  # @param [Hash]      params any additional params to pass to the request
+  #
   def submit!(*ios)
-    # TODO: process upload
+    params = extract_options!(ios)
+    
+    ios.each.with_index do |f, i|
+      params.update "file_#{i}" => f
+    end
+    
+    request = Transloadit::Request.new '/assemblies',
+      self.transloadit.secret,
+      self.to_hash
+    
+    request.post(params)
   end
   
   #
@@ -85,5 +101,9 @@ class Transloadit::Assembly
       else
         steps.inject({}) {|h, s| h.update s }
     end
+  end
+  
+  def extract_options!(*args)
+    args.last.is_a?(Hash) ? args.pop : {}
   end
 end

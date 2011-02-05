@@ -36,6 +36,12 @@ class Transloadit::Request
     api[url].post(payload, API_HEADERS) {|a,b,c| [a,b,c] }
   end
   
+  def initialize(url, secret = nil, params = {})
+    self.url    = url
+    self.secret = secret
+    self.params = params.to_hash
+  end
+  
   def get
     self.class.get url
   end
@@ -44,21 +50,8 @@ class Transloadit::Request
     self.class.delete url
   end
   
-  def post(*files)
-    payload = self.to_hash
-    files   = files.each.with_index.inject({}) {|h, (f, i)| h.update "file_#{i}" => f }
-    
-    self.class.post url, payload.merge(files)
-  end
-  
-  def initialize(url, secret = nil, params = {})
-    self.url    = url
-    self.secret = secret
-    self.params = params.to_hash
-  end
-  
-  def signature
-    self.class._hmac(self.secret, self.params.to_json) if self.secret
+  def post(params = {})
+    self.class.post url, self.to_hash.merge(params)
   end
   
   def inspect
@@ -72,6 +65,12 @@ class Transloadit::Request
   
   def to_json
     self.to_hash.to_json
+  end
+  
+  protected
+  
+  def signature
+    self.class._hmac(self.secret, self.params.to_json) if self.secret
   end
   
   private
