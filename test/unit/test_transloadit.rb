@@ -71,10 +71,9 @@ describe Transloadit do
     end
     
     it 'must produce Transloadit-compatible hash output' do
-      @transloadit.to_hash.must_equal(
-        :key    => @key,
-        :secret => @secret
-      )
+      @transloadit.to_hash[:key]    .must_equal @key
+      @transloadit.to_hash[:expires].
+        must_match %r{\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\+00:00}
     end
     
     it 'must produce Transloadit-compatible JSON output' do
