@@ -118,7 +118,8 @@ simply need to `use` other steps. Following
       steps: [ encode, thumbs, export ]
     ).submit! open('ninja-cat.mpg')
 
-You can also use the original uploaded file by passing the Symbol `:original`.
+You can also tell a step to use the original uploaded file by passing the
+Symbol `:original` instead of another step.
 
 Check the YARD documentation for more information on using
 [use](http://rubydoc.info/gems/transloadit/frames/Transloadit/Step#use-instance_method).
