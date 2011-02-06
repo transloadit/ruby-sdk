@@ -1,0 +1,36 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://api2.transloadit.com:80//assemblies
+    body: params=%7B%22steps%22%3A%7B%221286c301620f09cc095168cfeb43a2b3%22%3A%7B%22robot%22%3A%22%2Fvideo%2Fthumbs%22%7D%7D%2C%22redirect_url%22%3A%22http%3A%2F%2Ffoo.bar%2F%22%2C%22auth%22%3A%7B%22key%22%3A%22%22%7D%7D&file_0=%23%3CStringIO%3A0x000001029762d0%3E
+    headers: 
+      accept: 
+      - "*/*; q=0.5, application/xml"
+      accept-encoding: 
+      - gzip, deflate
+      user-agent: 
+      - Transloadit Ruby SDK 0.0.1
+      content-length: 
+      - "254"
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 400
+      message: Bad Request
+    headers: 
+      access-control-allow-headers: 
+      - X-Requested-With, Content-Type, Accept, Content-Length
+      access-control-allow-methods: 
+      - POST, GET, PUT, DELETE, OPTIONS
+      access-control-allow-origin: 
+      - "*"
+      content-type: 
+      - text/plain
+      content-length: 
+      - "92"
+      connection: 
+      - keep-alive
+    body: "{\"error\":\"GET_ACCOUNT_UNKNOWN_AUTH_KEY\",\"message\":\"could not get account, unknown auth key\"}"
+    http_version: "1.1"

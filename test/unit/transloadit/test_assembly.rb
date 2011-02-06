@@ -35,6 +35,16 @@ describe Transloadit::Assembly do
       @assembly.steps.must_equal @step.to_hash
     end
     
+    it 'must not wrap a nil step' do
+      @assembly.options[:steps] = nil
+      @assembly.steps.must_equal nil
+    end
+    
+    it 'must not wrap a hash step' do
+      @assembly.options[:steps] = { :foo => 1 }
+      @assembly.steps.must_equal :foo => 1
+    end
+    
     it 'must inspect like a hash' do
       @assembly.inspect.must_equal @assembly.to_hash.inspect
     end
@@ -49,6 +59,13 @@ describe Transloadit::Assembly do
     
     it 'must produce Transloadit-compatible JSON output' do
       @assembly.to_json.must_equal @assembly.to_hash.to_json
+    end
+    
+    it 'must submit files for upload' do
+      VCR.use_cassette 'submit_assembly' do
+        @assembly.submit! StringIO.new('foo')
+        skip 'Test response returned'
+      end
     end
   end
   
