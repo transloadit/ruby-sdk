@@ -24,16 +24,16 @@ class Transloadit::Request
     self.api self.get('/instances/bored')['api2_host']
   end
   
-  def self.get(url)
-    api[url].get(API_HEADERS)
+  def self.get(url, &extension)
+    self.request!(extension) { api[url].get(API_HEADERS) }
   end
   
-  def self.delete(url)
-    api[url].delete(API_HEADERS)
+  def self.delete(url, &extension)
+    self.request!(extension) { api[url].delete(API_HEADERS) }
   end
   
-  def self.post(url, payload)
-    api[url].post(payload, API_HEADERS) {|a,b,c| [a,b,c] }
+  def self.post(url, payload, &extension)
+    self.request!(extension) { api[url].post(payload, API_HEADERS) }
   end
   
   def initialize(url, secret = nil, params = {})
@@ -42,16 +42,16 @@ class Transloadit::Request
     self.params = params.to_hash
   end
   
-  def get
-    self.class.get url
+  def get(&extension)
+    self.class.get(url, &extension)
   end
   
-  def delete
-    self.class.delete url
+  def delete(&extension)
+    self.class.delete(url, &extension)
   end
   
-  def post(params = {})
-    self.class.post url, self.to_hash.merge(params)
+  def post(params = {}, &extension)
+    self.class.post(url, self.to_hash.merge(params), &extension)
   end
   
   def inspect
@@ -68,6 +68,12 @@ class Transloadit::Request
   end
   
   protected
+  
+  def self.request!(extension, &request)
+    response = request.call rescue $!.response
+    
+    Transloadit::Response.new(response, &extension)
+  end
   
   def signature
     self.class._hmac(self.secret, self.params.to_json) if self.secret

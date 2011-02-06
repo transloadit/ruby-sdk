@@ -63,8 +63,9 @@ describe Transloadit::Assembly do
     
     it 'must submit files for upload' do
       VCR.use_cassette 'submit_assembly' do
-        @assembly.submit! StringIO.new('foo')
-        skip 'Test response returned'
+        response = @assembly.submit! open('lib/transloadit/version.rb')
+        response.code.must_equal 302
+        response.headers[:location].must_match %r{^http://foo.bar/}
       end
     end
   end
