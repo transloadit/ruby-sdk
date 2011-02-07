@@ -9,7 +9,7 @@ class Transloadit::Request
   
   HMAC_ALGORITHM = OpenSSL::Digest::Digest.new('sha1')
   
-  attr_accessor :url
+  attr_reader   :url
   attr_accessor :secret
   attr_accessor :params
     
@@ -21,37 +21,36 @@ class Transloadit::Request
   end
   
   def self.bored!
-    self.api self.get('/instances/bored')['api2_host']
-  end
-  
-  def self.get(url, &extension)
-    self.request!(extension) { api[url].get(API_HEADERS) }
-  end
-  
-  def self.delete(url, &extension)
-    self.request!(extension) { api[url].delete(API_HEADERS) }
-  end
-  
-  def self.post(url, payload, &extension)
-    self.request!(extension) { api[url].post(payload, API_HEADERS) }
+    self.api self.new('/instances/bored').get['api2_host']
   end
   
   def initialize(url, secret = nil, params = {})
-    self.url    = url
+    self.url    = URI.parse(url.to_s)
     self.secret = secret
     self.params = params.to_hash
   end
   
-  def get(&extension)
-    self.class.get(url, &extension)
+  def api
+    @api ||=
+      self.url.host ? RestClient::Resource.new(self.url.host) : self.class.api
   end
   
-  def delete(&extension)
-    self.class.delete(url, &extension)
+  def get(params = {})
+    self.request! do
+      self.api[url.path].get(API_HEADERS)
+    end
   end
   
-  def post(params = {}, &extension)
-    self.class.post(url, self.to_hash.merge(params), &extension)
+  def delete(params = {})
+    self.request! do
+      self.api[url.path].delete(API_HEADERS)
+    end
+  end
+  
+  def post(payload = {})    
+    self.request! do
+      self.api[url.path].post(self.to_hash.update(payload), API_HEADERS)
+    end
   end
   
   def inspect
@@ -69,10 +68,12 @@ class Transloadit::Request
   
   protected
   
-  def self.request!(extension, &request)
-    response = request.call rescue $!.response
-    
-    Transloadit::Response.new(response, &extension)
+  attr_writer :url
+  
+  def request!(&request)
+    Transloadit::Response.new(request.call)
+  rescue RestClient::Exception => e
+    Transloadit::Response.new(e.response)
   end
   
   def signature

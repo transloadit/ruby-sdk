@@ -43,7 +43,7 @@ class Transloadit::Assembly
   # @param [Hash]      params any additional params to pass to the request
   #
   def submit!(*ios)
-    params = extract_options!(ios)
+    params = _extract_options!(ios)
     
     ios.each.with_index do |f, i|
       params.update "file_#{i}" => f
@@ -53,7 +53,7 @@ class Transloadit::Assembly
       self.transloadit.secret,
       self.to_hash
     
-    request.post(params)
+    request.post(params).extend!(Transloadit::Response::Assembly)
   end
   
   #
@@ -103,7 +103,7 @@ class Transloadit::Assembly
     end
   end
   
-  def extract_options!(*args)
+  def _extract_options!(*args)
     args.last.is_a?(Hash) ? args.pop : {}
   end
 end
