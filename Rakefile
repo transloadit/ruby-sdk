@@ -45,6 +45,7 @@ begin
     yard.options = %w{
       --title  Transloadit
       --readme README.md
+      --markup rdoc
     }
   end
 rescue
