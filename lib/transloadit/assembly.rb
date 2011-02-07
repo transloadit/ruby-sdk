@@ -22,7 +22,8 @@ class Transloadit::Assembly
   # instance.
   #
   # @param [Transloadit] transloadit the associated Transloadit instance
-  # @param [Hash]        options     the configuration for the Assembly
+  # @param [Hash]        options     the configuration for the Assembly;
+  #   see {Transloadit#assembly}
   #
   def initialize(transloadit, options = {})
     self.transloadit = transloadit
@@ -37,10 +38,16 @@ class Transloadit::Assembly
   end
   
   #
-  # Submits the assembly for processing.
+  # Submits the assembly for processing. Accepts as many IO objects as you
+  # wish to process in the assembly. The last argument is an optional Hash
+  # of parameters to send along with the request.
   #
-  # @param [Array<IO>] *ios   the files for the assembly to process
-  # @param [Hash]      params any additional params to pass to the request
+  # @overload submit!(*ios)
+  #   @param [Array<IO>] *ios   the files for the assembly to process
+  #
+  # @overload submit!(*ios, params = {})
+  #   @param [Array<IO>] *ios   the files for the assembly to process
+  #   @param [Hash]      params additional POST data to submit with the request
   #
   def submit!(*ios)
     params = _extract_options!(ios)
@@ -103,6 +110,13 @@ class Transloadit::Assembly
     end
   end
   
+  #
+  # Extracts the last argument from a set of arguments if it's a hash.
+  # Otherwise, returns an empty hash.
+  #
+  # @param  *args  the arguments to search for an options hash
+  # @return [Hash] the options passed, otherwise an empty hash
+  #
   def _extract_options!(*args)
     args.last.is_a?(Hash) ? args.pop : {}
   end

@@ -4,7 +4,10 @@ require 'rest-client'
 require 'openssl'
 
 class Transloadit::Request
+  # The default Transloadit API endpoint.
   API_ENDPOINT = 'http://api2.transloadit.com/'
+  
+  # The default headers to send to the API.
   API_HEADERS  = { 'User-Agent' => %{Transloadit Ruby SDK #{Transloadit::VERSION}} }
   
   HMAC_ALGORITHM = OpenSSL::Digest::Digest.new('sha1')

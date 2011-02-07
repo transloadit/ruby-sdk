@@ -1,3 +1,4 @@
 class Transloadit
-  VERSION = '0.0.1' # The current version of Transloadit.
+  # The current version of Transloadit.
+  VERSION = '0.0.1'
 end

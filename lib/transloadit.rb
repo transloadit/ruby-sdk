@@ -21,13 +21,12 @@ class Transloadit
   # Creates a new instance of the Transloadit API.
   #
   # @param [Hash] options a hash of options, which can be any of:
-  #
-  #   [+:key+]    your auth key from the 
-  #               {credentials}[https://transloadit.com/accounts/credentials]
-  #               page (required)
-  #   [+:secret+] your auth secret from the
-  #               {credentials}[https://transloadit.com/accounts/credentials]
-  #               page, for signing requests (optional)
+  # @option options [String] :key your auth key from the
+  #   {credentials}[https://transloadit.com/accounts/credentials] page
+  #   (required)
+  # @option options [String] :secret your auth secret from the
+  #   {credentials}[https://transloadit.com/accounts/credentials] page, for
+  #   signing requests (optional)
   #
   def initialize(options = {})
     self.key    = options[:key]
@@ -40,7 +39,9 @@ class Transloadit
   # Creates a Transloadit::Step describing a step in an upload assembly.
   #
   # @param  [String] robot the robot to use in this step (e.g., '/image/resize')
-  # @param  [Hash]   options a hash of options to customize the robot
+  # @param  [Hash]   options a hash of options to customize the robot's
+  #   operation; see the {Transloadit documentation}[http://transloadit.com/docs/]
+  #   for robot-specific options
   # @return [Step]   the created Step
   #
   def step(robot, options = {})
@@ -50,18 +51,19 @@ class Transloadit
   #
   # Creates a Transloadit::Assembly ready to be sent to the REST API.
   #
-  # @param [Hash] options a hash of options taken by the API, including:
+  # @param [Hash] options additional parameters to send with the assembly
+  #   submission; for a full list of parameters, see the official
+  #   documentation on {templates}[http://transloadit.com/docs/templates].
+  # @option options [Step, Array<Step>] :steps the steps to perform in this
+  #   assembly
+  # @option options [String] :notify_url A URL to be POSTed when the assembly
+  #   has finished processing
+  # @option options [String] :template_id the ID of a
+  #   {template}[https://transloadit.com/templates] to use instead of
+  #   specifying options here directly
   #
-  #   [+:steps+]       a Step or Array of Steps that describes the processing
-  #                    to be performed by this assembly
-  #   [+:notify_url+]  a URL to be POST to when the Assembly has completed
-  #   [+:template_id+] the ID of a {template}[http://transloadit.com/docs/templates]
-  #                    to base this assembly off of from, which can be found on
-  #                    your account's {templates}[https://transloadit.com/templates]
-  #                    page
-  #
-  def assembly(*options)
-    Transloadit::Assembly.new(self, *options)
+  def assembly(options = {})
+    Transloadit::Assembly.new(self, options)
   end
   
   #
@@ -98,6 +100,14 @@ class Transloadit
     end
   end
   
+  #
+  # Automatically generates API-compatible request expiration times 5 minutes
+  # from now.
+  #
+  # @param [Integer] duration the number of seconds from now to set the
+  #   expiry time
+  # @return [String] an API-compatible timestamp
+  #
   def _generate_expiry(duration = 5 * 60)
     (Time.now + duration).utc.strftime('%Y/%m/%d %H:%M:%S+00:00')
   end

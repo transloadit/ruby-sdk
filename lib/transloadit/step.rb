@@ -19,7 +19,8 @@ class Transloadit::Step
   # Creates a new Step with the given +robot+.
   #
   # @param [String] robot   the robot to use
-  # @param [Hash]   options the step's configuration options
+  # @param [Hash]   options the configuration options for the robot; see
+  #   {Transloadit#step} for possible values
   #
   def initialize(robot, options = {})
     self.robot   = robot
