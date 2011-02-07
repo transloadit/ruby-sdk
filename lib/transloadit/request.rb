@@ -30,7 +30,7 @@ class Transloadit::Request
   def initialize(url, secret = nil, params = {})
     self.url    = URI.parse(url.to_s)
     self.secret = secret
-    self.params = params.to_hash
+    self.params = params
   end
   
   def api

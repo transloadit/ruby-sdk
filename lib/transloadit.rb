@@ -77,9 +77,9 @@ class Transloadit
   # @return [Hash] a Transloadit-compatible Hash of the instance's contents
   #
   def to_hash
-    { :key => self.key }.tap do |hash|
-      hash.update(:expires => _generate_expiry) unless self.secret.nil?
-    end
+    result = { :key => self.key }
+    result.update(:expires => _generate_expiry) unless self.secret.nil?
+    result
   end
   
   #
