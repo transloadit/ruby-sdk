@@ -7,7 +7,7 @@ require 'transloadit'
 # at which point Transloadit will process and store the files according to the
 # rules in the Assembly.
 #
-# See the Transloadit {documentation}[http://transloadit.com/docs/assemblies]
+# See the Transloadit {documentation}[http://transloadit.com/docs/building-assembly-instructions]
 # for futher information on Assemblies and their parameters.
 #
 class Transloadit::Assembly

@@ -5,7 +5,7 @@ require 'transloadit'
 # +robot+ (e.g., '/image/resize' or '/video/thumbnail') and a hash of
 # +options+ specific to the chosen robot.
 #
-# See the Transloadit {documentation}[http://transloadit.com/docs/assemblies]
+# See the Transloadit {documentation}[http://transloadit.com/docs/building-assembly-instructions]
 # for futher information on robot types and their parameters.
 #
 class Transloadit::Step
@@ -45,7 +45,7 @@ class Transloadit::Step
   #
   # @param [Step, Array<Step>, Symbol, nil] input The input
   #   step to use. Follows the conventions outlined in the
-  #   online  {documentation}[http://transloadit.com/docs/assemblies#special-parameters].
+  #   online  {documentation}[http://transloadit.com/docs/building-assembly-instructions#special-parameters].
   #   The symbol +:original+ specifies that the original file should be sent
   #   to the robot. A Step indicates that this Step's output should be used
   #   as the input to this one. Likewise, an array of Steps tells Transloadit
