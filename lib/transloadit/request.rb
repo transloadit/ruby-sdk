@@ -85,6 +85,7 @@ class Transloadit::Request
     payload.update :params    => payload[:params].to_json
     payload.update :signature => self.signature(payload[:params])
     payload.delete :signature if payload[:signature].nil?
+    payload
   end
   
   def to_query(params = nil)
@@ -94,6 +95,7 @@ class Transloadit::Request
     escape = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
     params = URI.escape(params.to_json, escape)
     
+    # TODO: fix this to not depend on to_hash
     '?' + self.to_hash.
       update(:params => params).
       map {|k,v| "#{k}=#{v}" }.

@@ -53,7 +53,7 @@ class Transloadit::Assembly
     params  = _extract_options!(*ios)
     payload = { :params => self.to_hash.update(params) }
     
-    ios.each_with_index {|f, i| payload.update "file_#{i}" => f }
+    ios.each_with_index {|f, i| payload.update :"file_#{i}" => f }
     
     request = Transloadit::Request.new '/assemblies',
       self.transloadit.secret
