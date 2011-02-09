@@ -55,14 +55,6 @@ class Transloadit::Request
     self.url.to_s.inspect
   end
   
-  def to_hash
-    { :signature => self.signature }.delete_if {|k,v| v.nil? }
-  end
-  
-  def to_json
-    self.to_hash.to_json
-  end
-  
   protected
   
   attr_writer :url
@@ -85,11 +77,14 @@ class Transloadit::Request
     end
   end
   
-  def to_payload(params = nil)
-    return self.to_hash if params.nil?
-    return self.to_hash if params.respond_to?(:empty?) and params.empty?
+  def to_payload(payload = nil)
+    return {} if payload.nil?
+    return {} if payload.respond_to?(:empty?) and payload.empty?
     
-    self.to_hash.update(:params => params.to_json)
+    # TODO: refactor this, don't update a hash that's not ours
+    payload.update :params    => payload[:params].to_json
+    payload.update :signature => self.signature(payload[:params])
+    payload.delete :signature if payload[:signature].nil?
   end
   
   def to_query(params = nil)
@@ -111,8 +106,8 @@ class Transloadit::Request
     Transloadit::Response.new e.response
   end
   
-  def signature
-    self.class._hmac(self.secret, self.params.to_json) if self.secret
+  def signature(params)
+    self.class._hmac(self.secret, params.to_json) if self.secret
   end
   
   private

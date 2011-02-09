@@ -50,16 +50,15 @@ class Transloadit::Assembly
   #   @param [Hash]      params additional POST data to submit with the request
   #
   def submit!(*ios)
-    params = self.to_hash.update _extract_options!(*ios)
+    params  = _extract_options!(*ios)
+    payload = { :params => self.to_hash.update(params) }
     
-    ios.each_with_index do |f, i|
-      params.update "file_#{i}" => f
-    end
+    ios.each_with_index {|f, i| payload.update "file_#{i}" => f }
     
     request = Transloadit::Request.new '/assemblies',
       self.transloadit.secret
     
-    request.post(params).extend!(Transloadit::Response::Assembly)
+    request.post(payload).extend!(Transloadit::Response::Assembly)
   end
   
   #
