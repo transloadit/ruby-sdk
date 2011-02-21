@@ -10,6 +10,6 @@ module Transloadit::Response::Assembly
   end
   
   def completed?
-    r['ok'] == 'ASSEMBLY_COMPLETED'
+    self['ok'] == 'ASSEMBLY_COMPLETED'
   end
 end
