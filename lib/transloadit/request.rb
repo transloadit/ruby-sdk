@@ -29,32 +29,65 @@ class Transloadit::Request
   # resources. This is called automatically the first time a request is made.
   #
   def self.bored!
-    self.api(self.bored)
+    self.api self.bored
   end
   
+  #
+  # Prepares a request against an endpoint URL, optionally with an encryption
+  # secret. If only a path is passed, the API will automatically determine the
+  # best server to use. If a full URL is given, the host provided will be
+  # used.
+  #
+  # @param [String] url    the API endpoint
+  # @param [String] secret an optional secret with which to sign the request
+  #
   def initialize(url, secret = nil)
     self.url    = URI.parse(url.to_s)
     self.secret = secret
   end
   
+  #
+  # Performs an HTTP GET to the request's URL. Takes an optional hash of
+  # query params.
+  #
+  # @param  [Hash] params additional query parameters
+  # @return [Transloadit::Response] the response
+  #
   def get(params = {})
     self.request! do
       self.api[url.path + self.to_query(params)].get(API_HEADERS)
     end
   end
   
+  #
+  # Performs an HTTP DELETE to the request's URL. Takes an optional hash of
+  # query params.
+  #
+  # @param  [Hash] params additional query parameters
+  # @return [Transloadit::Response] the response
+  #
   def delete(params = {})
     self.request! do
       self.api[url.path + self.to_query(params)].delete(API_HEADERS)
     end
   end
   
+  #
+  # Performs an HTTP POST to the request's URL. Takes an optional hash
+  # containing the form-encoded payload.
+  #
+  # @param  [Hash] payload the payload to form-encode along with the POST
+  # @return [Transloadit::Response] the response
+  #
   def post(payload = {})
     self.request! do
       self.api[url.path].post(self.to_payload(payload), API_HEADERS)
     end
   end
   
+  #
+  # @return [String] a human-readable version of the prepared Request
+  #
   def inspect
     self.url.to_s.inspect
   end
@@ -63,15 +96,37 @@ class Transloadit::Request
   
   attr_writer :url
   
+  #
+  # Locates the API server with the smallest job queue.
+  #
+  # @return [String] the hostname of the most bored server
+  #
   def self.bored
     self.new(API_ENDPOINT + '/instances/bored').get['api2_host']
   end
   
+  #
+  # Sets or retrieves the base URI of the API endpoint.
+  #
+  # @overload self.api
+  #   @return [RestClient::Resource] the current API endpoint
+  #
+  # @overload self.api(uri)
+  #   @param [String] the hostname or URI to set the API endpoint to
+  #   @return [RestClient::Resource] the new API endpoint
+  #
   def self.api(uri = nil)
     @api   = RestClient::Resource.new(uri) if uri
     @api ||= RestClient::Resource.new(self.bored)
   end
   
+  #
+  # Retrieves the current API endpoint. If the URL of the request contains a
+  # hostname, then the hostname is used as the base endpoint of the API.
+  # Otherwise uses the class-level API base.
+  #
+  # @return [RestClient::Resource] the API endpoint for this instance
+  #
   def api
     @api ||= begin
       case self.url.host
@@ -81,6 +136,14 @@ class Transloadit::Request
     end
   end
   
+  #
+  # Updates the POST payload passed to be compliant with the Transloadit API
+  # spec. JSONifies the value for the +params+ key and signs the request with
+  # the instance's +secret+ if it exists.
+  #
+  # @param  [Hash] the payload to update
+  # @return [Hash] the Transloadit-compliant POST payload
+  #
   def to_payload(payload = nil)
     return {} if payload.nil?
     return {} if payload.respond_to?(:empty?) and payload.empty?
@@ -92,32 +155,57 @@ class Transloadit::Request
     payload
   end
   
+  #
+  # Updates the GET/DELETE params hash to be compliant with the Transloadit
+  # API by URI escaping and encoding the params hash, and attaching a
+  # signature.
+  #
+  # @param  [Hash] params the params to encode
+  # @return [String] the URI-encoded and escaped query parameters
+  #
   def to_query(params = nil)
     return '' if params.nil?
     return '' if params.respond_to?(:empty?) and params.empty?
     
-    escape = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
-    params = URI.escape(params.to_json, escape)
+    escape    = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
+    params    = {
+      :params    => URI.escape(params.to_json, escape),
+      :signature => self.signature(params)
+    }
     
-    # TODO: fix this to not depend on to_hash
-    '?' + self.to_hash.
-      update(:params => params).
-      map {|k,v| "#{k}=#{v}" }.
-      join('&')
+    '?' + params.map {|k,v| "#{k}=#{v}" if v }.compact.join('&')
   end
   
+  #
+  # Wraps a request's results in a Transloadit::Response, even if an exception
+  # is raised by RestClient.
+  #
   def request!(&request)
     Transloadit::Response.new request.call
   rescue RestClient::Exception => e
     Transloadit::Response.new e.response
   end
   
+  #
+  # Computes the HMAC digest of the params hash, if a secret was given to the
+  # instance.
+  #
+  # @param  [Hash] params the payload to sign
+  # @return [String] the HMAC signature for the params
+  #
   def signature(params)
     self.class._hmac(self.secret, params.to_json) if self.secret
   end
   
   private
   
+  #
+  # Computes an HMAC digest from the key and message.
+  #
+  # @param  [String] key     the secret key to sign with
+  # @param  [String] message the message to sign
+  # @return [String]         the signature of the message
+  #
   def self._hmac(key, message)
     OpenSSL::HMAC.hexdigest HMAC_ALGORITHM, key, message
   end

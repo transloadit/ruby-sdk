@@ -1,0 +1,32 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :get
+    uri: http://api2.transloadit.com:80/instances/bored
+    body: 
+    headers: 
+      accept: 
+      - "*/*; q=0.5, application/xml"
+      accept-encoding: 
+      - gzip, deflate
+      user-agent: 
+      - Transloadit Ruby SDK 0.1.2
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: OK
+    headers: 
+      access-control-allow-headers: 
+      - X-Requested-With, Content-Type, Accept, Content-Length
+      access-control-allow-methods: 
+      - POST, GET, PUT, DELETE, OPTIONS
+      access-control-allow-origin: 
+      - "*"
+      content-type: 
+      - text/plain
+      content-length: 
+      - "94"
+      connection: 
+      - keep-alive
+    body: "{\"ok\":\"BORED_INSTANCE_FOUND\",\"host\":\"jane.transloadit.com\",\"api2_host\":\"jane.transloadit.com\"}"
+    http_version: "1.1"
