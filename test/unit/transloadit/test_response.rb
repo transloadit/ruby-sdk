@@ -5,8 +5,7 @@ describe Transloadit::Response do
   
   it 'must allow delegate initialization' do
     response = Transloadit::Response.new('test')
-    response.must_be_kind_of String
-    response.must_equal      'test'
+    response.class.must_equal Transloadit::Response
   end
   
   describe 'when initialized' do
