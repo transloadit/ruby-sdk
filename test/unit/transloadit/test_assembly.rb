@@ -12,7 +12,7 @@ describe Transloadit::Assembly do
   
   describe 'when initialized' do
     before do    
-      @step     = @transloadit.step '/video/thumbs'
+      @step     = @transloadit.step 'thumbs', '/video/thumbs'
       @redirect = 'http://foo.bar/'
       
       @assembly = Transloadit::Assembly.new @transloadit,
@@ -72,8 +72,8 @@ describe Transloadit::Assembly do
   
   describe 'with multiple steps' do
     before do
-      @encode = @transloadit.step '/video/encode'
-      @thumbs = @transloadit.step '/video/thumbs'
+      @encode = @transloadit.step 'encode', '/video/encode'
+      @thumbs = @transloadit.step 'thumbs', '/video/thumbs'
       
       @assembly = Transloadit::Assembly.new @transloadit,
         :steps => [ @encode, @thumbs ]
