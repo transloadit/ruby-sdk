@@ -1,0 +1,36 @@
+--- 
+- !ruby/struct:VCR::HTTPInteraction 
+  request: !ruby/struct:VCR::Request 
+    method: :post
+    uri: http://api2.transloadit.com:80/assemblies
+    body: params=%7B%22auth%22%3A%7B%22key%22%3A%22%22%7D%2C%22steps%22%3A%7B%22encode%22%3A%7B%22robot%22%3A%22%2Fvideo%2Fencode%22%7D%7D%7D
+    headers: 
+      accept: 
+      - "*/*; q=0.5, application/xml"
+      accept-encoding: 
+      - gzip, deflate
+      user-agent: 
+      - Transloadit Ruby SDK 0.1.2
+      content-length: 
+      - "163"
+      content-type: 
+      - application/x-www-form-urlencoded
+  response: !ruby/struct:VCR::Response 
+    status: !ruby/struct:VCR::ResponseStatus 
+      code: 200
+      message: OK
+    headers: 
+      access-control-allow-headers: 
+      - X-Requested-With, Content-Type, Accept, Content-Length
+      access-control-allow-methods: 
+      - POST, GET, PUT, DELETE, OPTIONS
+      access-control-allow-origin: 
+      - "*"
+      content-type: 
+      - text/plain
+      content-length: 
+      - "482"
+      connection: 
+      - keep-alive
+    body: "{\"ok\":\"ASSEMBLY_COMPLETED\",\"message\":\"The assembly was successfully completed.\",\"assembly_id\":\"e5169f80d080adb1ccf99ed64e046a9b\",\"assembly_url\":\"http://api2.jane.transloadit.com/assemblies/e5169f80d080adb1ccf99ed64e046a9b\",\"bytes_received\":163,\"bytes_expected\":163,\"client_agent\":\"Transloadit Ruby SDK 0.1.2\",\"client_ip\":\"74.95.29.209\",\"client_referer\":null,\"start_date\":\"2011/02/21 22:57:29 GMT\",\"upload_duration\":0.012,\"execution_duration\":0,\"fields\":{},\"uploads\":[],\"results\":{}}"
+    http_version: "1.1"
