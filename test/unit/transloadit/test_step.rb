@@ -2,32 +2,26 @@ require 'test_helper'
 
 describe Transloadit::Step do
   it 'must allow initialization' do
-    Transloadit::Step.new('/s3/store').must_be_kind_of Transloadit::Step
+    Transloadit::Step.new('store', '/s3/store').
+      must_be_kind_of Transloadit::Step
   end
   
   describe 'when initialized' do
     before do
+      @name   = 'store'
       @robot  = '/s3/store'
       @key    = 'aws-access-key-id'
       @secret = 'aws-secret-access-key'
       @bucket = 's3-bucket-name'
       
-      @step = Transloadit::Step.new '/s3/store',
+      @step = Transloadit::Step.new @name, @robot,
         :key    => @key,
         :secret => @secret,
         :bucket => @bucket
     end
     
-    it 'must generate a name' do
-      @step.name.wont_equal nil
-    end
-    
-    it 'must generate a unique name' do
-      @step.name.wont_equal Transloadit::Step.new('').name
-    end
-    
-    it 'must generate a name with 32 hex characters' do
-      @step.name.length.must_equal 32
+    it 'should use the name given' do
+      @step.name.must_equal @name
     end
     
     it 'must remember the type' do
@@ -62,28 +56,9 @@ describe Transloadit::Step do
     end
   end
   
-  describe 'when given a name' do
-    before do
-      @robot  = '/s3/store'
-      @name   = 'test-step'
-      @key    = 'aws-access-key-id'
-      @secret = 'aws-secret-access-key'
-      @bucket = 's3-bucket-name'
-      
-      @step = Transloadit::Step.new '/s3/store', @name,
-        :key    => @key,
-        :secret => @secret,
-        :bucket => @bucket
-    end
-    
-    it 'should use the name given' do
-      @step.name.must_equal @name
-    end
-  end
-  
   describe 'when using alternative inputs' do
     before do
-      @step = Transloadit::Step.new '/image/resize'
+      @step = Transloadit::Step.new 'resize', '/image/resize'
     end
     
     it 'must allow using the original file as input' do
@@ -92,7 +67,7 @@ describe Transloadit::Step do
     end
     
     it 'must allow using another step' do
-      input = Transloadit::Step.new '/video/thumbnail'
+      input = Transloadit::Step.new 'thumbnail', '/video/thumbnail'
       
       @step.use(input).   must_equal [ input.name ]
       @step.options[:use].must_equal [ input.name ]
@@ -100,8 +75,8 @@ describe Transloadit::Step do
     
     it 'must allow using multiple steps' do
       inputs = [
-        Transloadit::Step.new('/video/thumbnail'),
-        Transloadit::Step.new('/image/resize')
+        Transloadit::Step.new('thumbnail', '/video/thumbnail'),
+        Transloadit::Step.new('resize',    '/image/resize')
       ]
       
       @step.use(inputs).  must_equal inputs.map {|i| i.name }

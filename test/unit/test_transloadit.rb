@@ -41,24 +41,16 @@ describe Transloadit do
     end
     
     it 'must create steps' do
-      step = @transloadit.step('/image/resize', :width => 320)
-
-      step.must_be_kind_of Transloadit::Step
-      step.robot.  must_equal '/image/resize'
-      step.options.must_equal :width => 320
-    end
-    
-    it 'must create named steps' do
-      step = @transloadit.step('/image/resize', 'resize', :width => 320)
+      step = @transloadit.step('resize', '/image/resize', :width => 320)
       
       step.must_be_kind_of Transloadit::Step
-      step.robot.  must_equal '/image/resize'
       step.name.   must_equal 'resize'
+      step.robot.  must_equal '/image/resize'
       step.options.must_equal :width => 320
     end
     
     it 'must create assemblies' do                     
-      step     = @transloadit.step('')
+      step     = @transloadit.step(nil, nil)
       assembly = @transloadit.assembly :steps => step
       
       assembly.must_be_kind_of Transloadit::Assembly
@@ -67,8 +59,8 @@ describe Transloadit do
     
     it 'must create assemblies with multiple steps' do
       steps = [
-        @transloadit.step(''),
-        @transloadit.step(''),
+        @transloadit.step(nil, nil),
+        @transloadit.step(nil, nil),
       ]
       
       assembly = @transloadit.assembly :steps => steps

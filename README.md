@@ -35,21 +35,14 @@ and store the result on [Amazon S3](http://aws.amazon.com/s3/).
 First, we create two steps: one to resize the image to 320x240, and another to
 store the image in our S3 bucket.
 
-    resize = transloadit.step '/image/resize',
+    resize = transloadit.step 'resize', '/image/resize',
       width:  320,
       height: 240
 
-    store  = transloadit.step '/s3/store',
+    store  = transloadit.step 'store', '/s3/store',
       key:    'aws-access-key-id',
       secret: 'aws-secret-access-key',
       bucket: 's3-bucket-name'
-
-You can also name a step explicitly in order to match steps to their output
-when handling the response. Just pass the step name after the robot name.
-
-    encode = transloadit.step '/video/encode', 'encode',
-      width:  320,
-      height: 240
 
 Now that we have the steps, we create an assembly (which is just a request to
 process a file or set of files) and let Transloadit do the rest.
@@ -115,9 +108,9 @@ Transloadit allows you to perform several processing steps in parallel. You
 simply need to `use` other steps. Following 
 [their example](http://transloadit.com/docs/assemblies#special-parameters):
 
-    encode = transloadit.step '/video/encode', { ... }
-    thumbs = transloadit.step '/video/thumbs', { ... }
-    export = transloadit.step '/s3/store',     { ... }
+    encode = transloadit.step 'encode', '/video/encode', { ... }
+    thumbs = transloadit.step 'thumbs', '/video/thumbs', { ... }
+    export = transloadit.step 'store',  '/s3/store',     { ... }
     
     export.use [ encode, thumbs ]
     

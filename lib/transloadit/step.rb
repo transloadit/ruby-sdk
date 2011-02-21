@@ -9,6 +9,9 @@ require 'transloadit'
 # for futher information on robot types and their parameters.
 #
 class Transloadit::Step
+  # @return [String] the name to give the step
+  attr_accessor :name
+  
   # @return [String] the robot to use
   attr_reader :robot
   
@@ -18,33 +21,15 @@ class Transloadit::Step
   #
   # Creates a new Step with the given +robot+.
   #
-  # @overload step(robot, options = {})
-  #   @param [String] robot   the robot to use
-  #   @param [Hash]   options the configuration options for the robot; see
-  #     {Transloadit#step} for possible values
+  # @param [String] name    the explicit name to give the step
+  # @param [String] robot   the robot to use
+  # @param [Hash]   options the configuration options for the robot; see
+  #   {Transloadit#step} for possible values
   #
-  # @overload step(robot, name, options = {})
-  #   @param [String] robot   the robot to use
-  #   @param [String] name    the explicit name to give the step
-  #   @param [Hash]   options the configuration options for the robot; see
-  #     {Transloadit#step} for possible values
-  #
-  def initialize(robot, *options)
+  def initialize(name, robot, options = {})
+    self.name    = name
     self.robot   = robot
-    self.options = _extract_options!(options)
-    self.name    = options.first
-  end
-  
-  #
-  # Automatically generates a unique, 32-character hex name for the step that
-  # uses this robot.
-  #
-  # @return [String] a randomly generated name
-  #
-  def name
-    # rand() is "good enough" for this; we generate 128 random bits (same
-    # length as a UUID for future compatibility) and convert it to hex
-    @name ||= rand(2 ** 128).to_s(16).rjust(32, '0')
+    self.options = options
   end
   
   #
@@ -97,18 +82,4 @@ class Transloadit::Step
   protected
   
   attr_writer :robot
-  attr_writer :name
-  
-  private
-  
-  #
-  # Extracts the last argument from a set of arguments if it's a hash.
-  # Otherwise, returns an empty hash.
-  #
-  # @param  *args  the arguments to search for an options hash
-  # @return [Hash] the options passed, otherwise an empty hash
-  #
-  def _extract_options!(args)
-    args.last.is_a?(Hash) ? args.pop : {}
-  end
 end

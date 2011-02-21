@@ -24,6 +24,10 @@ class Transloadit::Request
   # @return [String] the authentication secret to sign the request with
   attr_accessor :secret
   
+  #
+  # Automatically sets the API endpoint to the server with the most free
+  # resources. This is called automatically the first time a request is made.
+  #
   def self.bored!
     self.api(self.bored)
   end

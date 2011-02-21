@@ -38,24 +38,15 @@ class Transloadit
   #
   # Creates a Transloadit::Step describing a step in an upload assembly.
   #
-  # @overload step(robot, options = {})
-  #   @param  [String] robot the robot to use in this step (e.g., '/image/resize')
-  #   @param  [Hash]   options a hash of options to customize the robot's
-  #     operation; see the {online documentation}[http://transloadit.com/docs/building-assembly-instructions]
-  #     for robot-specific options
-  #   @return [Step]   the created Step
+  # @param  [String] name  the name to give the step
+  # @param  [String] robot the robot to use in this step (e.g., '/image/resize')
+  # @param  [Hash]   options a hash of options to customize the robot's
+  #   operation; see the {online documentation}[http://transloadit.com/docs/building-assembly-instructions]
+  #   for robot-specific options
+  # @return [Step]   the created Step
   #
-  # @overload step(robot, name, options = {})
-  #   @param  [String] robot the robot to use in this step (e.g., '/image/resize')
-  #   @param  [String] name  the explicit name to give the step
-  #   @param  [Hash]   options a hash of options to customize the robot's
-  #     operation; see the {online documentation}[http://transloadit.com/docs/building-assembly-instructions]
-  #     for robot-specific options
-  #   @return [Step]   the created Step
-  # 
-  #
-  def step(robot, *options)
-    Transloadit::Step.new(robot, *options)
+  def step(name, robot, options = {})
+    Transloadit::Step.new(name, robot, options)
   end
   
   #
