@@ -1,4 +1,6 @@
 require 'transloadit'
+
+require 'rest-client'
 require 'delegate'
 
 class Transloadit::Response < Delegator
@@ -78,10 +80,11 @@ class Transloadit::Response < Delegator
   # Replaces the object this instance delegates to with the one the other
   # object uses.
   #
-  # @param  [Delegator] other      the object whose delegate to use
-  # @return [RestClient::Response] the response delegated to
+  # @param  [Delegator] other       the object whose delegate to use
+  # @return [Transloadit::Response] this response
   #
   def replace(other)
     self.__setobj__ other.__getobj__
+    self
   end
 end
