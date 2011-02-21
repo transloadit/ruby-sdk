@@ -50,7 +50,7 @@ class Transloadit::Assembly
   #   @param [Hash]      params additional POST data to submit with the request
   #
   def submit!(*ios)
-    params  = _extract_options!(*ios)
+    params  = _extract_options!(ios)
     payload = { :params => self.to_hash.update(params) }
     
     ios.each_with_index {|f, i| payload.update :"file_#{i}" => f }
@@ -115,7 +115,7 @@ class Transloadit::Assembly
   # @param  *args  the arguments to search for an options hash
   # @return [Hash] the options passed, otherwise an empty hash
   #
-  def _extract_options!(*args)
+  def _extract_options!(args)
     args.last.is_a?(Hash) ? args.pop : {}
   end
 end
