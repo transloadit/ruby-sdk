@@ -18,13 +18,21 @@ class Transloadit::Step
   #
   # Creates a new Step with the given +robot+.
   #
-  # @param [String] robot   the robot to use
-  # @param [Hash]   options the configuration options for the robot; see
-  #   {Transloadit#step} for possible values
+  # @overload step(robot, options = {})
+  #   @param [String] robot   the robot to use
+  #   @param [Hash]   options the configuration options for the robot; see
+  #     {Transloadit#step} for possible values
   #
-  def initialize(robot, options = {})
+  # @overload step(robot, name, options = {})
+  #   @param [String] robot   the robot to use
+  #   @param [String] name    the explicit name to give the step
+  #   @param [Hash]   options the configuration options for the robot; see
+  #     {Transloadit#step} for possible values
+  #
+  def initialize(robot, *options)
     self.robot   = robot
-    self.options = options
+    self.options = _extract_options!(options)
+    self.name    = options.first
   end
   
   #
@@ -89,4 +97,18 @@ class Transloadit::Step
   protected
   
   attr_writer :robot
+  attr_writer :name
+  
+  private
+  
+  #
+  # Extracts the last argument from a set of arguments if it's a hash.
+  # Otherwise, returns an empty hash.
+  #
+  # @param  *args  the arguments to search for an options hash
+  # @return [Hash] the options passed, otherwise an empty hash
+  #
+  def _extract_options!(args)
+    args.last.is_a?(Hash) ? args.pop : {}
+  end
 end

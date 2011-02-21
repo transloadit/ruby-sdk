@@ -48,6 +48,15 @@ describe Transloadit do
       step.options.must_equal :width => 320
     end
     
+    it 'must create named steps' do
+      step = @transloadit.step('/image/resize', 'resize', :width => 320)
+      
+      step.must_be_kind_of Transloadit::Step
+      step.robot.  must_equal '/image/resize'
+      step.name.   must_equal 'resize'
+      step.options.must_equal :width => 320
+    end
+    
     it 'must create assemblies' do                     
       step     = @transloadit.step('')
       assembly = @transloadit.assembly :steps => step

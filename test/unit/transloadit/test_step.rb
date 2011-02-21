@@ -62,6 +62,25 @@ describe Transloadit::Step do
     end
   end
   
+  describe 'when given a name' do
+    before do
+      @robot  = '/s3/store'
+      @name   = 'test-step'
+      @key    = 'aws-access-key-id'
+      @secret = 'aws-secret-access-key'
+      @bucket = 's3-bucket-name'
+      
+      @step = Transloadit::Step.new '/s3/store', @name,
+        :key    => @key,
+        :secret => @secret,
+        :bucket => @bucket
+    end
+    
+    it 'should use the name given' do
+      @step.name.must_equal @name
+    end
+  end
+  
   describe 'when using alternative inputs' do
     before do
       @step = Transloadit::Step.new '/image/resize'
