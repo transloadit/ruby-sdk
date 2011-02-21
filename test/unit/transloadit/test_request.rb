@@ -36,13 +36,14 @@ describe Transloadit::Request do
   
   describe 'when performing a POST' do
     before do
-      @request = Transloadit::Request.new('assemblies')
+      @request = Transloadit::Request.new('assemblies', '')
     end
     
     it 'should perform a POST against the resource' do
       VCR.use_cassette 'post_assembly' do
         @request.post(:params => {
-          :auth  => { :key => '' },
+          :auth  => { :key     => '',
+                      :expires => (Time.now + 10).utc.strftime('%Y/%m/%d %H:%M:%S+00:00') },
           :steps => { :encode => { :robot => '/video/encode' } }
         })['ok'].must_equal 'ASSEMBLY_COMPLETED'
       end
