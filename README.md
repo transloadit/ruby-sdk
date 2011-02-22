@@ -23,8 +23,8 @@ Then create a Transloadit instance, which will maintain your authentication
 credentials and allow us to make requests to the API.
 
     transloadit = Transloadit.new(
-      key:    'transloadit-auth-key',
-      secret: 'transloadit-auth-secret'
+      :key    => 'transloadit-auth-key',
+      :secret => 'transloadit-auth-secret'
     )
 
 ### 1. Resize and store an image
@@ -36,19 +36,19 @@ First, we create two steps: one to resize the image to 320x240, and another to
 store the image in our S3 bucket.
 
     resize = transloadit.step 'resize', '/image/resize',
-      width:  320,
-      height: 240
+      :width  => 320,
+      :height => 240
 
     store  = transloadit.step 'store', '/s3/store',
-      key:    'aws-access-key-id',
-      secret: 'aws-secret-access-key',
-      bucket: 's3-bucket-name'
+      :key    => 'aws-access-key-id',
+      :secret => 'aws-secret-access-key',
+      :bucket => 's3-bucket-name'
 
 Now that we have the steps, we create an assembly (which is just a request to
 process a file or set of files) and let Transloadit do the rest.
 
     assembly = transloadit.assembly(
-      steps: [ resize, store ]
+      :steps => [ resize, store ]
     )
     
     response = assembly.submit! open('lolcat.jpg')
@@ -115,7 +115,7 @@ simply need to `use` other steps. Following
     export.use [ encode, thumbs ]
     
     transloadit.assembly(
-      steps: [ encode, thumbs, export ]
+      :steps => [ encode, thumbs, export ]
     ).submit! open('ninja-cat.mpg')
 
 You can also tell a step to use the original uploaded file by passing the
