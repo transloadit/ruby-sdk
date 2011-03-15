@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   
   gem.authors  = %w{ Stephen Touset }
   gem.email    = %w{ stephen@touset.org }
-  gem.homepage = 'http://github.com/stouset/transloadit/'
+  gem.homepage = 'http://github.com/transloadit/ruby-sdk/'
   
   gem.summary     = 'Official Ruby gem for Transloadit'
   gem.description = 'The transloadit gem allows you to automate uploading files through the Transloadit REST API'
