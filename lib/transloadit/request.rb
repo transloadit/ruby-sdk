@@ -194,7 +194,7 @@ class Transloadit::Request
   # @return [String] the HMAC signature for the params
   #
   def signature(params)
-    self.class._hmac(self.secret, params.to_json) if self.secret
+    self.class._hmac(self.secret, params) if self.secret
   end
   
   private
