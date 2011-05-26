@@ -190,7 +190,7 @@ class Transloadit::Request
   # Computes the HMAC digest of the params hash, if a secret was given to the
   # instance.
   #
-  # @param  [Hash] params the payload to sign
+  # @param  [String] params the JSON encoded payload to sign
   # @return [String] the HMAC signature for the params
   #
   def signature(params)
