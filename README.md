@@ -124,6 +124,19 @@ Symbol `:original` instead of another step.
 Check the YARD documentation for more information on using
 [use](http://rubydoc.info/gems/transloadit/frames/Transloadit/Step#use-instance_method).
 
+### 4. Using a Template
+
+Transloadit allows you to use custom [templates](http://transloadit.com/docs/templates)
+for recurring encoding tasks. In order to use these do the following:
+
+    transloadit.assembly(
+      :template_id => 'YOUR_TEMPLATE_ID'
+    ).submit! open('ninja-cat.mpg')
+
+You can use your steps together with this template and even use variables.
+The [Transloadit documentation](http://transloadit.com/docs/templates#passing-variables-into-a-template) has some nice
+examples for that.
+
 ## Documentation
 
 Up-to-date YARD documentation is automatically generated. You can view the
