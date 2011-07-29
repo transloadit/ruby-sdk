@@ -52,6 +52,7 @@ class Transloadit::Assembly
   def submit!(*ios)
     params  = _extract_options!(ios)
     payload = { :params => self.to_hash.update(params) }
+    payload.merge!(self.options[:fields]) if self.options[:fields]
     
     # update the payload with file entries
     ios.each_with_index {|f, i| payload.update :"file_#{i}" => f }
@@ -81,7 +82,7 @@ class Transloadit::Assembly
     self.options.merge(
       :auth  => self.transloadit.to_hash,
       :steps => self.steps
-    ).delete_if {|k,v| v.nil? }
+    ).delete_if {|k,v| v.nil? || k == :fields}
   end
   
   #
