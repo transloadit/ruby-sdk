@@ -68,6 +68,47 @@ describe Transloadit::Assembly do
         response.headers[:location].must_match %r{^http://foo.bar/}
       end
     end
+
+    describe 'with additional parameters' do
+      include WebMock::API
+
+      before do
+        stub_request(:post, 'jane.transloadit.com/assemblies')
+      end
+
+      after do
+        WebMock.reset!
+      end
+
+      it 'must allow to send a template id along' do
+        VCR.use_cassette 'fetch_bored' do
+          Transloadit::Assembly.new(
+            @transloadit,
+            :template_id => 'TEMPLATE_ID'
+          ).submit!
+
+          assert_requested(:post, 'jane.transloadit.com/assemblies') do |req|
+            values = values_from_post_body(req.body)
+            JSON.parse(values['params'])['template_id'].must_equal 'TEMPLATE_ID'
+          end
+        end
+      end
+
+      it 'must allow to send the fields hash' do
+        VCR.use_cassette 'fetch_bored' do
+          Transloadit::Assembly.new(
+            @transloadit,
+            :fields => {:tag => 'ninja-cat'}
+          ).submit!
+
+          assert_requested(:post, 'jane.transloadit.com/assemblies') do |req|
+            values = values_from_post_body(req.body)
+            values['tag'].must_equal 'ninja-cat'
+            JSON.parse(values['params'])['fields'].must_be_nil
+          end
+        end
+      end
+    end
   end
   
   describe 'with multiple steps' do
@@ -84,4 +125,8 @@ describe Transloadit::Assembly do
       @assembly.to_hash[:steps].keys.must_include @thumbs.name
     end
   end
+end
+
+def values_from_post_body(body)
+  Addressable::URI.parse('?' + URI.decode(body)).query_values
 end
