@@ -17,6 +17,10 @@ class Transloadit
   # @return [String] your Transloadit auth secret, for signing requests
   attr_accessor :secret
   
+  # @return [Integer] the duration in seconds that signed API requests
+  #   generated from this instance remain valid
+  attr_accessor :duration
+  
   #
   # Creates a new instance of the Transloadit API.
   #
@@ -29,8 +33,9 @@ class Transloadit
   #   signing requests (optional)
   #
   def initialize(options = {})
-    self.key    = options[:key]
-    self.secret = options[:secret]
+    self.key      = options[:key]
+    self.secret   = options[:secret]
+    self.duration = options[:duration] || 5 * 60
     
     _ensure_key_provided
   end
@@ -102,14 +107,12 @@ class Transloadit
   end
   
   #
-  # Automatically generates API-compatible request expiration times 5 minutes
-  # from now.
+  # Generates an API-compatible request expiration timestamp. Uses the
+  # current instance's duration.
   #
-  # @param [Integer] duration the number of seconds from now to set the
-  #   expiry time
   # @return [String] an API-compatible timestamp
   #
-  def _generate_expiry(duration = 5 * 60)
-    (Time.now + duration).utc.strftime('%Y/%m/%d %H:%M:%S+00:00')
+  def _generate_expiry
+    (Time.now + self.duration).utc.strftime('%Y/%m/%d %H:%M:%S+00:00')
   end
 end

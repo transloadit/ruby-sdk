@@ -2,8 +2,9 @@ require 'test_helper'
 
 describe Transloadit do
   before do
-    @key    = 'a'
-    @secret = 'b'
+    @key      = 'a'
+    @secret   = 'b'
+    @duration = 10
   end
   
   it 'must allow initialization' do
@@ -24,11 +25,16 @@ describe Transloadit do
     t.must_be_kind_of Transloadit
   end
   
+  it 'must provide a default duration' do
+    Transloadit.new(:key => @key).duration.wont_be_nil
+  end
+  
   describe 'when initialized' do
     before do
       @transloadit = Transloadit.new(
-        :key    => @key,
-        :secret => @secret
+        :key      => @key,
+        :secret   => @secret,
+        :duration => @duration
       )
     end
     
@@ -38,6 +44,10 @@ describe Transloadit do
     
     it 'must allow access to the secret' do
       @transloadit.secret.must_equal @secret
+    end
+    
+    it 'must allow access to the duration' do
+      @transloadit.duration.must_equal @duration
     end
     
     it 'must create steps' do
