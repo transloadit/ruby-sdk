@@ -168,6 +168,20 @@ transloadit.assembly(
   :fields => {:tag => 'ninjacats'}
 ).submit! open('ninja-cat.mpg')
 ```
+
+### 6. Notify URL
+
+If you want to be notified when the processing is finished you can provide
+a notify url for the assembly.
+
+```ruby
+transloadit.assembly(
+  :notify_url => 'http://example.com/processing_finished'
+).submit! open('ninja-cat.mpg')
+```
+
+Read up more on the notifications [on Transloadit's documentation page](http://transloadit.com/docs/notifications-vs-redirect-url)
+
 ## Documentation
 
 Up-to-date YARD documentation is automatically generated. You can view the
