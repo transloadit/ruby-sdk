@@ -5,6 +5,7 @@ describe Transloadit do
     @key      = 'a'
     @secret   = 'b'
     @duration = 10
+    @max_size = 100
   end
   
   it 'must allow initialization' do
@@ -34,7 +35,8 @@ describe Transloadit do
       @transloadit = Transloadit.new(
         :key      => @key,
         :secret   => @secret,
-        :duration => @duration
+        :duration => @duration,
+        :max_size => @max_size
       )
     end
     
@@ -48,6 +50,10 @@ describe Transloadit do
     
     it 'must allow access to the duration' do
       @transloadit.duration.must_equal @duration
+    end
+    
+    it 'must allow access to the max_size' do
+      @transloadit.max_size.must_equal @max_size
     end
     
     it 'must create steps' do
@@ -82,8 +88,9 @@ describe Transloadit do
     end
     
     it 'must produce Transloadit-compatible hash output' do
-      @transloadit.to_hash[:key]    .must_equal @key
-      @transloadit.to_hash[:expires].
+      @transloadit.to_hash[:key]     .must_equal @key
+      @transloadit.to_hash[:max_size].must_equal @max_size
+      @transloadit.to_hash[:expires] .
         must_match %r{\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\+00:00}
     end
     
