@@ -21,6 +21,8 @@ class Transloadit
   #   generated from this instance remain valid
   attr_accessor :duration
   
+  attr_accessor :max_size
+  
   #
   # Creates a new instance of the Transloadit API.
   #
@@ -36,6 +38,7 @@ class Transloadit
     self.key      = options[:key]
     self.secret   = options[:secret]
     self.duration = options[:duration] || 5 * 60
+    self.max_size = options[:max_size]
     
     _ensure_key_provided
   end
@@ -84,6 +87,7 @@ class Transloadit
   #
   def to_hash
     result = { :key => self.key }
+    result.merge!({:max_size => self.max_size}) if !!self.max_size
     result.update(:expires => _generate_expiry) unless self.secret.nil?
     result
   end
