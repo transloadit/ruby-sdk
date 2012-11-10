@@ -87,7 +87,7 @@ class Transloadit
   #
   def to_hash
     result = { :key => self.key }
-    result.merge!({:max_size => self.max_size}) if !!self.max_size
+    result.update(:max_size => self.max_size) unless self.max_size.nil?
     result.update(:expires => _generate_expiry) unless self.secret.nil?
     result
   end
