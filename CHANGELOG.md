@@ -1,3 +1,7 @@
+### 1.0.3 / 2013-03-06 ###
+
+* allow symbols as keys for response attributes (thanks @gbuesing for reporting)
+
 ### 1.0.3 / 2012-11-10 ###
 
 * Support max_size option
