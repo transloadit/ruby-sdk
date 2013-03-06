@@ -26,6 +26,12 @@ describe Transloadit::Response do
         @response[attribute].must_equal @response.body[attribute]
       end
     end
+
+    it 'must allow access to body attributes as symbols' do
+      [:ok, :message, :assembly_id, :assembly_url].each do |attribute|
+        @response[attribute].must_equal @response.body[attribute.to_s]
+      end
+    end
     
     it 'must inspect as the body' do
       @response.inspect.must_equal @response.body.inspect

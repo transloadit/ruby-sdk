@@ -22,7 +22,7 @@ class Transloadit::Response < Delegator
   # @return [String]           the value for the attribute
   #
   def [](attribute)
-    self.body[attribute]
+    self.body[attribute.to_s]
   end
   
   #
