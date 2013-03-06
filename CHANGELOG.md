@@ -1,4 +1,4 @@
-### 1.0.3 / 2013-03-06 ###
+### 1.0.4 / 2013-03-06 ###
 
 * allow symbols as keys for response attributes (thanks @gbuesing for reporting)
 
