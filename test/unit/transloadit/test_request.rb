@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.expand_path('../../../test_helper', __FILE__)
 
 describe Transloadit::Request do
   REQUEST_URI = 'http://api2.jane.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4'
