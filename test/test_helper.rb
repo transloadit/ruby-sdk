@@ -9,8 +9,8 @@ require 'minitest/autorun'
 require 'transloadit'
 require 'vcr'
 
-VCR.config do |c|
+VCR.configure do |c|
   c.cassette_library_dir     = 'test/fixtures/cassettes'
   c.default_cassette_options = { :record => :none }
-  c.stub_with :webmock
+  c.hook_into :webmock
 end

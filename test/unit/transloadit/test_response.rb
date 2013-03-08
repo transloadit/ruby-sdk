@@ -53,7 +53,7 @@ describe Transloadit::Response do
     
     # TODO: can this be tested better?
     it 'must allow reloading the assembly' do
-      VCR.use_cassette 'fetch_assembly' do
+      VCR.use_cassette 'fetch_assembly', :allow_playback_repeats => true do
         @response.send(:__getobj__).
           wont_be_same_as @response.reload!.send(:__getobj__)
         

@@ -1,63 +1,73 @@
---- 
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :get
-    uri: http://api2.transloadit.com:80/instances/bored
-    body: 
-    headers: 
-      accept: 
-      - "*/*; q=0.5, application/xml"
-      accept-encoding: 
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api2.transloadit.com/instances/bored
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
       - gzip, deflate
-      user-agent: 
+      User-Agent:
       - Transloadit Ruby SDK 0.1.2
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+  response:
+    status:
       code: 200
       message: OK
-    headers: 
-      access-control-allow-headers: 
+    headers:
+      Access-Control-Allow-Headers:
       - X-Requested-With, Content-Type, Accept, Content-Length
-      access-control-allow-methods: 
+      Access-Control-Allow-Methods:
       - POST, GET, PUT, DELETE, OPTIONS
-      access-control-allow-origin: 
-      - "*"
-      content-type: 
+      Access-Control-Allow-Origin:
+      - ! '*'
+      Content-Type:
       - text/plain
-      content-length: 
-      - "94"
-      connection: 
+      Content-Length:
+      - '94'
+      Connection:
       - keep-alive
-    body: "{\"ok\":\"BORED_INSTANCE_FOUND\",\"host\":\"jane.transloadit.com\",\"api2_host\":\"jane.transloadit.com\"}"
-    http_version: "1.1"
-- !ruby/struct:VCR::HTTPInteraction 
-  request: !ruby/struct:VCR::Request 
-    method: :get
-    uri: http://api2.transloadit.com:80/instances/bored?params=%7B%22params%22:%7B%22foo%22:%22bar%22%7D%7D
-    body: 
-    headers: 
-      accept: 
-      - "*/*; q=0.5, application/xml"
-      accept-encoding: 
+    body:
+      encoding: UTF-8
+      string: ! '{"ok":"BORED_INSTANCE_FOUND","host":"jane.transloadit.com","api2_host":"jane.transloadit.com"}'
+    http_version: '1.1'
+  recorded_at: Fri, 08 Mar 2013 15:13:10 GMT
+- request:
+    method: get
+    uri: http://api2.transloadit.com/instances/bored?params=%7B%22params%22:%7B%22foo%22:%22bar%22%7D%7D
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
       - gzip, deflate
-      user-agent: 
+      User-Agent:
       - Transloadit Ruby SDK 0.1.2
-  response: !ruby/struct:VCR::Response 
-    status: !ruby/struct:VCR::ResponseStatus 
+  response:
+    status:
       code: 200
       message: OK
-    headers: 
-      access-control-allow-headers: 
+    headers:
+      Access-Control-Allow-Headers:
       - X-Requested-With, Content-Type, Accept, Content-Length
-      access-control-allow-methods: 
+      Access-Control-Allow-Methods:
       - POST, GET, PUT, DELETE, OPTIONS
-      access-control-allow-origin: 
-      - "*"
-      content-type: 
+      Access-Control-Allow-Origin:
+      - ! '*'
+      Content-Type:
       - text/plain
-      content-length: 
-      - "94"
-      connection: 
+      Content-Length:
+      - '94'
+      Connection:
       - keep-alive
-    body: "{\"ok\":\"BORED_INSTANCE_FOUND\",\"host\":\"jane.transloadit.com\",\"api2_host\":\"jane.transloadit.com\"}"
-    http_version: "1.1"
+    body:
+      encoding: UTF-8
+      string: ! '{"ok":"BORED_INSTANCE_FOUND","host":"jane.transloadit.com","api2_host":"jane.transloadit.com"}'
+    http_version: '1.1'
+  recorded_at: Fri, 08 Mar 2013 15:13:10 GMT
+recorded_with: VCR 2.4.0
