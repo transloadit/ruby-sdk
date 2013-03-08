@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/transloadit/ruby-sdk.png?branch=master)](https://travis-ci.org/transloadit/ruby-sdk)
+
 # transloadit
 
 Fantastic file uploading for your web application.
