@@ -1,4 +1,5 @@
-require_relative '../test_helper'
+# 1.8 does not support require_relative
+require File.expand_path('../../test_helper', __FILE__)
 
 describe Transloadit do
   before do
