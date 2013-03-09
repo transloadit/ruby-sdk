@@ -192,11 +192,11 @@ for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/mast
 
 ## Compatibility
 
-At a minimum, this gem should work on MRI 1.9.2, 1.8.7, 1.8.6, and Rubinius
-1.2.0. If it doesn't, please file a [bug report](https://github.com/transloadit/ruby-sdk/issues).
-Compatibility patches for other Rubies are welcomed.
+At a minimum, this gem should work on MRI 2.0.0, 1.9.3, 1,8.7, Rubinius in both 1.8 mode and 1.9 mode,
+and JRuby in both 1.8 mode and 1.9 mode. It may also work on 1.8.6 and 1.9.2, but support for those
+Rubies is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
+[bug report](https://github.com/transloadit/ruby-sdk/issues). Compatibility patches for other Rubies
+are welcomed.
 
-You can run `rake test:multiruby` to test transloadit against all supported
-Rubies. Run `rake test:multiruby:setup` once beforehand, though, to set up the
-RVM environments. [RVM](rvm.beginrescueend.com/) must be installed in order to
-test against multiple Rubies.
+Testing against these versions is performed automatically by
+[Travis CI](https://travis-ci.org/transloadit/ruby-sdk).
