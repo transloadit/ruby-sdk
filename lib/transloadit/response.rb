@@ -31,7 +31,7 @@ class Transloadit::Response < Delegator
   # @return [Hash] the parsed JSON body hash
   #
   def body
-    JSON.parse self.__getobj__.body
+    MultiJson.load self.__getobj__.body
   end
   
   #

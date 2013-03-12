@@ -1,4 +1,4 @@
-require 'json'
+require 'multi_json'
 
 #
 # Implements the Transloadit REST API in Ruby. Check the {file:README.md README}
@@ -96,7 +96,7 @@ class Transloadit
   # @return [String] JSON-encoded String containing the object's hash contents
   #
   def to_json
-    self.to_hash.to_json
+    MultiJson.dump(self.to_hash)
   end
   
   private

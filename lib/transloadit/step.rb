@@ -76,7 +76,7 @@ class Transloadit::Step
   # @return [String] JSON-encoded String containing the Step's hash contents
   #
   def to_json
-    self.to_hash.to_json
+    MultiJson.dump(self.to_hash)
   end
   
   protected

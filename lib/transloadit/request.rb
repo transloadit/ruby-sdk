@@ -149,7 +149,7 @@ class Transloadit::Request
     return {} if payload.respond_to?(:empty?) and payload.empty?
     
     # TODO: refactor this, don't update a hash that's not ours
-    payload.update :params    => payload[:params].to_json
+    payload.update :params    => MultiJson.dump(payload[:params])
     payload.update :signature => self.signature(payload[:params])
     payload.delete :signature if payload[:signature].nil?
     payload
@@ -169,7 +169,7 @@ class Transloadit::Request
     
     escape    = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
     params    = {
-      :params    => URI.escape(params.to_json, escape),
+      :params    => URI.escape(MultiJson.dump(params), escape),
       :signature => self.signature(params)
     }
     

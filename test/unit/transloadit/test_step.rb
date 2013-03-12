@@ -52,7 +52,7 @@ describe Transloadit::Step do
     end
     
     it 'must produce Transloadit-compatible JSON output' do
-      @step.to_json.must_equal @step.to_hash.to_json
+      @step.to_json.must_equal MultiJson.dump(@step.to_hash)
     end
   end
   
