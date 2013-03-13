@@ -95,7 +95,7 @@ describe Transloadit do
     end
     
     it 'must produce Transloadit-compatible JSON output' do
-      @transloadit.to_json.must_equal @transloadit.to_hash.to_json
+      @transloadit.to_json.must_equal MultiJson.dump(@transloadit.to_hash)
     end
   end
   
@@ -109,7 +109,7 @@ describe Transloadit do
     end
     
     it 'must not include a secret in its JSON output' do
-      @transloadit.to_json.must_equal @transloadit.to_hash.to_json
+      @transloadit.to_json.must_equal MultiJson.dump(@transloadit.to_hash)
     end
   end
 end

@@ -58,7 +58,7 @@ describe Transloadit::Assembly do
     end
     
     it 'must produce Transloadit-compatible JSON output' do
-      @assembly.to_json.must_equal @assembly.to_hash.to_json
+      @assembly.to_json.must_equal MultiJson.dump(@assembly.to_hash)
     end
     
     it 'must submit files for upload' do
@@ -89,7 +89,7 @@ describe Transloadit::Assembly do
 
           assert_requested(:post, 'jane.transloadit.com/assemblies') do |req|
             values = values_from_post_body(req.body)
-            JSON.parse(values['params'])['template_id'].must_equal 'TEMPLATE_ID'
+            MultiJson.load(values['params'])['template_id'].must_equal 'TEMPLATE_ID'
           end
         end
       end
@@ -104,7 +104,7 @@ describe Transloadit::Assembly do
           assert_requested(:post, 'jane.transloadit.com/assemblies') do |req|
             values = values_from_post_body(req.body)
             values['tag'].must_equal 'ninja-cat'
-            JSON.parse(values['params'])['fields'].must_be_nil
+            MultiJson.load(values['params'])['fields'].must_be_nil
           end
         end
       end
