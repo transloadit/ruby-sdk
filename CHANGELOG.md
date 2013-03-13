@@ -1,3 +1,7 @@
+### 1.0.5 / 2013-03-13 ###
+
+* Use MultiJSON so everyone can use the JSON parser they like. (thanks @kselden for the patch)
+
 ### 1.0.4 / 2013-03-06 ###
 
 * allow symbols as keys for response attributes (thanks @gbuesing for reporting)
