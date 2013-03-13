@@ -89,7 +89,7 @@ class Transloadit::Assembly
   # @return [String] JSON-encoded String containing the Assembly's contents
   #
   def to_json
-    self.to_hash.to_json
+    MultiJson.dump(self.to_hash)
   end
   
   protected
