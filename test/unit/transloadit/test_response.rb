@@ -50,6 +50,7 @@ describe Transloadit::Response do
     it 'must allow checking for completion' do
       @response.completed?.must_equal true
       @response.finished?.must_equal true
+      @response.error?.must_equal false
     end
 
     # TODO: can this be tested better?
@@ -85,6 +86,7 @@ describe Transloadit::Response do
 
       @response.finished?.must_equal false
       @response.uploading?.must_equal true
+      @response.error?.must_equal false
     end
 
     it 'must allow to check for executing' do
@@ -96,6 +98,7 @@ describe Transloadit::Response do
 
       @response.finished?.must_equal false
       @response.executing?.must_equal true
+      @response.error?.must_equal false
     end
 
     it 'must allow to check for aborted' do
@@ -107,6 +110,16 @@ describe Transloadit::Response do
 
       @response.finished?.must_equal true
       @response.aborted?.must_equal true
+    end
+
+    it 'must allow to check for errors' do
+      VCR.use_cassette 'fetch_assembly_errors' do
+        @response = Transloadit::Response.new(
+          RestClient::Resource.new(REQUEST_URI).get
+        ).extend!(Transloadit::Response::Assembly)
+      end
+
+      @response.error?.must_equal true
     end
   end
 end

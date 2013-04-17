@@ -21,6 +21,10 @@ module Transloadit::Response::Assembly
     self['ok'] == 'ASSEMBLY_COMPLETED'
   end
 
+  def error?
+    self['error'] != nil
+  end
+
   def executing?
     self['ok'] == 'ASSEMBLY_EXECUTING'
   end
