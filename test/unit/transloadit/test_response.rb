@@ -10,7 +10,7 @@ describe Transloadit::Response do
 
   describe 'when initialized' do
     before do
-      VCR.use_cassette 'fetch_assembly' do
+      VCR.use_cassette 'fetch_assembly_ok' do
         @response = Transloadit::Response.new(
           RestClient::Resource.new(REQUEST_URI).get
         )
@@ -40,7 +40,7 @@ describe Transloadit::Response do
 
   describe 'when extended as an assembly' do
     before do
-      VCR.use_cassette 'fetch_assembly' do
+      VCR.use_cassette 'fetch_assembly_ok' do
         @response = Transloadit::Response.new(
           RestClient::Resource.new(REQUEST_URI).get
         ).extend!(Transloadit::Response::Assembly)
@@ -53,7 +53,7 @@ describe Transloadit::Response do
 
     # TODO: can this be tested better?
     it 'must allow reloading the assembly' do
-      VCR.use_cassette 'fetch_assembly', :allow_playback_repeats => true do
+      VCR.use_cassette 'fetch_assembly_ok', :allow_playback_repeats => true do
         @response.send(:__getobj__).
           wont_be_same_as @response.reload!.send(:__getobj__)
 
