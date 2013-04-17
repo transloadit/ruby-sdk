@@ -49,6 +49,7 @@ describe Transloadit::Response do
 
     it 'must allow checking for completion' do
       @response.completed?.must_equal true
+      @response.finished?.must_equal true
     end
 
     # TODO: can this be tested better?
@@ -69,6 +70,7 @@ describe Transloadit::Response do
         @response.completed?.must_equal false
         @response['ok']     .must_equal 'ASSEMBLY_CANCELED'
         @response.canceled?.must_equal true
+        @response.finished?.must_equal true
       end
     end
   end
@@ -81,6 +83,7 @@ describe Transloadit::Response do
         ).extend!(Transloadit::Response::Assembly)
       end
 
+      @response.finished?.must_equal false
       @response.uploading?.must_equal true
     end
 
@@ -91,6 +94,7 @@ describe Transloadit::Response do
         ).extend!(Transloadit::Response::Assembly)
       end
 
+      @response.finished?.must_equal false
       @response.executing?.must_equal true
     end
 
@@ -101,6 +105,7 @@ describe Transloadit::Response do
         ).extend!(Transloadit::Response::Assembly)
       end
 
+      @response.finished?.must_equal true
       @response.aborted?.must_equal true
     end
   end
