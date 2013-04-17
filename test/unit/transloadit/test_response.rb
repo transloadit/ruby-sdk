@@ -68,6 +68,7 @@ describe Transloadit::Response do
 
         @response.completed?.must_equal false
         @response['ok']     .must_equal 'ASSEMBLY_CANCELED'
+        @response.canceled?.must_equal true
       end
     end
   end
