@@ -72,4 +72,16 @@ describe Transloadit::Response do
       end
     end
   end
+
+  describe 'statuses' do
+    it 'must allow checking for upload' do
+      VCR.use_cassette 'fetch_assembly_uploading' do
+        @response = Transloadit::Response.new(
+          RestClient::Resource.new(REQUEST_URI).get
+        ).extend!(Transloadit::Response::Assembly)
+      end
+
+      @response.uploading?.must_equal true
+    end
+  end
 end
