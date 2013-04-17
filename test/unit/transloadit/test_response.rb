@@ -83,5 +83,15 @@ describe Transloadit::Response do
 
       @response.uploading?.must_equal true
     end
+
+    it 'must allow to check for executing' do
+      VCR.use_cassette 'fetch_assembly_executing' do
+        @response = Transloadit::Response.new(
+          RestClient::Resource.new(REQUEST_URI).get
+        ).extend!(Transloadit::Response::Assembly)
+      end
+
+      @response.executing?.must_equal true
+    end
   end
 end

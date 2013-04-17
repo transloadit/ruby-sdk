@@ -17,6 +17,10 @@ module Transloadit::Response::Assembly
     self['ok'] == 'ASSEMBLY_COMPLETED'
   end
 
+  def executing?
+    self['ok'] == 'ASSEMBLY_EXECUTING'
+  end
+
   def uploading?
     self['ok'] == 'ASSEMBLY_UPLOADING'
   end
