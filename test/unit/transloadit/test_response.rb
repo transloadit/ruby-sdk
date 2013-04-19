@@ -10,7 +10,7 @@ describe Transloadit::Response do
 
   describe 'when initialized' do
     before do
-      VCR.use_cassette 'fetch_assembly' do
+      VCR.use_cassette 'fetch_assembly_ok' do
         @response = Transloadit::Response.new(
           RestClient::Resource.new(REQUEST_URI).get
         )
@@ -40,7 +40,7 @@ describe Transloadit::Response do
 
   describe 'when extended as an assembly' do
     before do
-      VCR.use_cassette 'fetch_assembly' do
+      VCR.use_cassette 'fetch_assembly_ok' do
         @response = Transloadit::Response.new(
           RestClient::Resource.new(REQUEST_URI).get
         ).extend!(Transloadit::Response::Assembly)
@@ -49,11 +49,13 @@ describe Transloadit::Response do
 
     it 'must allow checking for completion' do
       @response.completed?.must_equal true
+      @response.finished?.must_equal true
+      @response.error?.must_equal false
     end
 
     # TODO: can this be tested better?
     it 'must allow reloading the assembly' do
-      VCR.use_cassette 'fetch_assembly', :allow_playback_repeats => true do
+      VCR.use_cassette 'fetch_assembly_ok', :allow_playback_repeats => true do
         @response.send(:__getobj__).
           wont_be_same_as @response.reload!.send(:__getobj__)
 
@@ -68,7 +70,56 @@ describe Transloadit::Response do
 
         @response.completed?.must_equal false
         @response['ok']     .must_equal 'ASSEMBLY_CANCELED'
+        @response.canceled?.must_equal true
+        @response.finished?.must_equal true
       end
+    end
+  end
+
+  describe 'statuses' do
+    it 'must allow checking for upload' do
+      VCR.use_cassette 'fetch_assembly_uploading' do
+        @response = Transloadit::Response.new(
+          RestClient::Resource.new(REQUEST_URI).get
+        ).extend!(Transloadit::Response::Assembly)
+      end
+
+      @response.finished?.must_equal false
+      @response.uploading?.must_equal true
+      @response.error?.must_equal false
+    end
+
+    it 'must allow to check for executing' do
+      VCR.use_cassette 'fetch_assembly_executing' do
+        @response = Transloadit::Response.new(
+          RestClient::Resource.new(REQUEST_URI).get
+        ).extend!(Transloadit::Response::Assembly)
+      end
+
+      @response.finished?.must_equal false
+      @response.executing?.must_equal true
+      @response.error?.must_equal false
+    end
+
+    it 'must allow to check for aborted' do
+      VCR.use_cassette 'fetch_assembly_aborted' do
+        @response = Transloadit::Response.new(
+          RestClient::Resource.new(REQUEST_URI).get
+        ).extend!(Transloadit::Response::Assembly)
+      end
+
+      @response.finished?.must_equal true
+      @response.aborted?.must_equal true
+    end
+
+    it 'must allow to check for errors' do
+      VCR.use_cassette 'fetch_assembly_errors' do
+        @response = Transloadit::Response.new(
+          RestClient::Resource.new(REQUEST_URI).get
+        ).extend!(Transloadit::Response::Assembly)
+      end
+
+      @response.error?.must_equal true
     end
   end
 end
