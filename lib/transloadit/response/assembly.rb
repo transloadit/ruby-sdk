@@ -30,7 +30,7 @@ module Transloadit::Response::Assembly
   end
 
   def finished?
-    aborted? || canceled? || completed?
+    aborted? || canceled? || completed? || error?
   end
 
   def uploading?

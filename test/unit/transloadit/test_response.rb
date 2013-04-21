@@ -120,6 +120,7 @@ describe Transloadit::Response do
       end
 
       @response.error?.must_equal true
+      @response.finished?.must_equal true
     end
   end
 end
