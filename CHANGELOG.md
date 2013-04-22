@@ -1,4 +1,4 @@
-### 1.0.6 / 2013-04-22 ###
+### 1.1.0 / 2013-04-22 ###
 
 * We now have more statuses available in the response:
     * finished? to check if processing is finished
