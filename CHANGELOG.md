@@ -1,3 +1,15 @@
+### 1.0.6 / 2013-04-22 ###
+
+* We now have more statuses available in the response:
+    * finished? to check if processing is finished
+    * error? to check if processing failed with errors
+    * canceled? to check if processing was canceled
+    * aborted? to check if processing was aborted
+    * executing? to check if processing is still executing
+    * uploading? to check if the upload is still going
+* Please use `finished?` to check if procssing is finished and `completed?` to
+  check if completed successfully
+
 ### 1.0.5 / 2013-03-13 ###
 
 * Use MultiJSON so everyone can use the JSON parser they like. (thanks @kselden for the patch)
