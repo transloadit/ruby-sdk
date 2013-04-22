@@ -63,6 +63,17 @@ assembly = transloadit.assembly(
 )
 
 response = assembly.submit! open('lolcat.jpg')
+
+# loop until processing is finished
+until response.finished?
+  sleep 1; response.reload! # you'll want to implement a timeout in your production app
+end
+
+if response.error?
+ # handle error
+else
+ # handle other cases
+end
 ```
 
 When the `submit!` method returns, the file has been uploaded but may not yet
@@ -80,11 +91,17 @@ response[:assembly_url] # => 'http://api2.vivian.transloadit.com/assemblies/9bd7
 response[:bytes_expected] # => 92933
 response[:bytes_received] # => 92933
 
-# checks if all processing has been completed
-response.completed? # => false
+# checks if all processing has been finished
+response.finished? # => false
 
 # cancels further processing on the assembly
 response.cancel! # => true
+
+# checks if processing was succesfully completed
+response.completed? # => true
+
+# checks if the processing returned with an error
+response.error? # => false
 ```
 
 It's important to note that none of these queries are "live" (with the
