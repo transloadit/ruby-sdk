@@ -39,7 +39,7 @@ describe Transloadit::Request do
 
   describe 'when performing a POST' do
     before do
-      @request = Transloadit::Request.new('assemblies', '')
+      @request = Transloadit::Request.new('assemblies', 'secret')
     end
 
     it 'must perform a POST against the resource' do
