@@ -3,7 +3,9 @@ $:.unshift File.expand_path('../../lib', __FILE__)
 
 require 'simplecov'
 
-SimpleCov.start { add_filter '/test/' }
+if ENV['COVERAGE']
+  SimpleCov.start { add_filter '/test/' }
+end
 
 require 'minitest/autorun'
 require 'transloadit'
