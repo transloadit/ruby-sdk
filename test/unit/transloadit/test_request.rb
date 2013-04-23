@@ -2,33 +2,33 @@ require 'test_helper'
 
 describe Transloadit::Request do
   REQUEST_URI = 'http://api2.jane.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4'
-  
+
   before do
     # reset the API endpoint between tests
     Transloadit::Request.api Transloadit::Request::API_ENDPOINT
   end
-  
+
   it 'must allow initialization' do
     request = Transloadit::Request.new '/'
     request.must_be_kind_of Transloadit::Request
   end
-  
+
   it 'must locate bored instances' do
     VCR.use_cassette 'fetch_bored' do
       Transloadit::Request.bored!.
         wont_equal Transloadit::Request::API_ENDPOINT.host
     end
   end
-  
+
   describe 'when performing a GET' do
     before do
       @request = Transloadit::Request.new('instances/bored')
     end
-    
+
     it 'must inspect to the API URL' do
       @request.inspect.must_equal @request.url.to_s.inspect
     end
-    
+
     it 'must perform a GET against the resource' do
       VCR.use_cassette 'fetch_bored' do
         @request.get(:params => { :foo => 'bar'})['ok'].
@@ -36,12 +36,12 @@ describe Transloadit::Request do
       end
     end
   end
-  
+
   describe 'when performing a POST' do
     before do
       @request = Transloadit::Request.new('assemblies', '')
     end
-    
+
     it 'must perform a POST against the resource' do
       VCR.use_cassette 'post_assembly' do
         @request.post(:params => {

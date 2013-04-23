@@ -13,10 +13,10 @@ require 'transloadit'
 class Transloadit::Assembly
   # @return [Transloadit] the associated Transloadit instance
   attr_reader   :transloadit
-  
+
   # @return [Hash] the options describing the Assembly
   attr_accessor :options
-  
+
   #
   # Creates a new Assembly authenticated using the given +transloadit+
   # instance.
@@ -29,14 +29,14 @@ class Transloadit::Assembly
     self.transloadit = transloadit
     self.options     = options
   end
-  
+
   #
   # @return [Hash] the processing steps, formatted for sending to Transloadit
   #
   def steps
     _wrap_steps_in_hash options[:steps]
   end
-  
+
   #
   # Submits the assembly for processing. Accepts as many IO objects as you
   # wish to process in the assembly. The last argument is an optional Hash
@@ -53,28 +53,28 @@ class Transloadit::Assembly
     params  = _extract_options!(ios)
     payload = { :params => self.to_hash.update(params) }
     payload.merge!(self.options[:fields]) if self.options[:fields]
-    
+
     # update the payload with file entries
     ios.each_with_index {|f, i| payload.update :"file_#{i}" => f }
-    
+
     # find a bored instance
     Transloadit::Request.bored!
-    
+
     # create the request
     request = Transloadit::Request.new '/assemblies',
       self.transloadit.secret
-    
+
     # post the request, extend it with the Assembly extensions
     request.post(payload).extend!(Transloadit::Response::Assembly)
   end
-  
+
   #
   # @return [String] a human-readable version of the Assembly
   #
   def inspect
     self.to_hash.inspect
   end
-  
+
   #
   # @return [Hash] a Transloadit-compatible Hash of the Assembly's contents
   #
@@ -84,20 +84,20 @@ class Transloadit::Assembly
       :steps => self.steps
     ).delete_if {|k,v| v.nil? || k == :fields}
   end
-  
+
   #
   # @return [String] JSON-encoded String containing the Assembly's contents
   #
   def to_json
     MultiJson.dump(self.to_hash)
   end
-  
+
   protected
-  
+
   attr_writer :transloadit
-  
+
   private
-  
+
   #
   # Returns a Transloadit-compatible Hash wrapping the +steps+ passed to it.
   # Accepts any supported format the +steps+ could come in.
@@ -114,7 +114,7 @@ class Transloadit::Assembly
         steps.inject({}) {|h, s| h.update s }
     end
   end
-  
+
   #
   # Extracts the last argument from a set of arguments if it's a hash.
   # Otherwise, returns an empty hash.

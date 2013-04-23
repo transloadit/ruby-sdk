@@ -5,7 +5,7 @@ require 'delegate'
 
 class Transloadit::Response < Delegator
   autoload :Assembly, 'transloadit/response/assembly'
-  
+
   #
   # Creates an enhanced response wrapped around a RestClient response.
   #
@@ -14,7 +14,7 @@ class Transloadit::Response < Delegator
   def initialize(response)
     self.__setobj__(response)
   end
-  
+
   #
   # Returns the attribute from the JSON response.
   #
@@ -24,7 +24,7 @@ class Transloadit::Response < Delegator
   def [](attribute)
     self.body[attribute.to_s]
   end
-  
+
   #
   # Returns the parsed JSON body.
   #
@@ -33,7 +33,7 @@ class Transloadit::Response < Delegator
   def body
     MultiJson.load self.__getobj__.body
   end
-  
+
   #
   # Inspects the body of the response.
   #
@@ -42,7 +42,7 @@ class Transloadit::Response < Delegator
   def inspect
     self.body.inspect
   end
-  
+
   #
   # Chainably extends the response with additional methods. Used to add
   # context-specific functionality to a response.
@@ -54,9 +54,9 @@ class Transloadit::Response < Delegator
     self.extend(mod)
     self
   end
-  
+
   protected
-  
+
   #
   # The object to delegate method calls to.
   #
@@ -65,7 +65,7 @@ class Transloadit::Response < Delegator
   def __getobj__
     @response
   end
-  
+
   #
   # Sets the object to delegate method calls to.
   #
@@ -75,7 +75,7 @@ class Transloadit::Response < Delegator
   def __setobj__(response)
     @response = response
   end
-  
+
   #
   # Replaces the object this instance delegates to with the one the other
   # object uses.

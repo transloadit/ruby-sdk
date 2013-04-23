@@ -11,13 +11,13 @@ require 'transloadit'
 class Transloadit::Step
   # @return [String] the name to give the step
   attr_accessor :name
-  
+
   # @return [String] the robot to use
   attr_reader :robot
-  
+
   # @return [Hash] the robot's options
   attr_accessor :options
-  
+
   #
   # Creates a new Step with the given +robot+.
   #
@@ -31,7 +31,7 @@ class Transloadit::Step
     self.robot   = robot
     self.options = options
   end
-  
+
   #
   # Specifies that this Step should process the provided +input+ instead of
   # the output of the Step before it.
@@ -50,36 +50,36 @@ class Transloadit::Step
   #
   def use(input)
     self.options.delete(:use) and return if input.nil?
-    
+
     self.options[:use] = case input
       when Symbol then input.inspect
       when Array  then input.map {|i| i.name }
       else             [ input.name ]
     end
   end
-  
+
   #
   # @return [String] a human-readable version of the Step
   #
   def inspect
     self.to_hash[self.name].inspect
   end
-  
+
   #
   # @return [Hash] a Transloadit-compatible Hash of the Step's contents
   #
   def to_hash
     { self.name => options.merge(:robot => self.robot) }
   end
-  
+
   #
   # @return [String] JSON-encoded String containing the Step's hash contents
   #
   def to_json
     MultiJson.dump(self.to_hash)
   end
-  
+
   protected
-  
+
   attr_writer :robot
 end
