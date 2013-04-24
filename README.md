@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/transloadit/ruby-sdk.png?branch=master)](https://travis-ci.org/transloadit/ruby-sdk)
+[![Code Climate](https://codeclimate.com/github/transloadit/ruby-sdk.png)](https://codeclimate.com/github/transloadit/ruby-sdk)
 
 # transloadit
 
