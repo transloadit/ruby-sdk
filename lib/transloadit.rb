@@ -10,19 +10,19 @@ class Transloadit
   autoload :Response, 'transloadit/response'
   autoload :Step,     'transloadit/step'
   autoload :VERSION,  'transloadit/version'
-  
+
   # @return [String] your Transloadit auth key
   attr_accessor :key
-  
+
   # @return [String] your Transloadit auth secret, for signing requests
   attr_accessor :secret
-  
+
   # @return [Integer] the duration in seconds that signed API requests
   #   generated from this instance remain valid
   attr_accessor :duration
-  
+
   attr_accessor :max_size
-  
+
   #
   # Creates a new instance of the Transloadit API.
   #
@@ -39,10 +39,10 @@ class Transloadit
     self.secret   = options[:secret]
     self.duration = options[:duration] || 5 * 60
     self.max_size = options[:max_size]
-    
+
     _ensure_key_provided
   end
-  
+
   #
   # Creates a Transloadit::Step describing a step in an upload assembly.
   #
@@ -56,7 +56,7 @@ class Transloadit
   def step(name, robot, options = {})
     Transloadit::Step.new(name, robot, options)
   end
-  
+
   #
   # Creates a Transloadit::Assembly ready to be sent to the REST API.
   #
@@ -74,14 +74,14 @@ class Transloadit
   def assembly(options = {})
     Transloadit::Assembly.new(self, options)
   end
-  
+
   #
   # @return [String] a human-readable version of the Transloadit.
   #
   def inspect
     self.to_hash.inspect
   end
-  
+
   #
   # @return [Hash] a Transloadit-compatible Hash of the instance's contents
   #
@@ -91,16 +91,16 @@ class Transloadit
     result.update(:expires => _generate_expiry) unless self.secret.nil?
     result
   end
-  
+
   #
   # @return [String] JSON-encoded String containing the object's hash contents
   #
   def to_json
     MultiJson.dump(self.to_hash)
   end
-  
+
   private
-  
+
   #
   # Raises an ArgumentError if no {#key} has been assigned.
   #
@@ -109,7 +109,7 @@ class Transloadit
       raise ArgumentError, 'an authentication key must be provided'
     end
   end
-  
+
   #
   # Generates an API-compatible request expiration timestamp. Uses the
   # current instance's duration.
