@@ -70,4 +70,39 @@ http_interactions:
       string: ! '{"ok":"BORED_INSTANCE_FOUND","host":"jane.transloadit.com","api2_host":"jane.transloadit.com"}'
     http_version: '1.1'
   recorded_at: Fri, 08 Mar 2013 15:13:10 GMT
+- request:
+    method: get
+    uri: http://api2.transloadit.com/instances/bored?params=%7B%22params%22:%7B%22foo%22:%22bar%22%7D%7D&signature=78f291e3038e3eeb82d9f79e11a68fe7b858ee97
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Transloadit Ruby SDK 0.1.2
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Headers:
+      - X-Requested-With, Content-Type, Accept, Content-Length
+      Access-Control-Allow-Methods:
+      - POST, GET, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - ! '*'
+      Content-Type:
+      - text/plain
+      Content-Length:
+      - '94'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: ! '{"ok":"BORED_INSTANCE_FOUND","host":"jane.transloadit.com","api2_host":"jane.transloadit.com"}'
+    http_version: '1.1'
+  recorded_at: Fri, 08 Mar 2013 15:13:10 GMT
 recorded_with: VCR 2.4.0
