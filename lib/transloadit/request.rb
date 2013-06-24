@@ -168,9 +168,10 @@ class Transloadit::Request
     return '' if params.respond_to?(:empty?) and params.empty?
 
     escape    = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
+    uri_params = URI.escape(MultiJson.dump(params), escape)
     params    = {
-      :params    => URI.escape(MultiJson.dump(params), escape),
-      :signature => self.signature(params)
+      :params    => uri_params,
+      :signature => self.signature(params.to_json)
     }
 
     '?' + params.map {|k,v| "#{k}=#{v}" if v }.compact.join('&')

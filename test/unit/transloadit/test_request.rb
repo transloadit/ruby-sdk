@@ -35,6 +35,24 @@ describe Transloadit::Request do
           must_equal 'BORED_INSTANCE_FOUND'
       end
     end
+
+    describe 'with secret' do
+      before do
+        @request.secret = "tehsupersecrettoken"
+      end
+
+      it 'must inspect to the API URL' do
+        @request.inspect.must_equal @request.url.to_s.inspect
+      end
+
+      it 'must perform a GET against the resource' do
+        VCR.use_cassette 'fetch_bored' do
+          @request.get(:params => { :foo => 'bar'})['ok'].
+              must_equal 'BORED_INSTANCE_FOUND'
+        end
+      end
+
+    end
   end
 
   describe 'when performing a POST' do
