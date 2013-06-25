@@ -1,4 +1,4 @@
-### Not yet released ###
+### 1.1.1 / 2013-06-25 ###
 
 * request.get with secret (thanks @miry for the patch)
 
