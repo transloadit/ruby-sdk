@@ -11,6 +11,9 @@ Fantastic file uploading for your web application.
 This is the official Ruby gem for [Transloadit](http://transloadit.com). It allows
 you to automate uploading files through the Transloadit REST API.
 
+If you run Ruby on Rails and are looking to integrate with the browser for file uploads, 
+checkout the [rails-sdk](https://github.com/transloadit/rails-sdk).
+
 ## Install
 
 ```bash
