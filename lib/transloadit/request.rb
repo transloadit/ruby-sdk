@@ -29,7 +29,7 @@ class Transloadit::Request
   # resources. This is called automatically the first time a request is made.
   #
   def self.bored!
-    self.api self.bored
+    api(bored)
   end
 
   #
@@ -42,8 +42,8 @@ class Transloadit::Request
   # @param [String] secret an optional secret with which to sign the request
   #
   def initialize(url, secret = nil)
-    self.url    = URI.parse(url.to_s)
-    self.secret = secret
+    @url    = URI.parse(url.to_s)
+    @secret = secret
   end
 
   #
@@ -54,8 +54,8 @@ class Transloadit::Request
   # @return [Transloadit::Response] the response
   #
   def get(params = {})
-    self.request! do
-      self.api[url.path + self.to_query(params)].get(API_HEADERS)
+    request! do
+      api[@url.path + to_query(params)].get(API_HEADERS)
     end
   end
 
@@ -67,8 +67,8 @@ class Transloadit::Request
   # @return [Transloadit::Response] the response
   #
   def delete(params = {})
-    self.request! do
-      self.api[url.path + self.to_query(params)].delete(API_HEADERS)
+    request! do
+      api[@url.path + to_query(params)].delete(API_HEADERS)
     end
   end
 
@@ -80,8 +80,8 @@ class Transloadit::Request
   # @return [Transloadit::Response] the response
   #
   def post(payload = {})
-    self.request! do
-      self.api[url.path].post(self.to_payload(payload), API_HEADERS)
+    request! do
+      api[@url.path].post(to_payload(payload), API_HEADERS)
     end
   end
 
@@ -89,7 +89,7 @@ class Transloadit::Request
   # @return [String] a human-readable version of the prepared Request
   #
   def inspect
-    self.url.to_s.inspect
+    @url.to_s.inspect
   end
 
   protected
@@ -102,7 +102,7 @@ class Transloadit::Request
   # @return [String] the hostname of the most bored server
   #
   def self.bored
-    self.new(API_ENDPOINT + '/instances/bored').get['api2_host']
+    new(API_ENDPOINT + '/instances/bored').get['api2_host']
   end
 
   #
@@ -117,7 +117,7 @@ class Transloadit::Request
   #
   def self.api(uri = nil)
     @api   = RestClient::Resource.new(uri) if uri
-    @api ||= RestClient::Resource.new(self.bored)
+    @api ||= RestClient::Resource.new(bored)
   end
 
   #
@@ -129,8 +129,8 @@ class Transloadit::Request
   #
   def api
     @api ||= begin
-      case self.url.host
-        when String then RestClient::Resource.new(self.url.host)
+      case @url.host
+        when String then RestClient::Resource.new(@url.host)
         else self.class.api
       end
     end
@@ -150,7 +150,7 @@ class Transloadit::Request
 
     # TODO: refactor this, don't update a hash that's not ours
     payload.update :params    => MultiJson.dump(payload[:params])
-    payload.update :signature => self.signature(payload[:params])
+    payload.update :signature => signature(payload[:params])
     payload.delete :signature if payload[:signature].nil?
     payload
   end
@@ -173,7 +173,7 @@ class Transloadit::Request
 
     params    = {
       :params    => uri_params,
-      :signature => self.signature(params_in_json)
+      :signature => signature(params_in_json)
     }
 
     '?' + params.map {|k,v| "#{k}=#{v}" if v }.compact.join('&')
@@ -197,7 +197,7 @@ class Transloadit::Request
   # @return [String] the HMAC signature for the params
   #
   def signature(params)
-    self.class._hmac(self.secret, params) if self.secret.to_s.length > 0
+    hmac(@secret, params) if @secret.to_s.length > 0
   end
 
   private
@@ -209,7 +209,7 @@ class Transloadit::Request
   # @param  [String] message the message to sign
   # @return [String]         the signature of the message
   #
-  def self._hmac(key, message)
+  def hmac(key, message)
     OpenSSL::HMAC.hexdigest HMAC_ALGORITHM, key, message
   end
 end

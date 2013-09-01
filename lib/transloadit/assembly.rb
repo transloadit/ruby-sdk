@@ -26,15 +26,15 @@ class Transloadit::Assembly
   #   see {Transloadit#assembly}
   #
   def initialize(transloadit, options = {})
-    self.transloadit = transloadit
-    self.options     = options
+    @transloadit = transloadit
+    @options     = options
   end
 
   #
   # @return [Hash] the processing steps, formatted for sending to Transloadit
   #
   def steps
-    _wrap_steps_in_hash options[:steps]
+    wrap_steps_in_hash @options[:steps]
   end
 
   #
@@ -50,9 +50,9 @@ class Transloadit::Assembly
   #   @param [Hash]      params additional POST data to submit with the request
   #
   def submit!(*ios)
-    params  = _extract_options!(ios)
-    payload = { :params => self.to_hash.update(params) }
-    payload.merge!(self.options[:fields]) if self.options[:fields]
+    params  = extract_options!(ios)
+    payload = { :params => to_hash.update(params) }
+    payload.merge!(@options[:fields]) if @options[:fields]
 
     # update the payload with file entries
     ios.each_with_index {|f, i| payload.update :"file_#{i}" => f }
@@ -61,8 +61,7 @@ class Transloadit::Assembly
     Transloadit::Request.bored!
 
     # create the request
-    request = Transloadit::Request.new '/assemblies',
-      self.transloadit.secret
+    request = Transloadit::Request.new '/assemblies', @transloadit.secret
 
     # post the request, extend it with the Assembly extensions
     request.post(payload).extend!(Transloadit::Response::Assembly)
@@ -72,16 +71,16 @@ class Transloadit::Assembly
   # @return [String] a human-readable version of the Assembly
   #
   def inspect
-    self.to_hash.inspect
+    to_hash.inspect
   end
 
   #
   # @return [Hash] a Transloadit-compatible Hash of the Assembly's contents
   #
   def to_hash
-    self.options.merge(
-      :auth  => self.transloadit.to_hash,
-      :steps => self.steps
+    options.merge(
+      :auth  => @transloadit.to_hash,
+      :steps => steps
     ).delete_if {|k,v| v.nil? || k == :fields}
   end
 
@@ -89,12 +88,8 @@ class Transloadit::Assembly
   # @return [String] JSON-encoded String containing the Assembly's contents
   #
   def to_json
-    MultiJson.dump(self.to_hash)
+    MultiJson.dump(to_hash)
   end
-
-  protected
-
-  attr_writer :transloadit
 
   private
 
@@ -105,7 +100,7 @@ class Transloadit::Assembly
   # @param  [nil, Hash, Step, Array] steps the steps to encode
   # @return [Hash] the Transloadit-compatible hash of steps
   #
-  def _wrap_steps_in_hash(steps)
+  def wrap_steps_in_hash(steps)
     case steps
       when nil                then steps
       when Hash               then steps
@@ -122,7 +117,7 @@ class Transloadit::Assembly
   # @param  *args  the arguments to search for an options hash
   # @return [Hash] the options passed, otherwise an empty hash
   #
-  def _extract_options!(args)
+  def extract_options!(args)
     args.last.is_a?(Hash) ? args.pop : {}
   end
 end

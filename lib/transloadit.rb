@@ -35,12 +35,12 @@ class Transloadit
   #   signing requests (optional)
   #
   def initialize(options = {})
-    self.key      = options[:key]
-    self.secret   = options[:secret]
-    self.duration = options[:duration] || 5 * 60
-    self.max_size = options[:max_size]
+    @key      = options[:key]
+    @secret   = options[:secret]
+    @duration = options[:duration] || 5 * 60
+    @max_size = options[:max_size]
 
-    _ensure_key_provided
+    ensure_key_provided
   end
 
   #
@@ -79,16 +79,16 @@ class Transloadit
   # @return [String] a human-readable version of the Transloadit.
   #
   def inspect
-    self.to_hash.inspect
+    to_hash.inspect
   end
 
   #
   # @return [Hash] a Transloadit-compatible Hash of the instance's contents
   #
   def to_hash
-    result = { :key => self.key }
-    result.update(:max_size => self.max_size) unless self.max_size.nil?
-    result.update(:expires => _generate_expiry) unless self.secret.nil?
+    result = { :key => @key }
+    result.update(:max_size => @max_size) unless @max_size.nil?
+    result.update(:expires => generate_expiry) unless @secret.nil?
     result
   end
 
@@ -96,7 +96,7 @@ class Transloadit
   # @return [String] JSON-encoded String containing the object's hash contents
   #
   def to_json
-    MultiJson.dump(self.to_hash)
+    MultiJson.dump(to_hash)
   end
 
   private
@@ -104,8 +104,8 @@ class Transloadit
   #
   # Raises an ArgumentError if no {#key} has been assigned.
   #
-  def _ensure_key_provided
-    unless self.key
+  def ensure_key_provided
+    unless @key
       raise ArgumentError, 'an authentication key must be provided'
     end
   end
@@ -116,7 +116,7 @@ class Transloadit
   #
   # @return [String] an API-compatible timestamp
   #
-  def _generate_expiry
-    (Time.now + self.duration).utc.strftime('%Y/%m/%d %H:%M:%S+00:00')
+  def generate_expiry
+    (Time.now + @duration).utc.strftime('%Y/%m/%d %H:%M:%S+00:00')
   end
 end
