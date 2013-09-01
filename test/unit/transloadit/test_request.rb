@@ -1,8 +1,6 @@
 require 'test_helper'
 
 describe Transloadit::Request do
-  REQUEST_URI = 'http://api2.jane.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4'
-
   before do
     # reset the API endpoint between tests
     Transloadit::Request.api Transloadit::Request::API_ENDPOINT
