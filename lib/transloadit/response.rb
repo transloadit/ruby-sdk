@@ -12,7 +12,7 @@ class Transloadit::Response < Delegator
   # @param [RestClient::Response] response the JSON response to wrap
   #
   def initialize(response)
-    self.__setobj__(response)
+    __setobj__(response)
   end
 
   #
@@ -22,7 +22,7 @@ class Transloadit::Response < Delegator
   # @return [String]           the value for the attribute
   #
   def [](attribute)
-    self.body[attribute.to_s]
+    body[attribute.to_s]
   end
 
   #
@@ -31,7 +31,7 @@ class Transloadit::Response < Delegator
   # @return [Hash] the parsed JSON body hash
   #
   def body
-    MultiJson.load self.__getobj__.body
+    MultiJson.load __getobj__.body
   end
 
   #
@@ -40,7 +40,7 @@ class Transloadit::Response < Delegator
   # @return [String] a human-readable version of the body
   #
   def inspect
-    self.body.inspect
+    body.inspect
   end
 
   #
@@ -84,7 +84,7 @@ class Transloadit::Response < Delegator
   # @return [Transloadit::Response] this response
   #
   def replace(other)
-    self.__setobj__ other.__getobj__
+    __setobj__ other.__getobj__
     self
   end
 end
