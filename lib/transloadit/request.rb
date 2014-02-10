@@ -16,7 +16,7 @@ class Transloadit::Request
   API_HEADERS  = { 'User-Agent' => %{Transloadit Ruby SDK #{Transloadit::VERSION}} }
 
   # The HMAC algorithm used for calculation request signatures.
-  HMAC_ALGORITHM = OpenSSL::Digest::Digest.new('sha1')
+  HMAC_ALGORITHM = OpenSSL::Digest.new('sha1')
 
   # @return [String] the API endpoint for the request
   attr_reader   :url
