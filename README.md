@@ -214,7 +214,7 @@ for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/mast
 
 ## Compatibility
 
-At a minimum, this gem should work on MRI 2.1.0, 2.0.0, 1.9.3, 1.9.2, 1,8.7, Rubinius in both 1.8 mode and 1.9 mode,
+At a minimum, this gem should work on MRI 2.1.0, 2.0.0, 1.9.3, 1.9.2, 1,8.7, Rubinius,
 and JRuby in both 1.8 mode and 1.9 mode. It may also work on 1.8.6, but support for those
 Rubies is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
 [bug report](https://github.com/transloadit/ruby-sdk/issues). Compatibility patches for other Rubies
