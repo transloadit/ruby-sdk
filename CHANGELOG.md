@@ -1,3 +1,7 @@
+### 1.1.2 / 2014-06-17 ###
+
+* Fix deprecation warning on Ruby 2.1.0 for OpenSSL::Digest (thanks @pekeler for the patch)
+
 ### 1.1.1 / 2013-06-25 ###
 
 * request.get with secret (thanks @miry for the patch)
