@@ -21,7 +21,11 @@ Gem::Specification.new do |gem|
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.require_paths = %w{ lib }
 
-  gem.add_dependency 'rest-client'
+  if RUBY_VERSION < '1.9'
+    gem.add_dependency 'rest-client', '< 1.7.0'
+  else
+    gem.add_dependency 'rest-client'
+  end
   gem.add_dependency 'multi_json'
   gem.add_dependency 'mime-types', '< 2.0.0' if RUBY_VERSION < '1.9'
 
