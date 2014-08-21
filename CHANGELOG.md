@@ -1,3 +1,7 @@
+### 1.1.3 / 2014-08-21 ###
+
+* Use rest-client < 1.7.0 for Ruby version below 1.9 to stay 1.8 compatible.
+
 ### 1.1.2 / 2014-06-17 ###
 
 * Fix deprecation warning on Ruby 2.1.0 for OpenSSL::Digest (thanks @pekeler for the patch)
