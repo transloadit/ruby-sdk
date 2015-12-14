@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'mime-types'
 
   gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'minitest'
   gem.add_development_dependency 'simplecov'
 
   gem.add_development_dependency 'vcr'
@@ -34,4 +35,5 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency 'yard'
   gem.add_development_dependency 'kramdown' # for YARD rdoc formatting
+
 end
