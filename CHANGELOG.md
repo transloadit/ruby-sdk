@@ -1,3 +1,7 @@
+### 1.1.4 / 2015-12-14 ###
+
+* fix Ruby 1.9.x compatibility by explicitly requiring mime-types 2.99
+
 ### 1.1.3 / 2014-08-21 ###
 
 * Use rest-client < 1.7.0 for Ruby version below 1.9 to stay 1.8 compatible.
