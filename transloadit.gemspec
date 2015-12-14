@@ -24,7 +24,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'rest-client'
   gem.add_dependency 'multi_json'
-  gem.add_dependency 'mime-types'
+  gem.add_dependency 'mime-types', '~> 2.99'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'minitest'
