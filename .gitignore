@@ -8,3 +8,5 @@ Gemfile.lock
 coverage
 doc
 pkg
+
+transloadit-*.gem
