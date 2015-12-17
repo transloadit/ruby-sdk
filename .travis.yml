@@ -9,4 +9,5 @@ rvm:
   - 2.3.0-preview1
   - rbx-2
   - jruby-19mode
+  - jruby-9.0.0.0
 script: "COVERAGE=false bundle exec rake test"
