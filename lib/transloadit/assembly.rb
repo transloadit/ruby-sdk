@@ -82,7 +82,7 @@ class Transloadit::Assembly
     self.options.merge(
       :auth  => self.transloadit.to_hash,
       :steps => self.steps
-    ).delete_if {|k,v| v.nil? || k == :fields}
+    ).delete_if {|k,v| v.nil?}
   end
 
   #
