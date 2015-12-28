@@ -1,6 +1,6 @@
 ### 1.2.0 / 2015-12-28 ###
 
-* allow custom fields to be passed to Transloadit and received back in the response
+* allow custom fields to be passed to Transloadit and received back in the response (thanks @Acconut for the pull request)
 
 ### 1.1.4 / 2015-12-14 ###
 
