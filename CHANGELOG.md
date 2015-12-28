@@ -1,3 +1,7 @@
+### 1.2.0 / 2015-12-28 ###
+
+* allow custom fields to be passed to Transloadit and received back in the response
+
 ### 1.1.4 / 2015-12-14 ###
 
 * fix Ruby 1.9.x compatibility by explicitly requiring mime-types 2.99
