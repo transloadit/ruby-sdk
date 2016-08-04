@@ -10,3 +10,5 @@ doc
 pkg
 
 transloadit-*.gem
+
+.DS_Store
