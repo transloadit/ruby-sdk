@@ -25,14 +25,6 @@ class Transloadit::Request
   attr_accessor :secret
 
   #
-  # Automatically sets the API endpoint to the server with the most free
-  # resources. This is called automatically the first time a request is made.
-  #
-  def self.bored!
-    self.api self.bored
-  end
-
-  #
   # Prepares a request against an endpoint URL, optionally with an encryption
   # secret. If only a path is passed, the API will automatically determine the
   # best server to use. If a full URL is given, the host provided will be
@@ -97,30 +89,6 @@ class Transloadit::Request
   attr_writer :url
 
   #
-  # Locates the API server with the smallest job queue.
-  #
-  # @return [String] the hostname of the most bored server
-  #
-  def self.bored
-    self.new(API_ENDPOINT + '/instances/bored').get['api2_host']
-  end
-
-  #
-  # Sets or retrieves the base URI of the API endpoint.
-  #
-  # @overload self.api
-  #   @return [RestClient::Resource] the current API endpoint
-  #
-  # @overload self.api(uri)
-  #   @param [String] the hostname or URI to set the API endpoint to
-  #   @return [RestClient::Resource] the new API endpoint
-  #
-  def self.api(uri = nil)
-    @api   = RestClient::Resource.new(uri) if uri
-    @api ||= RestClient::Resource.new(self.bored)
-  end
-
-  #
   # Retrieves the current API endpoint. If the URL of the request contains a
   # hostname, then the hostname is used as the base endpoint of the API.
   # Otherwise uses the class-level API base.
@@ -131,7 +99,7 @@ class Transloadit::Request
     @api ||= begin
       case self.url.host
         when String then RestClient::Resource.new(self.url.host)
-        else self.class.api
+        else RestClient::Resource.new(API_ENDPOINT.host)
       end
     end
   end
