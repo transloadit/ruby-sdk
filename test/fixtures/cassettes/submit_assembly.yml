@@ -1,43 +1,8 @@
 ---
 http_interactions:
 - request:
-    method: get
-    uri: http://api2.transloadit.com/instances/bored
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - ! '*/*; q=0.5, application/xml'
-      Accept-Encoding:
-      - gzip, deflate
-      User-Agent:
-      - Transloadit Ruby SDK 0.0.1
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Access-Control-Allow-Headers:
-      - X-Requested-With, Content-Type, Accept, Content-Length
-      Access-Control-Allow-Methods:
-      - POST, GET, PUT, DELETE, OPTIONS
-      Access-Control-Allow-Origin:
-      - ! '*'
-      Content-Type:
-      - text/plain
-      Content-Length:
-      - '98'
-      Connection:
-      - keep-alive
-    body:
-      encoding: UTF-8
-      string: ! '{"ok":"BORED_INSTANCE_FOUND","host":"vivian.transloadit.com","api2_host":"vivian.transloadit.com"}'
-    http_version: '1.1'
-  recorded_at: Fri, 08 Mar 2013 15:13:10 GMT
-- request:
     method: post
-    uri: http://vivian.transloadit.com/assemblies
+    uri: http://api2.transloadit.com/assemblies
     body:
       encoding: UTF-8
       string: params=%7B%22steps%22%3A%7B%22a479db2c601661d8f914caf9cf258c0b%22%3A%7B%22robot%22%3A%22%2Fvideo%2Fthumbs%22%7D%7D%2C%22redirect_url%22%3A%22http%3A%2F%2Ffoo.bar%2F%22%2C%22auth%22%3A%7B%22key%22%3A%22%22%7D%2C%22file_0%22%3A%22%23%3CFile%3A0x00000100c63738%3E%22%7D
