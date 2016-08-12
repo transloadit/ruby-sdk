@@ -50,8 +50,7 @@ class Transloadit::Assembly
   #   @param [Hash]      params additional POST data to submit with the request
   #
   def submit!(*ios)
-    params  = _extract_options!(ios)
-    payload = { :params => self.to_hash.update(params) }
+    payload = { :params => self.to_hash.update(_extract_options!(ios)) }
     payload.merge!(self.options[:fields]) if self.options[:fields]
 
     # update the payload with file entries
@@ -63,6 +62,61 @@ class Transloadit::Assembly
 
     # post the request, extend it with the Assembly extensions
     request.post(payload).extend!(Transloadit::Response::Assembly)
+  end
+
+  #
+  # Returns a list of all assemblies
+  # @param [Hash]        params   additional GET data to submit with the request
+  #
+  def all(params = {})
+    params = self.to_hash.update(params)
+    Transloadit::Request.new('/assemblies', self.transloadit.secret).get(params)
+  end
+
+  #
+  # Returns a single assembly object specified by the assembly id
+  # @param [String]     id    id of the desired assembly
+  #
+  def get(id)
+    request = Transloadit::Request.new("/assemblies/#{id}", self.transloadit.secret)
+    request.get.extend!(Transloadit::Response::Assembly)
+  end
+
+  #
+  # Deletes/cancels an assambly specified by the  id
+  # @param [String]     id    id of the desired assembly
+  #
+  def delete(id)
+    Transloadit::Request.new("/assemblies/#{id}", self.transloadit.secret).delete
+  end
+
+  #
+  # Replays an assambly specified by the  id
+  # @param [String]   id       id of the desired assembly
+  # @param [Hash]     params   additional GET data to submit with the request
+  #
+  def replay(id, params = {})
+    params = self.to_hash.update(params)
+    Transloadit::Request.new("/assemblies/#{id}/replay", self.transloadit.secret).get(params)
+  end
+
+  #
+  # Returns all assembly notifications
+  # @param [Hash]        params    additional GET data to submit with the request
+  #
+  def notifications(params = {})
+    params = self.to_hash.update(params)
+    Transloadit::Request.new("/assembly_notifications", self.transloadit.secret).get(params)
+  end
+
+  #
+  # Replays an assambly notification by the  id
+  # @param [String]      id         id of the desired assembly
+  # @param [Hash]        params     additional POST data to submit with the request
+  #
+  def replay_notification(id, params = {})
+    payload = { :params => self.to_hash.update(params) }
+    Transloadit::Request.new("/assembly_notifications/#{id}/replay", self.transloadit.secret).post(payload)
   end
 
   #
