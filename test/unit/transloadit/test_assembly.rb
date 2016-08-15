@@ -73,6 +73,7 @@ describe Transloadit::Assembly do
       include WebMock::API
 
       before do
+        WebMock.reset!
         stub_request(:post, 'api2.transloadit.com/assemblies')
       end
 
