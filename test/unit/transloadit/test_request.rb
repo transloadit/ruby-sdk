@@ -1,26 +1,14 @@
 require 'test_helper'
 
 describe Transloadit::Request do
-  before do
-    # reset the API endpoint between tests
-    Transloadit::Request.api Transloadit::Request::API_ENDPOINT
-  end
-
   it 'must allow initialization' do
     request = Transloadit::Request.new '/'
     request.must_be_kind_of Transloadit::Request
   end
 
-  it 'must locate bored instances' do
-    VCR.use_cassette 'fetch_bored' do
-      Transloadit::Request.bored!.
-        wont_equal Transloadit::Request::API_ENDPOINT.host
-    end
-  end
-
   describe 'when performing a GET' do
     before do
-      @request = Transloadit::Request.new('instances/bored')
+      @request = Transloadit::Request.new '/'
     end
 
     it 'must inspect to the API URL' do
@@ -28,9 +16,9 @@ describe Transloadit::Request do
     end
 
     it 'must perform a GET against the resource' do
-      VCR.use_cassette 'fetch_bored' do
+      VCR.use_cassette 'fetch_root' do
         @request.get(:params => { :foo => 'bar'})['ok'].
-          must_equal 'BORED_INSTANCE_FOUND'
+          must_equal 'SERVER_ROOT'
       end
     end
 
@@ -44,9 +32,9 @@ describe Transloadit::Request do
       end
 
       it 'must perform a GET against the resource' do
-        VCR.use_cassette 'fetch_bored' do
+        VCR.use_cassette 'fetch_root' do
           @request.get(:params => { :foo => 'bar'})['ok'].
-              must_equal 'BORED_INSTANCE_FOUND'
+              must_equal 'SERVER_ROOT'
         end
       end
 

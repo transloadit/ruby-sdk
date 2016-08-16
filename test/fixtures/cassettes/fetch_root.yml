@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://api2.transloadit.com/instances/bored
+    uri: http://api2.transloadit.com
     body:
       encoding: US-ASCII
       string: ''
@@ -32,12 +32,12 @@ http_interactions:
       - keep-alive
     body:
       encoding: UTF-8
-      string: ! '{"ok":"BORED_INSTANCE_FOUND","host":"jane.transloadit.com","api2_host":"jane.transloadit.com"}'
+      string: ! '{"ok":"SERVER_ROOT","hostname":"jane.transloadit.com"}'
     http_version: '1.1'
   recorded_at: Fri, 08 Mar 2013 15:13:10 GMT
 - request:
     method: get
-    uri: http://api2.transloadit.com/instances/bored?params=%7B%22params%22:%7B%22foo%22:%22bar%22%7D%7D
+    uri: http://api2.transloadit.com/?params=%7B%22params%22:%7B%22foo%22:%22bar%22%7D%7D
     body:
       encoding: US-ASCII
       string: ''
@@ -67,12 +67,12 @@ http_interactions:
       - keep-alive
     body:
       encoding: UTF-8
-      string: ! '{"ok":"BORED_INSTANCE_FOUND","host":"jane.transloadit.com","api2_host":"jane.transloadit.com"}'
+      string: ! '{"ok":"SERVER_ROOT","host":"jane.transloadit.com"}'
     http_version: '1.1'
   recorded_at: Fri, 08 Mar 2013 15:13:10 GMT
 - request:
     method: get
-    uri: http://api2.transloadit.com/instances/bored?params=%7B%22params%22:%7B%22foo%22:%22bar%22%7D%7D&signature=78f291e3038e3eeb82d9f79e11a68fe7b858ee97
+    uri: http://api2.transloadit.com/?params=%7B%22params%22:%7B%22foo%22:%22bar%22%7D%7D&signature=78f291e3038e3eeb82d9f79e11a68fe7b858ee97
     body:
       encoding: US-ASCII
       string: ''
@@ -102,7 +102,7 @@ http_interactions:
       - keep-alive
     body:
       encoding: UTF-8
-      string: ! '{"ok":"BORED_INSTANCE_FOUND","host":"jane.transloadit.com","api2_host":"jane.transloadit.com"}'
+      string: ! '{"ok":"SERVER_ROOT","hostname":"jane.transloadit.com"}'
     http_version: '1.1'
   recorded_at: Fri, 08 Mar 2013 15:13:10 GMT
 recorded_with: VCR 2.4.0

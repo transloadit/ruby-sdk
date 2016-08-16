@@ -57,9 +57,6 @@ class Transloadit::Assembly
     # update the payload with file entries
     ios.each_with_index {|f, i| payload.update :"file_#{i}" => f }
 
-    # find a bored instance
-    Transloadit::Request.bored!
-
     # create the request
     request = Transloadit::Request.new '/assemblies',
       self.transloadit.secret

@@ -73,7 +73,8 @@ describe Transloadit::Assembly do
       include WebMock::API
 
       before do
-        stub_request(:post, 'jane.transloadit.com/assemblies')
+        WebMock.reset!
+        stub_request(:post, 'api2.transloadit.com/assemblies')
       end
 
       after do
@@ -81,31 +82,27 @@ describe Transloadit::Assembly do
       end
 
       it 'must allow to send a template id along' do
-        VCR.use_cassette 'fetch_bored' do
-          Transloadit::Assembly.new(
-            @transloadit,
-            :template_id => 'TEMPLATE_ID'
-          ).submit!
+        Transloadit::Assembly.new(
+          @transloadit,
+          :template_id => 'TEMPLATE_ID'
+        ).submit!
 
-          assert_requested(:post, 'jane.transloadit.com/assemblies') do |req|
-            values = values_from_post_body(req.body)
-            MultiJson.load(values['params'])['template_id'].must_equal 'TEMPLATE_ID'
-          end
+        assert_requested(:post, 'api2.transloadit.com/assemblies') do |req|
+          values = values_from_post_body(req.body)
+          MultiJson.load(values['params'])['template_id'].must_equal 'TEMPLATE_ID'
         end
       end
 
       it 'must allow to send the fields hash' do
-        VCR.use_cassette 'fetch_bored' do
-          Transloadit::Assembly.new(
-            @transloadit,
-            :fields => {:tag => 'ninja-cat'}
-          ).submit!
+        Transloadit::Assembly.new(
+          @transloadit,
+          :fields => {:tag => 'ninja-cat'}
+        ).submit!
 
-          assert_requested(:post, 'jane.transloadit.com/assemblies') do |req|
-            values = values_from_post_body(req.body)
-            values['tag'].must_equal 'ninja-cat'
-            MultiJson.load(values['params'])['fields']['tag'].must_equal 'ninja-cat'
-          end
+        assert_requested(:post, 'api2.transloadit.com/assemblies') do |req|
+          values = values_from_post_body(req.body)
+          values['tag'].must_equal 'ninja-cat'
+          MultiJson.load(values['params'])['fields']['tag'].must_equal 'ninja-cat'
         end
       end
     end
