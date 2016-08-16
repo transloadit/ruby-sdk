@@ -3,6 +3,8 @@
 * Drop support for EOL'd Ruby 1.9.x and Ruby 2.0, please use version 1.2.0 if you need support for older
   Ruby versions.
 * Fix compatibility to Ruby >=2.1 and Rails 5.
+* Remove bored instance logic (thanks @ifedapoolarewaju for the PR). This shouldn't affect users at all and removes
+  the need for another HTTP request before the actual HTTP request.
 
 ### 1.2.0 / 2015-12-28 ###
 
