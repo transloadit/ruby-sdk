@@ -29,6 +29,10 @@ module Transloadit::Response::Assembly
     self['ok'] == 'ASSEMBLY_EXECUTING'
   end
 
+  def replaying?
+    self['ok'] == 'ASSEMBLY_REPLAYING'
+  end
+
   def finished?
     aborted? || canceled? || completed? || error?
   end

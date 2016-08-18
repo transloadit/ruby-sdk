@@ -42,15 +42,18 @@ class Transloadit::Assembly
   # wish to process in the assembly. The last argument is an optional Hash
   # of parameters to send along with the request.
   #
-  # @overload submit!(*ios)
+  # @overload create!(*ios)
   #   @param [Array<IO>] *ios   the files for the assembly to process
   #
-  # @overload submit!(*ios, params = {})
+  # @overload create!(*ios, params = {})
   #   @param [Array<IO>] *ios   the files for the assembly to process
   #   @param [Hash]      params additional POST data to submit with the request
   #
-  def submit!(*ios)
-    payload = { :params => self.to_hash.update(_extract_options!(ios)) }
+  def create!(*ios)
+    params = _extract_options!(ios)
+    params[:steps] = _wrap_steps_in_hash(params[:steps]) if !params[:steps].nil?
+
+    payload = { :params => self.to_hash.update(params) }
     payload.merge!(self.options[:fields]) if self.options[:fields]
 
     # update the payload with file entries
@@ -65,10 +68,21 @@ class Transloadit::Assembly
   end
 
   #
-  # Returns a list of all assemblies
-  # @param [Hash]        params   additional GET data to submit with the request
+  # alias for create!
+  # keeping this method for backward compatibility
   #
-  def all(params = {})
+  def submit!(*ios)
+    warn "#{caller(1)[0]}: warning: Transloadit::Assembly#submit!"\
+      " is obsolete use Transloadit::Assembly#create! instead"
+
+    self.create!(*ios)
+  end
+
+  #
+  # Returns a list of all assemblies
+  # @param [Hash]        additional GET data to submit with the request
+  #
+  def list(params = {})
     params = self.to_hash.update(params)
     Transloadit::Request.new('/assemblies', self.transloadit.secret).get(params)
   end
@@ -83,21 +97,14 @@ class Transloadit::Assembly
   end
 
   #
-  # Deletes/cancels an assambly specified by the  id
-  # @param [String]     id    id of the desired assembly
-  #
-  def delete(id)
-    Transloadit::Request.new("/assemblies/#{id}", self.transloadit.secret).delete
-  end
-
-  #
   # Replays an assambly specified by the  id
   # @param [String]   id       id of the desired assembly
-  # @param [Hash]     params   additional GET data to submit with the request
+  # @param [Hash]     params   additional POST data to submit with the request
   #
   def replay(id, params = {})
-    params = self.to_hash.update(params)
-    Transloadit::Request.new("/assemblies/#{id}/replay", self.transloadit.secret).get(params)
+    params = { :params => { :wait => false }.merge(self.to_hash.update(params)) }
+    request = Transloadit::Request.new("/assemblies/#{id}/replay", self.transloadit.secret)
+    request.post(params).extend!(Transloadit::Response::Assembly)
   end
 
   #
