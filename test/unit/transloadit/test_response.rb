@@ -101,6 +101,20 @@ describe Transloadit::Response do
       @response.error?.must_equal false
     end
 
+    it 'must allow to check for replaying' do
+      VCR.use_cassette 'replay_assembly' do
+        @response = Transloadit::Response.new(
+          RestClient::Resource.new(
+            'http://api2.transloadit.com/assemblies/55c965a063a311e6ba2d379ef10b28f7/replay'
+          ).post({})
+        ).extend!(Transloadit::Response::Assembly)
+      end
+
+      @response.finished?.must_equal false
+      @response.replaying?.must_equal true
+      @response.error?.must_equal false
+    end
+
     it 'must allow to check for aborted' do
       VCR.use_cassette 'fetch_assembly_aborted' do
         @response = Transloadit::Response.new(
