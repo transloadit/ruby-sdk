@@ -209,14 +209,14 @@ describe Transloadit::Assembly do
           :get,
           'api2.transloadit.com/assembly_notifications?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D'
         )
-        @assembly.notifications
+        @assembly.get_notifications
 
         assert_requested(stub)
       end
 
       it 'must return a list of items' do
         VCR.use_cassette 'fetch_assembly_notifications' do
-          response = @assembly.notifications
+          response = @assembly.get_notifications
 
           response['items'].must_equal []
           response['count'].must_equal 0

@@ -105,7 +105,7 @@ class Transloadit::Assembly
   # Returns all assembly notifications
   # @param [Hash]        params    additional GET data to submit with the request
   #
-  def notifications(params = {})
+  def get_notifications(params = {})
     _do_request "/assembly_notifications", params
   end
 
