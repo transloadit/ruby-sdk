@@ -98,6 +98,7 @@ class Transloadit::Assembly
   # @param [Hash]     params   additional POST data to submit with the request
   #
   def replay(id, params = {})
+    params.merge!({ :wait => false })
     _do_request("/assemblies/#{id}/replay", params, 'post').extend!(Transloadit::Response::Assembly)
   end
 
