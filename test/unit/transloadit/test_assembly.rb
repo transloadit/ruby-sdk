@@ -106,7 +106,7 @@ describe Transloadit::Assembly do
         end
       end
 
-      it 'must allow steps through create! method' do
+      it 'must allow steps through the create! method' do
         Transloadit::Assembly.new(@transloadit).create!(
           { :steps => @transloadit.step('thumbs', '/video/thumbs') }
         )
@@ -117,7 +117,7 @@ describe Transloadit::Assembly do
         end
       end
 
-      it 'must allow steps through create! override steps on initialization' do
+      it 'must allow steps passed through the create! method override steps previously set' do
         @assembly.create!({ :steps => @transloadit.step('resize', '/image/resize') })
 
         assert_requested(:post, 'api2.transloadit.com/assemblies') do |req|
@@ -129,13 +129,15 @@ describe Transloadit::Assembly do
 
     describe 'when using the "submit!" method' do
 
-      it 'must call create! method with the same parameters' do
+      it 'must call the create! method with the same parameters' do
         VCR.use_cassette 'submit_assembly' do
           file = open('lib/transloadit/version.rb')
           mocker = MiniTest::Mock.new
-          mocker.expect :create!, nil, [file]
-
-          assert_send([@assembly, :create!, file])
+          mocker.expect :call, nil, [file]
+          @assembly.stub :create!, mocker do
+            @assembly.submit!(file)
+          end
+          mocker.verify
         end
       end
     end
@@ -193,7 +195,7 @@ describe Transloadit::Assembly do
       end
 
       it 'must get assembly with specified id' do
-        VCR.use_cassette 'fetch_assembly_by_id' do
+        VCR.use_cassette 'fetch_assembly_ok' do
           response = @assembly.get '76fe5df1c93a0a530f3e583805cf98b4'
           response['assembly_id'].must_equal '76fe5df1c93a0a530f3e583805cf98b4'
         end
@@ -203,7 +205,10 @@ describe Transloadit::Assembly do
     describe 'when fetching assembly notifications' do
 
       it 'must perform GET request to /assembly_notifications' do
-        stub = stub_request(:get, 'api2.transloadit.com/assembly_notifications?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D')
+        stub = stub_request(
+          :get,
+          'api2.transloadit.com/assembly_notifications?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D'
+        )
         @assembly.notifications
 
         assert_requested(stub)
