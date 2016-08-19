@@ -53,18 +53,17 @@ class Transloadit::Assembly
     params = _extract_options!(ios)
     params[:steps] = _wrap_steps_in_hash(params[:steps]) if !params[:steps].nil?
 
-    payload = { :params => self.to_hash.update(params) }
-    payload.merge!(self.options[:fields]) if self.options[:fields]
-
+    extra_params = {}
     # update the payload with file entries
-    ios.each_with_index {|f, i| payload.update :"file_#{i}" => f }
+    ios.each_with_index {|f, i| extra_params.update :"file_#{i}" => f }
 
-    # create the request
-    request = Transloadit::Request.new '/assemblies',
-      self.transloadit.secret
+    extra_params.merge!(self.options[:fields]) if self.options[:fields]
 
-    # post the request, extend it with the Assembly extensions
-    request.post(payload).extend!(Transloadit::Response::Assembly)
+    _do_request(
+      '/assemblies',
+      params, 'post',
+      extra_params
+    ).extend!(Transloadit::Response::Assembly)
   end
 
   #
@@ -73,8 +72,7 @@ class Transloadit::Assembly
   #
   def submit!(*ios)
     warn "#{caller(1)[0]}: warning: Transloadit::Assembly#submit!"\
-      " is obsolete use Transloadit::Assembly#create! instead"
-
+      " is deprecated. use Transloadit::Assembly#create! instead"
     self.create!(*ios)
   end
 
@@ -83,8 +81,7 @@ class Transloadit::Assembly
   # @param [Hash]        additional GET data to submit with the request
   #
   def list(params = {})
-    params = self.to_hash.update(params)
-    Transloadit::Request.new('/assemblies', self.transloadit.secret).get(params)
+    _do_request('/assemblies', params)
   end
 
   #
@@ -92,8 +89,7 @@ class Transloadit::Assembly
   # @param [String]     id    id of the desired assembly
   #
   def get(id)
-    request = Transloadit::Request.new("/assemblies/#{id}", self.transloadit.secret)
-    request.get.extend!(Transloadit::Response::Assembly)
+    _do_request("/assemblies/#{id}").extend!(Transloadit::Response::Assembly)
   end
 
   #
@@ -102,9 +98,7 @@ class Transloadit::Assembly
   # @param [Hash]     params   additional POST data to submit with the request
   #
   def replay(id, params = {})
-    params = { :params => { :wait => false }.merge(self.to_hash.update(params)) }
-    request = Transloadit::Request.new("/assemblies/#{id}/replay", self.transloadit.secret)
-    request.post(params).extend!(Transloadit::Response::Assembly)
+    _do_request("/assemblies/#{id}/replay", params, 'post').extend!(Transloadit::Response::Assembly)
   end
 
   #
@@ -112,8 +106,7 @@ class Transloadit::Assembly
   # @param [Hash]        params    additional GET data to submit with the request
   #
   def notifications(params = {})
-    params = self.to_hash.update(params)
-    Transloadit::Request.new("/assembly_notifications", self.transloadit.secret).get(params)
+    _do_request "/assembly_notifications", params
   end
 
   #
@@ -122,8 +115,7 @@ class Transloadit::Assembly
   # @param [Hash]        params     additional POST data to submit with the request
   #
   def replay_notification(id, params = {})
-    payload = { :params => self.to_hash.update(params) }
-    Transloadit::Request.new("/assembly_notifications/#{id}/replay", self.transloadit.secret).post(payload)
+    _do_request("/assembly_notifications/#{id}/replay", params, 'post')
   end
 
   #
@@ -182,5 +174,24 @@ class Transloadit::Assembly
   #
   def _extract_options!(args)
     args.last.is_a?(Hash) ? args.pop : {}
+  end
+
+  #
+  # Performs http request in favour of it's caller
+  #
+  # @param [String]     path      url path to which request is made
+  # @param [Hash]       params    POST/GET data to submit with the request
+  # @param [String]     method    http request method. This could be 'post' or 'get'
+  # @param [Hash]       extra_params   additional POST/GET data to submit with the request
+  #
+  # @return [Transloadit::Response] the response
+  #
+  def _do_request(path, params = nil, method = 'get', extra_params = nil)
+    if !params.nil?
+      params = self.to_hash.update(params)
+      params = { :params => params } if method == 'post'
+      params.merge!(extra_params) if !extra_params.nil?
+    end
+    Transloadit::Request.new(path, self.transloadit.secret).public_send(method, params)
   end
 end
