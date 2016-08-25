@@ -52,15 +52,22 @@ class Transloadit::Request
   end
 
   #
-  # Performs an HTTP DELETE to the request's URL. Takes an optional hash of
-  # query params.
+  # Performs an HTTP DELETE to the request's URL. Takes an optional hash
+  # containing the form-encoded payload.
   #
-  # @param  [Hash] params additional query parameters
+  # @param  [Hash] payload the payload to form-encode along with the POST
   # @return [Transloadit::Response] the response
   #
-  def delete(params = {})
+  def delete(payload = {})
     self.request! do
-      self.api[url.path + self.to_query(params)].delete(API_HEADERS)
+      # RestClient::Resource does not provide post payload
+      # feature with http delete method
+      RestClient::Request.execute(
+        :method => 'delete',
+        :url => self.api.concat_urls(self.api.url, self.url.path),
+        :payload => self.to_payload(payload),
+        :headers => API_HEADERS
+      )
     end
   end
 
@@ -74,6 +81,19 @@ class Transloadit::Request
   def post(payload = {})
     self.request! do
       self.api[url.path].post(self.to_payload(payload), API_HEADERS)
+    end
+  end
+
+  #
+  # Performs an HTTP PUT to the request's URL. Takes an optional hash
+  # containing the form-encoded payload.
+  #
+  # @param  [Hash] payload the payload to form-encode along with the POST
+  # @return [Transloadit::Response] the response
+  #
+  def put(payload = {})
+    self.request! do
+      self.api[url.path].put(self.to_payload(payload), API_HEADERS)
     end
   end
 

@@ -65,7 +65,7 @@ describe Transloadit do
       step.options.must_equal :width => 320
     end
 
-    it 'must create assemblies' do
+    it 'must create assembly api instances' do
       step     = @transloadit.step(nil, nil)
       assembly = @transloadit.assembly :steps => step
 
@@ -89,6 +89,11 @@ describe Transloadit do
         bill['ok'].must_equal 'BILL_FOUND'
         bill['invoice_id'].must_equal '76fe5df1c93a0a530f3e583805cf98b4'
       end
+    end
+
+    it 'must create template api instances' do
+      template = @transloadit.template
+      template.must_be_kind_of Transloadit::Template
     end
 
     it 'must inspect like a hash' do

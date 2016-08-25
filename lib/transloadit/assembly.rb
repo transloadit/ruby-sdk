@@ -1,35 +1,12 @@
 require 'transloadit'
 
 #
-# Represents a Assembly ready to be sent to the REST API for processing. An
-# Assembly can contain one or more Steps for processing or point to a
-# server-side template. It's submitted along with a list of files to process,
-# at which point Transloadit will process and store the files according to the
-# rules in the Assembly.
+# Represents an Assembly API ready to make calls to the REST API endpoints.
 #
-# See the Transloadit {documentation}[http://transloadit.com/docs/building-assembly-instructions]
-# for futher information on Assemblies and their parameters.
+# See the Transloadit {documentation}[https://transloadit.com/docs/api-docs/#assembly-api]
+# for futher information on Assemblies and available endpoints.
 #
-class Transloadit::Assembly
-  # @return [Transloadit] the associated Transloadit instance
-  attr_reader   :transloadit
-
-  # @return [Hash] the options describing the Assembly
-  attr_accessor :options
-
-  #
-  # Creates a new Assembly authenticated using the given +transloadit+
-  # instance.
-  #
-  # @param [Transloadit] transloadit the associated Transloadit instance
-  # @param [Hash]        options     the configuration for the Assembly;
-  #   see {Transloadit#assembly}
-  #
-  def initialize(transloadit, options = {})
-    self.transloadit = transloadit
-    self.options     = options
-  end
-
+class Transloadit::Assembly < Transloadit::API
   #
   # @return [Hash] the processing steps, formatted for sending to Transloadit
   #
@@ -38,8 +15,16 @@ class Transloadit::Assembly
   end
 
   #
-  # Submits the assembly for processing. Accepts as many IO objects as you
-  # wish to process in the assembly. The last argument is an optional Hash
+  # Creates a Transloadit::Assembly and sends to the REST API. An
+  # Assembly can contain one or more Steps for processing or point to a
+  # server-side template. It's submitted along with a list of files to process,
+  # at which point Transloadit will process and store the files according to the
+  # rules in the Assembly.
+  # See the Transloadit {documentation}[http://transloadit.com/docs/building-assembly-instructions]
+  # for futher information on Assemblies and their parameters.
+  #
+  # Accepts as many IO objects as you wish to process in the assembly.
+  # The last argument is an optional Hash
   # of parameters to send along with the request.
   #
   # @overload create!(*ios)
@@ -47,7 +32,16 @@ class Transloadit::Assembly
   #
   # @overload create!(*ios, params = {})
   #   @param [Array<IO>] *ios   the files for the assembly to process
-  #   @param [Hash]      params additional POST data to submit with the request
+  #   @param [Hash]      params additional POST data to submit with the request;
+  #     for a full list of parameters, see the official documentation
+  #     on {templates}[http://transloadit.com/docs/templates].
+  #   @option params [Step, Array<Step>] :steps the steps to perform in this
+  #     assembly
+  #   @option params [String] :notify_url A URL to be POSTed when the assembly
+  #     has finished processing
+  #   @option params [String] :template_id the ID of a
+  #     {template}[https://transloadit.com/templates] to use instead of
+  #     specifying params here directly
   #
   def create!(*ios)
     params = _extract_options!(ios)
@@ -60,9 +54,8 @@ class Transloadit::Assembly
     extra_params.merge!(self.options[:fields]) if self.options[:fields]
 
     _do_request(
-      '/assemblies',
-      params, 'post',
-      extra_params
+      '/assemblies',params,
+      'post', extra_params
     ).extend!(Transloadit::Response::Assembly)
   end
 
@@ -120,13 +113,6 @@ class Transloadit::Assembly
   end
 
   #
-  # @return [String] a human-readable version of the Assembly
-  #
-  def inspect
-    self.to_hash.inspect
-  end
-
-  #
   # @return [Hash] a Transloadit-compatible Hash of the Assembly's contents
   #
   def to_hash
@@ -135,17 +121,6 @@ class Transloadit::Assembly
       :steps => self.steps
     ).delete_if {|k,v| v.nil?}
   end
-
-  #
-  # @return [String] JSON-encoded String containing the Assembly's contents
-  #
-  def to_json
-    MultiJson.dump(self.to_hash)
-  end
-
-  protected
-
-  attr_writer :transloadit
 
   private
 
@@ -175,24 +150,5 @@ class Transloadit::Assembly
   #
   def _extract_options!(args)
     args.last.is_a?(Hash) ? args.pop : {}
-  end
-
-  #
-  # Performs http request in favour of it's caller
-  #
-  # @param [String]     path      url path to which request is made
-  # @param [Hash]       params    POST/GET data to submit with the request
-  # @param [String]     method    http request method. This could be 'post' or 'get'
-  # @param [Hash]       extra_params   additional POST/GET data to submit with the request
-  #
-  # @return [Transloadit::Response] the response
-  #
-  def _do_request(path, params = nil, method = 'get', extra_params = nil)
-    if !params.nil?
-      params = self.to_hash.update(params)
-      params = { :params => params } if method == 'post'
-      params.merge!(extra_params) if !extra_params.nil?
-    end
-    Transloadit::Request.new(path, self.transloadit.secret).public_send(method, params)
   end
 end
