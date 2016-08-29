@@ -142,6 +142,12 @@ response = assembly.submit!(
 )
 ```
 
+You can also pass an array of files to the `submit!` method. Just unpack the array using the splat `*` operator.
+```ruby
+files = [open('puppies.jpg'), open('kittens.jpg'), open('ferrets.jpg')]
+response = assembly.submit! *files
+```
+
 ### 3. Parallel Assembly
 
 Transloadit allows you to perform several processing steps in parallel. You
