@@ -6,7 +6,7 @@ require 'transloadit'
 # See the Transloadit {documentation}[https://transloadit.com/docs/api-docs/#assembly-api]
 # for futher information on Assemblies and available endpoints.
 #
-class Transloadit::Assembly < Transloadit::API
+class Transloadit::Assembly < Transloadit::ApiModel
   #
   # @return [Hash] the processing steps, formatted for sending to Transloadit
   #

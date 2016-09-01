@@ -5,8 +5,8 @@ describe Transloadit::Assembly do
     @transloadit = Transloadit.new(:key => '')
   end
 
-  it 'must inherit from Transloadit::API class' do
-    (Transloadit::Assembly < Transloadit::API).must_equal true
+  it 'must inherit from Transloadit::ApiModel class' do
+    (Transloadit::Assembly < Transloadit::ApiModel).must_equal true
   end
 
   describe 'when initialized' do

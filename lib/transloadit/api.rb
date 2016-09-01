@@ -4,7 +4,7 @@ require 'transloadit'
 # Represents an API class that more Transloadit specific API classes
 # would inherit from.
 #
-class Transloadit::API
+class Transloadit::ApiModel
   # @return [Transloadit] the associated Transloadit instance
   attr_reader   :transloadit
 

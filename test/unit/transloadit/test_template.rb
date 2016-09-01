@@ -2,8 +2,8 @@ require 'test_helper'
 
 describe Transloadit::Template do
 
-  it 'must inherit from Transloadit::API class' do
-    (Transloadit::Template < Transloadit::API).must_equal true
+  it 'must inherit from Transloadit::ApiModel class' do
+    (Transloadit::Template < Transloadit::ApiModel).must_equal true
   end
 
   describe 'using template API methods' do

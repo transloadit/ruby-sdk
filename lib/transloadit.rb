@@ -6,7 +6,7 @@ require 'date'
 # for usage instructions.
 #
 class Transloadit
-  autoload :API,      'transloadit/api'
+  autoload :ApiModel,      'transloadit/api'
   autoload :Assembly, 'transloadit/assembly'
   autoload :Request,  'transloadit/request'
   autoload :Response, 'transloadit/response'

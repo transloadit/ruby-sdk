@@ -6,7 +6,7 @@ require 'transloadit'
 # See the Transloadit {documentation}[https://transloadit.com/docs/api-docs/#template-api]
 # for futher information on Templates and their parameters.
 #
-class Transloadit::Template < Transloadit::API
+class Transloadit::Template < Transloadit::ApiModel
   #
   # Submits a template to be created.
   #

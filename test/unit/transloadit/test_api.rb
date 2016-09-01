@@ -1,13 +1,13 @@
 require 'test_helper'
 
-describe Transloadit::API do
+describe Transloadit::ApiModel do
   before do
     @transloadit = Transloadit.new(:key => '')
   end
 
   it 'must allow initialization' do
-    Transloadit::API.new(@transloadit).
-      must_be_kind_of Transloadit::API
+    Transloadit::ApiModel.new(@transloadit).
+      must_be_kind_of Transloadit::ApiModel
 
     Transloadit::Template.new(@transloadit).
       must_be_kind_of Transloadit::Template
@@ -18,7 +18,7 @@ describe Transloadit::API do
       @foo = 'foo'
       @bar = 'bar'
 
-      @api = Transloadit::API.new @transloadit,
+      @api = Transloadit::ApiModel.new @transloadit,
         :foo => @foo,
         :bar => @bar
     end
