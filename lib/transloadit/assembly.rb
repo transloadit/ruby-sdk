@@ -48,17 +48,20 @@ class Transloadit::Assembly < Transloadit::ApiModel
     params[:steps] = _wrap_steps_in_hash(params[:steps]) if !params[:steps].nil?
 
     extra_params = {}
-    # update the payload with file entries
-    ios.each_with_index {|f, i| extra_params.update :"file_#{i}" => f }
-
     extra_params.merge!(self.options[:fields]) if self.options[:fields]
 
-    _do_request(
-      '/assemblies',
-      params,
-      'post',
-      extra_params
-    ).extend!(Transloadit::Response::Assembly)
+    loop do
+      # update the payload with file entries
+      ios.each_with_index {|f, i| extra_params.update :"file_#{i}" => f }
+
+      response = _do_request(
+        '/assemblies',params,'post', extra_params
+      ).extend!(Transloadit::Response::Assembly)
+
+      return response unless response.rate_limit?
+
+      _handle_rate_limit!(response, ios)
+    end
   end
 
   #
@@ -152,5 +155,19 @@ class Transloadit::Assembly < Transloadit::ApiModel
   #
   def _extract_options!(args)
     args.last.is_a?(Hash) ? args.pop : {}
+  end
+
+  #
+  # Stays idle for certain time and then reopens assembly files for reprocessing.
+  # Should be called when assembly rate limit is reached.
+  #
+  # @param  [Response] response  assembly response that comes with a rate limit
+  # @param [Array<IO>] ios the files sent for the assembly to process.
+  #
+  def _handle_rate_limit!(response, ios)
+    warn "Rate limit reached. Waiting for #{response.wait_time} seconds before retrying."
+    sleep response.wait_time
+    # reopen file stream
+    ios.collect! {|file| open file.path }
   end
 end

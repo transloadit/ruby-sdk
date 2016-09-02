@@ -40,4 +40,12 @@ module Transloadit::Response::Assembly
   def uploading?
     self['ok'] == 'ASSEMBLY_UPLOADING'
   end
+
+  def rate_limit?
+    self['error'] == 'RATE_LIMIT_REACHED'
+  end
+
+  def wait_time
+    self['info']['retryIn'] || 0
+  end
 end

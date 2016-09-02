@@ -54,7 +54,7 @@ describe Transloadit::Assembly do
 
       before do
         WebMock.reset!
-        stub_request(:post, 'api2.transloadit.com/assemblies')
+        stub_request(:post, 'api2.transloadit.com/assemblies').to_return(body: '{"ok":"ASSEMBLY_COMPLETED"}')
       end
 
       after do
