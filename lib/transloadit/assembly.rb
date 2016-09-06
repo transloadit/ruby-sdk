@@ -50,7 +50,9 @@ class Transloadit::Assembly < Transloadit::ApiModel
     extra_params = {}
     extra_params.merge!(self.options[:fields]) if self.options[:fields]
 
-    loop do
+    # retry 2 more times on rate limit response.
+    trials = 3
+    (1..trials).each do |trial|
       # update the payload with file entries
       ios.each_with_index {|f, i| extra_params.update :"file_#{i}" => f }
 
@@ -60,7 +62,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
 
       return response unless response.rate_limit?
 
-      _handle_rate_limit!(response, ios)
+      _handle_rate_limit!(response, ios, trial < trials)
     end
   end
 
@@ -164,10 +166,15 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # @param  [Response] response  assembly response that comes with a rate limit
   # @param [Array<IO>] ios the files sent for the assembly to process.
   #
-  def _handle_rate_limit!(response, ios)
-    warn "Rate limit reached. Waiting for #{response.wait_time} seconds before retrying."
-    sleep response.wait_time
-    # reopen file stream
-    ios.collect! {|file| open file.path }
+  def _handle_rate_limit!(response, ios, is_retrying)
+    if is_retrying
+      warn "Rate limit reached. Waiting for #{response.wait_time} seconds before retrying."
+      sleep response.wait_time
+      # reopen file stream
+      ios.collect! {|file| open file.path }
+    else
+      # raise exception error here
+      raise Transloadit::Exception::RateLimitReached.new(response = response)
+    end
   end
 end

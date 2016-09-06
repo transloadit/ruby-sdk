@@ -125,13 +125,21 @@ describe Transloadit::Assembly do
 
     describe 'when rate limit is reached' do
 
-      it 'must output a warning and retry for a succesful request' do
-        VCR.use_cassette 'submit_assembly_rate_limit' do
+      it 'must output a warning and retry for a successful request' do
+        VCR.use_cassette 'rate_limit_succeed' do
           _, warning = capture_io do
             response = @assembly.create! open('lib/transloadit/version.rb')
             response['ok'].must_equal 'ASSEMBLY_COMPLETED'
           end
           warning.must_equal "Rate limit reached. Waiting for 0 seconds before retrying.\n"
+        end
+      end
+
+      it 'must raise RateLimitReached exception after multiple retries request' do
+        VCR.use_cassette 'rate_limit_fail' do
+          assert_raises Transloadit::Exception::RateLimitReached do
+            response = @assembly.create! open('lib/transloadit/version.rb')
+          end
         end
       end
     end

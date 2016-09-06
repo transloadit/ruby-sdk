@@ -8,6 +8,7 @@ require 'date'
 class Transloadit
   autoload :ApiModel, 'transloadit/api_model'
   autoload :Assembly, 'transloadit/assembly'
+  autoload :Exception, 'transloadit/exceptions'
   autoload :Request,  'transloadit/request'
   autoload :Response, 'transloadit/response'
   autoload :Step,     'transloadit/step'

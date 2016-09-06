@@ -73,7 +73,7 @@ describe Transloadit::Template do
 
       it 'must perform PUT request to templates/[id]' do
         url = 'api2.transloadit.com/templates/76fe5df1c93a0a530f3e583805cf98b4'
-        stub = stub_request(:put, url)
+        stub_request(:put, url)
         @template.update(
           '76fe5df1c93a0a530f3e583805cf98b4',
           {:name => 'foo', :template => {:key => 'value'}}
