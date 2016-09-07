@@ -173,7 +173,6 @@ class Transloadit::Assembly < Transloadit::ApiModel
       # reopen file stream
       ios.collect! {|file| open file.path }
     else
-      # raise exception error here
       raise Transloadit::Exception::RateLimitReached.new(response = response)
     end
   end
