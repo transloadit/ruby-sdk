@@ -83,6 +83,14 @@ describe Transloadit do
       assembly.steps.must_equal steps.inject({}) {|h,s| h.merge s }
     end
 
+    it 'must get user billing report' do
+      VCR.use_cassette 'fetch_billing' do
+        bill = Transloadit.new(:key => '').bill(9, 2016)
+        bill['ok'].must_equal 'BILL_FOUND'
+        bill['invoice_id'].must_equal '76fe5df1c93a0a530f3e583805cf98b4'
+      end
+    end
+
     it 'must inspect like a hash' do
       @transloadit.inspect.must_equal @transloadit.to_hash.inspect
     end

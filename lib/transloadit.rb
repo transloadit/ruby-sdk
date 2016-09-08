@@ -1,4 +1,5 @@
 require 'multi_json'
+require 'date'
 
 #
 # Implements the Transloadit REST API in Ruby. Check the {file:README.md README}
@@ -73,6 +74,25 @@ class Transloadit
   #
   def assembly(options = {})
     Transloadit::Assembly.new(self, options)
+  end
+
+  #
+  # Gets user billing reports for specified month and year.
+  # Defaults to current month or year if corresponding param is not specified.
+  #
+  # @param [Integer] month the month for which billing reports should be retrieved.
+  #   defaults to current month if not specified.
+  # @param [Integer] year the year for which billing reports should be retrieved.
+  #   defaults to current year if not specified.
+  #
+  def bill(month = nil, year = nil)
+    today = Date.today
+    # convert month to 2 digit  format
+    month = format('%02d', month || today.month)
+    year  = today.year if year.nil?
+    path = "bill/#{year}-#{month}"
+
+    Transloadit::Request.new(path, self.secret).get({ :auth => self.to_hash })
   end
 
   #
