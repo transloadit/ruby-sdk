@@ -85,11 +85,9 @@ class Transloadit
   # @param [Integer] year the year for which billing reports should be retrieved.
   #   defaults to current year if not specified.
   #
-  def bill(month = nil, year = nil)
-    today = Date.today
-    # convert month to 2 digit  format
-    month = format('%02d', month || today.month)
-    year  = today.year if year.nil?
+  def bill(month = Date.today.month, year = Date.today.year)
+    # convert month to 2 digit format
+    month = format '%02d', month
     path = "bill/#{year}-#{month}"
 
     Transloadit::Request.new(path, self.secret).get({ :auth => self.to_hash })
