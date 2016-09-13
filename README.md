@@ -218,9 +218,10 @@ If you want to retrieve your transloadit account billing report for a particular
 you can use the `bill` method passing the required month and year like the following:
 
 ```ruby
+# returns bill report for February, 2016.
 transloadit.bill(month=2, year=2016)
 ```
-not specifying the `month` or `year` would default to the current month or year.
+Not specifying the `month` or `year` would default to the current month or year.
 
 ## Documentation
 
