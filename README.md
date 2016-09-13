@@ -212,6 +212,16 @@ transloadit.assembly(
 
 Read up more on the notifications [on Transloadit's documentation page](http://transloadit.com/docs/notifications-vs-redirect-url)
 
+### 7. Getting Bill reports
+
+If you want to retrieve your transloadit account billing report for a particular month and year
+you can use the `bill` method passing the required month and year like the following:
+
+```ruby
+transloadit.bill(month=2, year=2016)
+```
+not specifying the `month` or `year` would default to the current month or year.
+
 ## Documentation
 
 Up-to-date YARD documentation is automatically generated. You can view the
