@@ -1,0 +1,44 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://api2.transloadit.com/bill/2016-09?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Transloadit Ruby SDK 1.2.0
+      Host:
+      - api2.transloadit.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Headers:
+      - X-Requested-With, Content-Type, Cache-Control, Accept, Content-Length
+      Access-Control-Allow-Methods:
+      - POST, GET, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Origin:
+      - "*"
+      Cache-Control:
+      - no-cache
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 08 Sep 2016 11:06:58 GMT
+      Content-Length:
+      - '104'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"ok":"BILL_FOUND", "invoice_id":"76fe5df1c93a0a530f3e583805cf98b4", "to":"", "email":"user@email.com", "month":"2016-09", "created":"2016-07-29T15:27:19.000Z", "plan":{"id":"4c3ffb9856704668bd484a19cee4b066", "title":"Sandbox", "slug":"sandbox", "price_per_month":0, "gb_included":2, "gb_limit":2, "max_jobs_simulteneous":1, "has_lifetime_limit":1, "price_per_gb":0, "published":1}}'
+    http_version: 
+  recorded_at: Thu, 08 Sep 2016 11:06:58 GMT
+recorded_with: VCR 3.0.3

@@ -5,6 +5,7 @@
 * Fix compatibility to Ruby >=2.1 and Rails 5.
 * Remove bored instance logic (thanks @ifedapoolarewaju for the PR). This shouldn't affect users at all and removes
   the need for another HTTP request before the actual HTTP request.
+* We now have the `transloadit.bill` method to retrieve billing reports.
 
 ### 1.2.0 / 2015-12-28 ###
 
