@@ -212,6 +212,8 @@ transloadit.assembly(
 ).create! open('ninja-cat.mpg')
 ```
 
+Read up more on the notifications [on Transloadit's documentation page](http://transloadit.com/docs/notifications-vs-redirect-url)
+
 ### 7. Other Assembly methods
 
 Transloadit also provides methods to retrieve/replay assemblies and their notifications.
@@ -287,8 +289,6 @@ template.update(
 template.delete 'YOUR_TEMPLATE_ID'
 >>>>>>> docs: update README and CHANGELOG
 ```
-
-Read up more on the notifications [on Transloadit's documentation page](http://transloadit.com/docs/notifications-vs-redirect-url)
 
 ### 9. Getting Bill reports
 
