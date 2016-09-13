@@ -20,6 +20,7 @@
   * get to retrieve a particular template.
   * update to update a particular template.
   * delete to delete a particular template.
+* Add rate limit feature to implicitly retry assembly creation when the rate limit is reached.
 
 ### 1.2.0 / 2015-12-28 ###
 
