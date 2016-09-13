@@ -6,7 +6,20 @@
 * Remove bored instance logic (thanks @ifedapoolarewaju for the PR). This shouldn't affect users at all and removes
   the need for another HTTP request before the actual HTTP request.
 * We now have the `transloadit.bill` method to retrieve billing reports. (@ifedapoolarewaju)
-* Add support for new assembly methods (`replay`, `get_notifications`, `replay_notification`, `list`, `get`) (Thanks @ifedapoolarewaju)
+* Deprecate `assembly.submit!` method for `assembly.create!`. This shouldn't affect users as the `submit!` method remains
+  as an alias for `create!`. (@ifedapoolarewaju)
+* Add support for new `assembly` methods (Thanks @ifedapoolarewaju):
+  * list to get a list of all assemblies.
+  * get to retrieve a particular assembly. Requires assembly id to be passed as argument.
+  * replay to replay a particular assembly. Requires assembly id to be passed as argument.
+  * get_notifications to get a list of all assembly notifications.
+  * replay_notification to replay the notification of a particular assembly. Requires assembly id to be passed as argument.
+* We now have a Template api with the following methods:
+  * create to create a new template.
+  * list to get a list of all templates.
+  * get to retrieve a particular template.
+  * update to update a particular template.
+  * delete to delete a particular template.
 
 ### 1.2.0 / 2015-12-28 ###
 
