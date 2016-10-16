@@ -67,7 +67,7 @@ assembly = transloadit.assembly(
   :steps => [ resize, store ]
 )
 
-response = assembly.submit! open('lolcat.jpg')
+response = assembly.create! open('lolcat.jpg')
 
 # loop until processing is finished
 until response.finished?
@@ -81,7 +81,7 @@ else
 end
 ```
 
-When the `submit!` method returns, the file has been uploaded but may not yet
+When the `create!` method returns, the file has been uploaded but may not yet
 be done processing. We can use the returned object to check if processing has
 completed, or examine other attributes of the request.
 
@@ -128,24 +128,24 @@ Transloadit HTTP API.
 
 ### 2. Uploading multiple files
 
-Multiple files can be given to the `submit!` method in order to upload more
+Multiple files can be given to the `create!` method in order to upload more
 than one file in the same request. You can also pass a single step for the
 `steps` parameter, without having to wrap it in an Array.
 
 ```ruby
 assembly = transloadit.assembly(steps: store)
 
-response = assembly.submit!(
+response = assembly.create!(
   open('puppies.jpg'),
   open('kittens.jpg'),
   open('ferrets.jpg')
 )
 ```
 
-You can also pass an array of files to the `submit!` method. Just unpack the array using the splat `*` operator.
+You can also pass an array of files to the `create!` method. Just unpack the array using the splat `*` operator.
 ```ruby
 files = [open('puppies.jpg'), open('kittens.jpg'), open('ferrets.jpg')]
-response = assembly.submit! *files
+response = assembly.create! *files
 ```
 
 ### 3. Parallel Assembly
@@ -163,7 +163,7 @@ export.use [ encode, thumbs ]
 
 transloadit.assembly(
   :steps => [ encode, thumbs, export ]
-).submit! open('ninja-cat.mpg')
+).create! open('ninja-cat.mpg')
 ```
 
 You can also tell a step to use the original uploaded file by passing the
@@ -180,7 +180,7 @@ for recurring encoding tasks. In order to use these do the following:
 ```ruby
 transloadit.assembly(
   :template_id => 'YOUR_TEMPLATE_ID'
-).submit! open('ninja-cat.mpg')
+).create! open('ninja-cat.mpg')
 ```
 
 You can use your steps together with this template and even use variables.
@@ -196,7 +196,7 @@ to the upload itself. You can use fields like the following:
 ```ruby
 transloadit.assembly(
   :fields => {:tag => 'ninjacats'}
-).submit! open('ninja-cat.mpg')
+).create! open('ninja-cat.mpg')
 ```
 
 ### 6. Notify URL
@@ -207,7 +207,7 @@ a notify url for the assembly.
 ```ruby
 transloadit.assembly(
   :notify_url => 'http://example.com/processing_finished'
-).submit! open('ninja-cat.mpg')
+).create! open('ninja-cat.mpg')
 ```
 
 Read up more on the notifications [on Transloadit's documentation page](http://transloadit.com/docs/notifications-vs-redirect-url)
