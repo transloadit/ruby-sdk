@@ -93,7 +93,7 @@ class Transloadit::Assembly
   end
 
   #
-  # Replays an assambly specified by the  id
+  # Replays an assembly specified by the  id
   # @param [String]   id       id of the desired assembly
   # @param [Hash]     params   additional POST data to submit with the request
   #
@@ -111,7 +111,7 @@ class Transloadit::Assembly
   end
 
   #
-  # Replays an assambly notification by the  id
+  # Replays an assembly notification by the  id
   # @param [String]      id         id of the desired assembly
   # @param [Hash]        params     additional POST data to submit with the request
   #
