@@ -2,7 +2,7 @@
 .rvmrc
 .yardoc
 .ruby-version
-
+.idea/
 Gemfile.lock
 
 coverage
