@@ -6,7 +6,7 @@ require 'transloadit'
 #
 class Transloadit::ApiModel
   # @return [Transloadit] the associated Transloadit instance
-  attr_reader   :transloadit
+  attr_reader :transloadit
 
   # @return [Hash] the options describing the Assembly
   attr_accessor :options
@@ -36,7 +36,7 @@ class Transloadit::ApiModel
   def to_hash
     self.options.merge(
       :auth  => self.transloadit.to_hash,
-    ).delete_if {|k,v| v.nil?}
+    ).delete_if {|_,v| v.nil?}
   end
 
   #

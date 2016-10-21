@@ -54,8 +54,10 @@ class Transloadit::Assembly < Transloadit::ApiModel
     extra_params.merge!(self.options[:fields]) if self.options[:fields]
 
     _do_request(
-      '/assemblies',params,
-      'post', extra_params
+      '/assemblies',
+      params,
+      'post',
+      extra_params
     ).extend!(Transloadit::Response::Assembly)
   end
 

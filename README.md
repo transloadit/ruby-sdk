@@ -287,7 +287,6 @@ template.update(
 
 # deletes a specific template
 template.delete 'YOUR_TEMPLATE_ID'
->>>>>>> docs: update README and CHANGELOG
 ```
 
 ### 9. Getting Bill reports
