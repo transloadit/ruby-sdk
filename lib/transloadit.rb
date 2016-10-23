@@ -6,10 +6,12 @@ require 'date'
 # for usage instructions.
 #
 class Transloadit
+  autoload :ApiModel, 'transloadit/api_model'
   autoload :Assembly, 'transloadit/assembly'
   autoload :Request,  'transloadit/request'
   autoload :Response, 'transloadit/response'
   autoload :Step,     'transloadit/step'
+  autoload :Template, 'transloadit/template'
   autoload :VERSION,  'transloadit/version'
 
   # @return [String] your Transloadit auth key
@@ -74,6 +76,16 @@ class Transloadit
   #
   def assembly(options = {})
     Transloadit::Assembly.new(self, options)
+  end
+
+  #
+  # Creates a Transloadit::Template instance ready to interact with its corresponding REST API.
+  #
+  # See the Transloadit {documentation}[https://transloadit.com/docs/api-docs/#template-api]
+  # for futher information on Templates and available endpoints.
+  #
+  def template(options = {})
+    Transloadit::Template.new(self, options)
   end
 
   #

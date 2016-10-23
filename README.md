@@ -80,6 +80,8 @@ else
  # handle other cases
 end
 ```
+*(note: the assembly method `submit!` has been deprecated and replaced with `create!`.
+The submit! method remains as an alias of `create!` for backward Compatibility)*
 
 When the `create!` method returns, the file has been uploaded but may not yet
 be done processing. We can use the returned object to check if processing has
@@ -172,9 +174,9 @@ Symbol `:original` instead of another step.
 Check the YARD documentation for more information on using
 [use](http://rubydoc.info/gems/transloadit/frames/Transloadit/Step#use-instance_method).
 
-### 4. Using a Template
+### 4. Creating an Assembly with Templates
 
-Transloadit allows you to use custom [templates](http://transloadit.com/docs/templates)
+Transloadit allows you to use custom [templates](https://github.com/transloadit/ruby-sdk/blob/master/README.md#8-templates)
 for recurring encoding tasks. In order to use these do the following:
 
 ```ruby
@@ -212,7 +214,82 @@ transloadit.assembly(
 
 Read up more on the notifications [on Transloadit's documentation page](http://transloadit.com/docs/notifications-vs-redirect-url)
 
-### 7. Getting Bill reports
+### 7. Other Assembly methods
+
+Transloadit also provides methods to retrieve/replay assemblies and their notifications.
+
+```ruby
+assembly = transloadit.assembly
+
+# returns a list of all assemblies
+assembly.list
+
+# returns a specific assembly
+assembly.get 'YOUR_ASSEMBLY_ID'
+
+# replays a specific assembly
+response = assembly.replay 'YOUR_ASSEMBLY_ID'
+# should return true if assembly is replaying and false otherwise.
+response.replaying?
+
+# returns all assembly notifications
+assembly.get_notifications
+
+# replays an assembly notification
+assembly.replay_notification 'YOUR_ASSEMBLY_ID'
+```
+
+### 8. Templates
+
+Transloadit provides a [templates api](https://transloadit.com/docs/templates)
+for recurring encoding tasks. Here's how you would create a template:
+
+```ruby
+template = transloadit.template
+
+# creates a new template
+template.create(
+  :name => 'TEMPLATE_NAME',
+  :template => {
+    "steps": {
+      "encode": {
+        "use": ":original",
+        "robot": "/video/encode",
+        "result": true
+      }
+    }
+  }
+)
+```
+
+There are also some other methods to retrieve, update and delete a template.
+
+```ruby
+# returns a list of all templates.
+template.list
+
+# returns a specific template.
+template.get 'YOUR_TEMPLATE_ID'
+
+# updates the template whose id is specified.
+template.update(
+  'YOUR_TEMPLATE_ID',
+  :name => 'CHANGED_TEMPLATE_NAME',
+  :template => {
+    :steps => {
+      :encode => {
+        :use => ':original',
+        :robot => '/video/merge'
+      }
+    }
+  }
+)
+
+# deletes a specific template
+template.delete 'YOUR_TEMPLATE_ID'
+```
+
+### 9. Getting Bill reports
 
 If you want to retrieve your transloadit account billing report for a particular month and year
 you can use the `bill` method passing the required month and year like the following:

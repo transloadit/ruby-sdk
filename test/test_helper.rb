@@ -15,3 +15,7 @@ VCR.configure do |c|
   c.default_cassette_options = { :record => :none }
   c.hook_into :webmock
 end
+
+def values_from_post_body(body)
+  Addressable::URI.parse('?' + URI.decode(body)).query_values
+end

@@ -13,7 +13,7 @@ class Transloadit::Request
   API_ENDPOINT = URI.parse('http://api2.transloadit.com/')
 
   # The default headers to send to the API.
-  API_HEADERS  = { 'User-Agent' => %{Transloadit Ruby SDK #{Transloadit::VERSION}} }
+  API_HEADERS  = { 'User-Agent' => "Transloadit Ruby SDK #{Transloadit::VERSION}" }
 
   # The HMAC algorithm used for calculation request signatures.
   HMAC_ALGORITHM = OpenSSL::Digest.new('sha1')
@@ -52,15 +52,16 @@ class Transloadit::Request
   end
 
   #
-  # Performs an HTTP DELETE to the request's URL. Takes an optional hash of
-  # query params.
+  # Performs an HTTP DELETE to the request's URL. Takes an optional hash
+  # containing the form-encoded payload.
   #
-  # @param  [Hash] params additional query parameters
+  # @param  [Hash] payload the payload to form-encode along with the POST
   # @return [Transloadit::Response] the response
   #
-  def delete(params = {})
+  def delete(payload = {})
     self.request! do
-      self.api[url.path + self.to_query(params)].delete(API_HEADERS)
+      options = {:payload => self.to_payload(payload)}
+      self.api(options = options)[url.path].delete(API_HEADERS)
     end
   end
 
@@ -74,6 +75,19 @@ class Transloadit::Request
   def post(payload = {})
     self.request! do
       self.api[url.path].post(self.to_payload(payload), API_HEADERS)
+    end
+  end
+
+  #
+  # Performs an HTTP PUT to the request's URL. Takes an optional hash
+  # containing the form-encoded payload.
+  #
+  # @param  [Hash] payload the payload to form-encode along with the POST
+  # @return [Transloadit::Response] the response
+  #
+  def put(payload = {})
+    self.request! do
+      self.api[url.path].put(self.to_payload(payload), API_HEADERS)
     end
   end
 
@@ -95,11 +109,11 @@ class Transloadit::Request
   #
   # @return [RestClient::Resource] the API endpoint for this instance
   #
-  def api
+  def api(options = {})
     @api ||= begin
       case self.url.host
-        when String then RestClient::Resource.new(self.url.host)
-        else RestClient::Resource.new(API_ENDPOINT.host)
+        when String then RestClient::Resource.new(self.url.host, options = options)
+        else RestClient::Resource.new(API_ENDPOINT.host, options = options)
       end
     end
   end

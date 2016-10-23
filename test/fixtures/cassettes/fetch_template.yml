@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://api2.transloadit.com/assemblies?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D
+    uri: http://api2.transloadit.com/templates/76fe5df1c93a0a530f3e583805cf98b4?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D
     body:
       encoding: US-ASCII
       string: ''
@@ -31,14 +31,14 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 16 Aug 2016 09:09:24 GMT
+      - Wed, 24 Aug 2016 09:58:40 GMT
       Content-Length:
-      - '22'
+      - '104'
       Connection:
       - keep-alive
     body:
       encoding: UTF-8
-      string: '{"items":[],"count":0}'
+      string: '{"ok": "TEMPLATE_FOUND", "template_id": "76fe5df1c93a0a530f3e583805cf98b4", "template_name": "name"}'
     http_version: 
-  recorded_at: Tue, 16 Aug 2016 09:09:24 GMT
+  recorded_at: Wed, 24 Aug 2016 09:58:38 GMT
 recorded_with: VCR 3.0.3
