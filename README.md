@@ -276,10 +276,10 @@ template.update(
   'YOUR_TEMPLATE_ID',
   :name => 'CHANGED_TEMPLATE_NAME',
   :template => {
-    "steps": {
-      "encode": {
-        "use": ":original",
-        "robot": "/video/merge"
+    :steps => {
+      :encode => {
+        :use => ':original',
+        :robot => '/video/merge'
       }
     }
   }
