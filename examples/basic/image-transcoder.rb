@@ -1,6 +1,6 @@
 class ImageTranscoder < MediaTranscoder
   require 'transloadit'
-  require './media-transcoder'
+  require_relative 'media-transcoder'
 
   # in this example a file is submitted, optimized, and then stored in s3
   def transcode!(file)

@@ -1,6 +1,6 @@
 class AudioTranscoder < MediaTranscoder
   require 'transloadit'
-  require './media-transcoder'
+  require_relative 'media-transcoder'
 
   # in this example a file is encoded as an mp3, id3 tags are added, and it is stored in s3
   def transcode!(file)

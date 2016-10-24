@@ -1,8 +1,8 @@
 require 'open-uri'
-require '../examples/media-transcoder'
-require '../examples/image-transcoder'
-require '../examples/audio-transcoder'
-require '../examples/audio-concat-transcoder'
+require_relative 'media-transcoder'
+require_relative 'image-transcoder'
+require_relative 'audio-transcoder'
+require_relative 'audio-concat-transcoder'
 
 p 'starting image transcoding job...'
 p 'fetching image from the cat api...'

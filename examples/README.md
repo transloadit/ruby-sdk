@@ -16,7 +16,8 @@ main.rb
 ##  Code Review
 
 ### Overview
-In each example we utilize a simple base class ```MediaTranscoder```. This class provides us
+
+In each example we utilize a simple base class `MediaTranscoder`. This class provides us
 with two methods:
  
 ```
@@ -28,12 +29,13 @@ The first method is responsible for returning us an instance of the Transloadit 
 utilizing our credentials that we set in environment variables.
 
 The second method is responsible for returning us the status of an assembly. Note that it
-extends ```Transloadit::Response::Assembly``` to give us access to convenience methods like
-```finished?```.
+extends `Transloadit::Response::Assembly` to give us access to convenience methods like
+`finished?`.
 
 ### First example
+
 In the first example that gets played, we fetch an image from the cat api, optimize it
-using the Transloadit ```/image/optimize``` robot, and then store it in s3.
+using the Transloadit `/image/optimize` robot, and then store it in s3.
 
 There are only two steps:
 ```
@@ -58,10 +60,11 @@ The job is invoked by running the following:
 assembly = transloadit_client.assembly(steps: [optimize, store])
 assembly.submit! open(file)
 ```
-We pass the two steps we defined above and call ```open``` on the file passed in. This method
-assumes the file object passed in responds to ```open```.
+We pass the two steps we defined above and call `open` on the file passed in. This method
+assumes the file object passed in responds to `open`.
 
 ### Second example
+
 In the second example, we take a non-mp3 audio file, encode it as an mp3, add ID3 tags to it,
 and then store it in s3. There are many use cases for audio uploads, and adding ID3 tags
 provides the necessary metadata to display artist and track information in audio players
@@ -91,10 +94,10 @@ store = transloadit_client.step('store', '/s3/store', {
 })
 ```
 
-The first step simply uses the original file to create an mp3 version using the ```audio/encode```
+The first step simply uses the original file to create an mp3 version using the `audio/encode`
 robot.
 
-The second step takes the first step as input, and adds the appropriate metadata using the ```meta/write```
+The second step takes the first step as input, and adds the appropriate metadata using the `meta/write`
 robot. In our simple example we set the track name to the name of the file using variable
 name substitution (see https://transloadit.com/docs/#assembly-variables), and set canned
 values for all other ID3 fields
@@ -117,12 +120,13 @@ assembly.submit! open(file)
 ```
 
 ### Third example
+
 In the third example, we take a series of mp3 files and concatenate them together.
 We upload the result to s3.
 
-This example is provided to showcase advanced usage of the ```use``` parameter in the ```audio/concat``` assembly.
+This example is provided to showcase advanced usage of the `use` parameter in the `audio/concat` assembly.
 
-In our ```transcode``` method, note that this time we are passed an array of files.
+In our `transcode` method, note that this time we are passed an array of files.
 
 ```
 concat = transloadit_client.step('concat', '/audio/concat', {
@@ -137,22 +141,22 @@ concat = transloadit_client.step('concat', '/audio/concat', {
 })
 ```
 
-Taking a look at the ```concat``` step, we see a different usage of the ```use``` parameter
+Taking a look at the `concat` step, we see a different usage of the `use` parameter
 than we have seen in previous examples. We are effectively able to define the ordering of the
-concatenation by specifying the ```name```,  ```as``` and ```fields``` parameters.
+concatenation by specifying the ```name```,  `as` and `fields` parameters.
  
-In this example, we have set the name for each to ```:original```, specifying that the input
-at index ```i``` should be the input file defined at index  ```i```.
+In this example, we have set the name for each to `:original`, specifying that the input
+at index `i` should be the input file defined at index  `i`.
  
-It is equally important to specify the ```as``` parameter. This simple parameter tells the assembly
+It is equally important to specify the `as` parameter. This simple parameter tells the assembly
 the ordering.
  
-Finally, we have the ```fields``` parameter. Files that get uploaded via the Ruby SDK get sent to Transloadit
+Finally, we have the `fields` parameter. Files that get uploaded via the Ruby SDK get sent to Transloadit
 through an HTTP Rest client as a multipart/form-data request. This means that each field needs a name. The Ruby SDK
-automatically adds the name ```file_<index>``` to the outgoing request, where ```<index>``` is the number specified
+automatically adds the name `file_<index>` to the outgoing request, where `<index>` is the number specified
 by its position in the array. 
 
-This is why it is important to define the ordering in the ```steps``` array, as there is no guarantee that items
+This is why it is important to define the ordering in the `steps` array, as there is no guarantee that items
 will finish uploading in the order they are sent.
 
 With that step complete, we can finalize our store step and submit the assembly.
@@ -169,12 +173,13 @@ assembly = transloadit_client.assembly(steps: [concat, store])
 assembly.submit! *open_files(files)
 ```
 
-Note the final call to ```submit``` and usage of the splat (```*```) operator. The ```submit!``` method expects
+Note the final call to `submit` and usage of the splat (`*`) operator. The `submit!` method expects
 one or more arguments. If you would like to pass an array to this method, you must unpack the contents of the array
 or the method will treat the argument passed in as a single object, and you may have unexpected results in your 
 final results.
 
 ### Conclusion
+
 With the above examples, we have seen how we can utilize the Transloadit Ruby SDK to perform simple image optimization,
 mp3 encoding and metadata writing, and audio concatenation features provided by the Transloadit service. Please visit
 https://transloadit.com/docs for the full Transloadit API documentation.

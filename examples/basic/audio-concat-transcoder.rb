@@ -1,11 +1,10 @@
 class AudioConcatTranscoder < MediaTranscoder
   require 'transloadit'
-  require './media-transcoder'
+  require_relative 'media-transcoder'
 
   # in this example a file is encoded as an mp3, id3 tags are added, and it is stored in s3
   def transcode!(files)
     concat = transloadit_client.step('concat', '/audio/concat', {
-      ffmpeg_stack: 'v2.2.3',
       preset: 'mp3',
       use: {
         steps: files.map.each_with_index do |f, i|

@@ -1,12 +1,9 @@
 class MediaTranscoder
   def transloadit_client
-    unless @transloadit
-      @transloadit = Transloadit.new({
-        key: ENV.fetch('TRANSLOADIT_KEY'),
-        secret: ENV.fetch('TRANSLOADIT_SECRET')
-      })
-    end
-    @transloadit
+    @transloadit ||= Transloadit.new({
+      key: ENV.fetch('TRANSLOADIT_KEY'),
+      secret: ENV.fetch('TRANSLOADIT_SECRET')
+    })
   end
 
   def get_status!(assembly_id)
