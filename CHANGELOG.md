@@ -1,6 +1,6 @@
 ### 2.0.0 ###
 
-* Added examples with a small tutorial in `examples` (@jasonaibrahim)
+* Added example files with a [small tutorial](examples/README.md) in `examples` (@jasonaibrahim)
 
 ### 2.0.0 / ????-??-?? ###
 
