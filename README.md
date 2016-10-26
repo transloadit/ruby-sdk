@@ -229,6 +229,11 @@ Up-to-date YARD documentation is automatically generated. You can view the
 docs for the [released gem](http://rubydoc.info/gems/transloadit/frames) or
 for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/master/frames).
 
+## Examples
+
+An example of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags, and more can be
+found [here](examples/README.md)
+
 ## Compatibility
 
 At a minimum, this gem should work on MRI 2.3.0, 2.2.0, 2.1.0, Rubinius,
