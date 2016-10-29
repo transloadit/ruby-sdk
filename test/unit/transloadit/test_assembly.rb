@@ -135,6 +135,16 @@ describe Transloadit::Assembly do
         end
       end
 
+      it 'must retry only the number of times specified' do
+        @assembly.options[:rate_limit_retries] = 0
+
+        VCR.use_cassette 'rate_limit_succeed' do
+          assert_raises Transloadit::Exception::RateLimitReached do
+            response = @assembly.create! open('lib/transloadit/version.rb')
+          end
+        end
+      end
+
       it 'must raise RateLimitReached exception after multiple retries request' do
         VCR.use_cassette 'rate_limit_fail' do
           assert_raises Transloadit::Exception::RateLimitReached do

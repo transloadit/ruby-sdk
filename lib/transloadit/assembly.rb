@@ -7,6 +7,8 @@ require 'transloadit'
 # for futher information on Assemblies and available endpoints.
 #
 class Transloadit::Assembly < Transloadit::ApiModel
+  DEFAULT_RATE_LIMIT_RETRIES = 2
+
   #
   # @return [Hash] the processing steps, formatted for sending to Transloadit
   #
@@ -43,15 +45,13 @@ class Transloadit::Assembly < Transloadit::ApiModel
   #     {template}[https://transloadit.com/templates] to use instead of
   #     specifying params here directly
   #
-  def create!(*ios)
-    params = _extract_options!(ios)
+  def create!(*ios, **params)
     params[:steps] = _wrap_steps_in_hash(params[:steps]) if !params[:steps].nil?
 
     extra_params = {}
     extra_params.merge!(self.options[:fields]) if self.options[:fields]
 
-    # retry 2 more times on rate limit response.
-    trials = 3
+    trials = 1 + (self.options[:rate_limit_retries] || DEFAULT_RATE_LIMIT_RETRIES)
     (1..trials).each do |trial|
       # update the payload with file entries
       ios.each_with_index {|f, i| extra_params.update :"file_#{i}" => f }
@@ -149,17 +149,6 @@ class Transloadit::Assembly < Transloadit::ApiModel
   end
 
   #
-  # Extracts the last argument from a set of arguments if it's a hash.
-  # Otherwise, returns an empty hash.
-  #
-  # @param  *args  the arguments to search for an options hash
-  # @return [Hash] the options passed, otherwise an empty hash
-  #
-  def _extract_options!(args)
-    args.last.is_a?(Hash) ? args.pop : {}
-  end
-
-  #
   # Stays idle for certain time and then reopens assembly files for reprocessing.
   # Should be called when assembly rate limit is reached.
   #
@@ -170,10 +159,10 @@ class Transloadit::Assembly < Transloadit::ApiModel
     if is_retrying
       warn "Rate limit reached. Waiting for #{response.wait_time} seconds before retrying."
       sleep response.wait_time
-      # reopen file stream
+      # RestClient closes file streams at the end of a request.
       ios.collect! {|file| open file.path }
     else
-      raise Transloadit::Exception::RateLimitReached.new(response = response)
+      raise Transloadit::Exception::RateLimitReached.new(response)
     end
   end
 end
