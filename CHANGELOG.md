@@ -1,3 +1,7 @@
+### 2.0.0 ###
+
+* Added example files with a [small tutorial](examples/README.md) in `examples` (@jasonaibrahim)
+
 ### 2.0.0 / ????-??-?? ###
 
 * Drop support for EOL'd Ruby 1.9.x and Ruby 2.0, please use version 1.2.0 if you need support for older
