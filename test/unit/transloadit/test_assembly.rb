@@ -136,7 +136,7 @@ describe Transloadit::Assembly do
       end
 
       it 'must retry only the number of times specified' do
-        @assembly.options[:rate_limit_retries] = 0
+        @assembly.options[:tries] = 1
 
         VCR.use_cassette 'rate_limit_succeed' do
           assert_raises Transloadit::Exception::RateLimitReached do

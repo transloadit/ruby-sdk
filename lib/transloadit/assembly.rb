@@ -7,7 +7,7 @@ require 'transloadit'
 # for futher information on Assemblies and available endpoints.
 #
 class Transloadit::Assembly < Transloadit::ApiModel
-  DEFAULT_RATE_LIMIT_RETRIES = 2
+  DEFAULT_TRIES = 3
 
   #
   # @return [Hash] the processing steps, formatted for sending to Transloadit
@@ -51,7 +51,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
     extra_params = {}
     extra_params.merge!(self.options[:fields]) if self.options[:fields]
 
-    trials = 1 + (self.options[:rate_limit_retries] || DEFAULT_RATE_LIMIT_RETRIES)
+    trials = self.options[:tries] || DEFAULT_TRIES
     (1..trials).each do |trial|
       # update the payload with file entries
       ios.each_with_index {|f, i| extra_params.update :"file_#{i}" => f }
