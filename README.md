@@ -296,7 +296,7 @@ you can use the `bill` method passing the required month and year like the follo
 
 ```ruby
 # returns bill report for February, 2016.
-transloadit.bill(month=2, year=2016)
+transloadit.bill(2, 2016)
 ```
 Not specifying the `month` or `year` would default to the current month or year.
 
@@ -308,7 +308,7 @@ for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/mast
 
 ## Examples
 
-An small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags, 
+An small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
 and more can be found [here](examples/README.md).
 
 ## Compatibility
