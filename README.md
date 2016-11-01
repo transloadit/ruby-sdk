@@ -300,6 +300,25 @@ transloadit.bill(2, 2016)
 ```
 Not specifying the `month` or `year` would default to the current month or year.
 
+### 10. Rate limits
+
+Transloadit enforces rate limits to guarantee that no customers are adversely affected by the usage
+of any given customer. See [Rate Limiting](https://transloadit.com/docs/api-docs/#rate-limiting).
+
+While creating an assembly, if a rate limit error is received, by default, 2 more attempts would be made for a succesful
+response. If after these attempts the rate limit error persists, a `RateLimitReached` exception will be raised.
+
+To change the number of attempts that will be made when creating an assembly, you may pass the `tries` option to your
+assembly like so.
+
+```ruby
+# would make one extra attempt after a failed attempt.
+transloadit.assembly(:tries => 2).create! open('ninja-cat.mpg')
+
+# Would make no attempt at all. Your request would not be sent.
+transloadit.assembly(:tries => 0).create! open('ninja-cat.mpg')
+```
+
 ## Documentation
 
 Up-to-date YARD documentation is automatically generated. You can view the

@@ -7,6 +7,8 @@ require 'transloadit'
 # for futher information on Assemblies and available endpoints.
 #
 class Transloadit::Assembly < Transloadit::ApiModel
+  DEFAULT_TRIES = 3
+
   #
   # @return [Hash] the processing steps, formatted for sending to Transloadit
   #
@@ -43,22 +45,25 @@ class Transloadit::Assembly < Transloadit::ApiModel
   #     {template}[https://transloadit.com/templates] to use instead of
   #     specifying params here directly
   #
-  def create!(*ios)
-    params = _extract_options!(ios)
+  def create!(*ios, **params)
     params[:steps] = _wrap_steps_in_hash(params[:steps]) if !params[:steps].nil?
 
     extra_params = {}
-    # update the payload with file entries
-    ios.each_with_index {|f, i| extra_params.update :"file_#{i}" => f }
-
     extra_params.merge!(self.options[:fields]) if self.options[:fields]
 
-    _do_request(
-      '/assemblies',
-      params,
-      'post',
-      extra_params
-    ).extend!(Transloadit::Response::Assembly)
+    trials = self.options[:tries] || DEFAULT_TRIES
+    (1..trials).each do |trial|
+      # update the payload with file entries
+      ios.each_with_index {|f, i| extra_params.update :"file_#{i}" => f }
+
+      response = _do_request(
+        '/assemblies',params,'post', extra_params
+      ).extend!(Transloadit::Response::Assembly)
+
+      return response unless response.rate_limit?
+
+      _handle_rate_limit!(response, ios, trial < trials)
+    end
   end
 
   #
@@ -144,13 +149,20 @@ class Transloadit::Assembly < Transloadit::ApiModel
   end
 
   #
-  # Extracts the last argument from a set of arguments if it's a hash.
-  # Otherwise, returns an empty hash.
+  # Stays idle for certain time and then reopens assembly files for reprocessing.
+  # Should be called when assembly rate limit is reached.
   #
-  # @param  *args  the arguments to search for an options hash
-  # @return [Hash] the options passed, otherwise an empty hash
+  # @param  [Response] response  assembly response that comes with a rate limit
+  # @param [Array<IO>] ios the files sent for the assembly to process.
   #
-  def _extract_options!(args)
-    args.last.is_a?(Hash) ? args.pop : {}
+  def _handle_rate_limit!(response, ios, is_retrying)
+    if is_retrying
+      warn "Rate limit reached. Waiting for #{response.wait_time} seconds before retrying."
+      sleep response.wait_time
+      # RestClient closes file streams at the end of a request.
+      ios.collect! {|file| open file.path }
+    else
+      raise Transloadit::Exception::RateLimitReached.new(response)
+    end
   end
 end
