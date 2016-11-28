@@ -15,4 +15,13 @@ module Transloadit::Exception
       "Transloadit Rate Limit Reached.#{retry_msg}"
     end
   end
+
+  #
+  # Exception raised when Response#reload_until_finished! reaches limit specified in :tries option
+  #
+  class ReloadLimitReached < StandardError
+    def message
+      "reload_until_finished! reached limit specified in :tries option. This is not a rate limit and you may continue to poll for updates."
+    end
+  end
 end

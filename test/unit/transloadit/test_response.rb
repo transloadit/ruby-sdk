@@ -76,6 +76,36 @@ describe Transloadit::Response do
     end
   end
 
+  describe 'long-running assembly' do
+    before do
+      VCR.use_cassette 'fetch_assembly_executing' do
+        @response = Transloadit::Response.new(
+          RestClient::Resource.new(REQUEST_URI).get
+        ).extend!(Transloadit::Response::Assembly)
+      end
+    end
+
+    it 'must allow reloading until finished' do
+      @response.finished?.must_equal false
+
+      VCR.use_cassette 'fetch_assembly_ok' do
+        VCR.use_cassette 'fetch_assembly_executing' do
+          @response.reload_until_finished!
+        end
+      end
+
+      @response.finished?.must_equal true
+    end
+
+    it 'must raise exception if reload until finished tries exceeded' do
+      assert_raises Transloadit::Exception::ReloadLimitReached do
+        VCR.use_cassette 'fetch_assembly_executing', :allow_playback_repeats => true do
+          @response.reload_until_finished! tries: 1
+        end
+      end
+    end
+  end
+
   describe 'statuses' do
     it 'must allow checking for upload' do
       VCR.use_cassette 'fetch_assembly_uploading' do
