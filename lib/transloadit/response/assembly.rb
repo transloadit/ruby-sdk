@@ -55,8 +55,8 @@ module Transloadit::Response::Assembly
     tries = options[:tries] || DEFAULT_RELOAD_TRIES
 
     tries.times do
-      return self if finished?
       sleep 1; reload!
+      return self if finished?
     end
 
     raise Transloadit::Exception::ReloadLimitReached
