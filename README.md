@@ -69,7 +69,7 @@ assembly = transloadit.assembly(
 
 response = assembly.create! open('lolcat.jpg')
 
-# blocks and polls REST API once per second until all processing is finished
+# reloads the response once per second until all processing is finished
 response.reload_until_finished!
 
 if response.error?
