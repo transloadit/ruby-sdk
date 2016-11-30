@@ -51,7 +51,7 @@ module Transloadit::Response::Assembly
 
   DEFAULT_RELOAD_TRIES = 600
 
-  def reload_until_finished! options = {}
+  def reload_until_finished!(options = {})
     tries = options[:tries] || DEFAULT_RELOAD_TRIES
 
     tries.times do
