@@ -48,4 +48,17 @@ module Transloadit::Response::Assembly
   def wait_time
     self['info']['retryIn'] || 0
   end
+
+  DEFAULT_RELOAD_TRIES = 600
+
+  def reload_until_finished!(options = {})
+    tries = options[:tries] || DEFAULT_RELOAD_TRIES
+
+    tries.times do
+      sleep 1; reload!
+      return self if finished?
+    end
+
+    raise Transloadit::Exception::ReloadLimitReached
+  end
 end

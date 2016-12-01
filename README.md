@@ -69,10 +69,8 @@ assembly = transloadit.assembly(
 
 response = assembly.create! open('lolcat.jpg')
 
-# loop until processing is finished
-until response.finished?
-  sleep 1; response.reload! # you'll want to implement a timeout in your production app
-end
+# reloads the response once per second until all processing is finished
+response.reload_until_finished!
 
 if response.error?
  # handle error
@@ -119,6 +117,10 @@ assembly to reload its results from the API.
 ```ruby
 # reloads the response's contents from the REST API
 response.reload!
+
+# reloads once per second until all processing is finished, up to number of 
+# times specified in :tries option, othewise will raise ReloadLimitReached
+response.reload_until_finished! tries: 300 # default is 600
 ```
 
 In general, you use hash accessor syntax to query any direct attribute from
