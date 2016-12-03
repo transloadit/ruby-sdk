@@ -1,8 +1,4 @@
-### 2.0.0 ###
-
-* Added example files with a [small tutorial](examples/README.md) in `examples` (@jasonaibrahim)
-
-### 2.0.0 / ????-??-?? ###
+### 2.0.0 / 2016-12-03 ###
 
 * Drop support for EOL'd Ruby 1.9.x and Ruby 2.0, please use version 1.2.0 if you need support for older
   Ruby versions.
@@ -26,6 +22,7 @@
   * delete to delete a particular template.
 * Add rate limit feature to implicitly retry assembly creation when the rate limit is reached.
 * Add `assembly.reload_until_finished!` which calls `reload!` once per second until assembly is finished (@gbuesing)
+* Added example files with a [small tutorial](examples/README.md) in `examples` (@jasonaibrahim)
 
 ### 1.2.0 / 2015-12-28 ###
 
