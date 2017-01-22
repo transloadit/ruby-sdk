@@ -1,3 +1,7 @@
+### 2.?.? / 2017-??-?? ###
+
+* Use the ssl enabled url as the API base url
+
 ### 2.0.0 / 2016-12-03 ###
 
 * Drop support for EOL'd Ruby 1.9.x and Ruby 2.0, please use version 1.2.0 if you need support for older
