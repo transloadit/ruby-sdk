@@ -1,6 +1,6 @@
 ### 2.?.? / 2017-??-?? ###
 
-* Use the ssl enabled url as the API base url
+* Use the ssl enabled url as the API base url (@ifedapoolarewaju)
 
 ### 2.0.0 / 2016-12-03 ###
 
