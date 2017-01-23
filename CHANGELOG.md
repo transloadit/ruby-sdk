@@ -1,3 +1,7 @@
+### 1.2.1 / 2017-01-23 ###
+
+* Use the ssl enabled url as the API base url (@ifedapoolarewaju)
+
 ### 1.2.0 / 2015-12-28 ###
 
 * allow custom fields to be passed to Transloadit and received back in the response
