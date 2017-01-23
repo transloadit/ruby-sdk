@@ -1,4 +1,4 @@
-### 2.?.? / 2017-??-?? ###
+### 2.0.1 / 2017-01-23 ###
 
 * Use the ssl enabled url as the API base url (@ifedapoolarewaju)
 
