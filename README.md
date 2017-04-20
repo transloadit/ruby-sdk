@@ -403,7 +403,7 @@ transloadit.assembly(:tries => 0).create! open('/PATH/TO/FILE.mpg')
 
 ## Examples
 
-An small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
+A small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
 and more can be found [here](https://github.com/transloadit/ruby-sdk/tree/master/examples).
 
 ## Documentation
