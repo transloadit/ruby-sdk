@@ -13,15 +13,25 @@ class AudioConcatTranscoder < MediaTranscoder
       },
       result: true
     })
-    store = transloadit_client.step('store', '/s3/store', {
-      key: ENV.fetch('S3_ACCESS_KEY'),
-      secret: ENV.fetch('S3_SECRET_KEY'),
-      bucket: ENV.fetch('S3_BUCKET'),
-      bucket_region: ENV.fetch('S3_REGION'),
-      use: ['concat']
-    })
-    assembly = transloadit_client.assembly(steps: [concat, store])
-    assembly.submit! *open_files(files)
+
+    steps = [concat]
+
+    begin
+      store = transloadit_client.step('store', '/s3/store', {
+        key: ENV.fetch('S3_ACCESS_KEY'),
+        secret: ENV.fetch('S3_SECRET_KEY'),
+        bucket: ENV.fetch('S3_BUCKET'),
+        bucket_region: ENV.fetch('S3_REGION'),
+        use: ['concat']
+      })
+
+      steps.push(store)
+    rescue KeyError => e
+      p 's3 config not set. Skipping s3 storage...'
+    end
+
+    assembly = transloadit_client.assembly(steps: steps)
+    assembly.create! *open_files(files)
   end
 
   def open_files(files)

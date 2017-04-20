@@ -14,11 +14,9 @@ open('http://thecatapi.com/api/images/get') do |f|
 
   # if you are using rails one thing you can do would be to start an ActiveJob process that recursively
   # checks on the status of the assembly until it is finished
-  while !response.finished?
-    sleep 1
-    p 'checking job status...'
-    response = image_transcoder.get_status!(response[:assembly_id])
-  end
+  p 'checking job status...'
+  response.reload_until_finished!
+
   p response[:message]
   p response[:results]['image'][0]['url']
 end
@@ -27,18 +25,16 @@ p 'starting audio transcoding job...'
 p 'fetching soundbite from nasa...'
 p "\n"
 
-open('http://www.nasa.gov/640379main_Computers_are_in_Control.m4r') do |f|
+open('https://www.nasa.gov/640379main_Computers_are_in_Control.m4r') do |f|
   p 'starting transcoding job...'
   audio_transcoder = AudioTranscoder.new
   response = audio_transcoder.transcode!(f)
 
   # if you are using rails one thing you can do would be to start an ActiveJob process that recursively
   # checks on the status of the assembly until it is finished
-  while !response.finished?
-    sleep 1
-    p 'checking job status...'
-    response = audio_transcoder.get_status!(response[:assembly_id])
-  end
+  p 'checking job status...'
+  response.reload_until_finished!
+
   p response[:message]
   p response[:results]['mp3'][0]['url']
   p "\n"
@@ -48,9 +44,9 @@ p 'starting audio concat transcoding job...'
 p 'fetching 3 soundbites from nasa...'
 
 files = [
-  'http://www.nasa.gov/mp3/640148main_APU%20Shutdown.mp3',
-  'http://www.nasa.gov/mp3/640164main_Go%20for%20Deploy.mp3',
-  'http://www.nasa.gov/mp3/640165main_Lookin%20At%20It.mp3'
+  'https://www.nasa.gov/mp3/640148main_APU%20Shutdown.mp3',
+  'https://www.nasa.gov/mp3/640164main_Go%20for%20Deploy.mp3',
+  'https://www.nasa.gov/mp3/640165main_Lookin%20At%20It.mp3'
 ]
 
 p 'starting transcoding job...'
@@ -59,11 +55,9 @@ response = audio_concat_transcoder.transcode!(files)
 
 # if you are using rails one thing you can do would be to start an ActiveJob process that recursively
 # checks on the status of the assembly until it is finished
-while !response.finished?
-  sleep 1
-  p 'checking job status...'
-  response = audio_concat_transcoder.get_status!(response[:assembly_id])
-end
+p 'checking job status...'
+response.reload_until_finished!
+
 p response[:message]
 p response[:results]['concat'][0]['url']
 p "\n"

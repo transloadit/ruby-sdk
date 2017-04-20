@@ -2,17 +2,17 @@
 [![Code Climate](https://codeclimate.com/github/transloadit/ruby-sdk.png)](https://codeclimate.com/github/transloadit/ruby-sdk)
 [![Dependency Status](https://gemnasium.com/transloadit/ruby-sdk.png)](https://gemnasium.com/transloadit/ruby-sdk)
 
-# transloadit
+## ruby-sdk
 
-Fantastic file uploading for your web application.
+A **Ruby** Integration for [Transloadit](https://transloadit.com)'s file uploading and encoding service
 
-## Description
+## Intro
 
-This is the official Ruby gem for [Transloadit](http://transloadit.com). It allows
-you to automate uploading files through the Transloadit REST API.
+[Transloadit](https://transloadit.com) is a service that helps you handle file uploads, resize, crop and watermark your images, make GIFs, transcode your videos, extract thumbnails, generate audio waveforms, and so much more. In short, [Transloadit](https://transloadit.com) is the Swiss Army Knife for your files.
 
-If you run Ruby on Rails and are looking to integrate with the browser for file uploads,
-checkout the [rails-sdk](https://github.com/transloadit/rails-sdk).
+This is a **Ruby** SDK to make it easy to talk to the [Transloadit](https://transloadit.com) REST API.
+
+*If you run Ruby on Rails and are looking to integrate with the browser for file uploads, checkout the [rails-sdk](https://github.com/transloadit/rails-sdk).*
 
 ## Install
 
@@ -20,7 +20,7 @@ checkout the [rails-sdk](https://github.com/transloadit/rails-sdk).
 gem install transloadit
 ```
 
-## Getting started
+## Usage
 
 To get started, you need to require the 'transloadit' gem:
 
@@ -35,8 +35,8 @@ credentials and allow us to make requests to the API.
 
 ```ruby
 transloadit = Transloadit.new(
-  :key    => 'transloadit-auth-key',
-  :secret => 'transloadit-auth-secret'
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
 )
 ```
 
@@ -45,39 +45,44 @@ transloadit = Transloadit.new(
 This example demonstrates how you can create an assembly to resize an image
 and store the result on [Amazon S3](http://aws.amazon.com/s3/).
 
-First, we create two steps: one to resize the image to 320x240, and another to
-store the image in our S3 bucket.
-
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
+# First, we create two steps: one to resize the image to 320x240, and another to
+# store the image in our S3 bucket.
 resize = transloadit.step 'resize', '/image/resize',
   :width  => 320,
   :height => 240
 
 store  = transloadit.step 'store', '/s3/store',
-  :key    => 'aws-access-key-id',
-  :secret => 'aws-secret-access-key',
-  :bucket => 's3-bucket-name'
-```
+  :key    => 'AWS-ACCESS-KEY-ID',
+  :secret => 'AWS-SECRET-ACCESS-KEY',
+  :bucket => 'S3-BUCKET-NAME'
 
-Now that we have the steps, we create an assembly (which is just a request to
-process a file or set of files) and let Transloadit do the rest.
-
-```ruby
+# Now that we have the steps, we create an assembly (which is just a request to
+# process a file or set of files) and let Transloadit do the rest.
 assembly = transloadit.assembly(
   :steps => [ resize, store ]
 )
 
-response = assembly.create! open('lolcat.jpg')
+response = assembly.create! open('/PATH/TO/FILE.jpg')
 
 # reloads the response once per second until all processing is finished
 response.reload_until_finished!
 
 if response.error?
- # handle error
+  # handle error
 else
- # handle other cases
+  # handle other cases
+  puts response
 end
 ```
+
 *(note: the assembly method `submit!` has been deprecated and replaced with `create!`.
 The submit! method remains as an alias of `create!` for backward Compatibility)*
 
@@ -137,6 +142,13 @@ than one file in the same request. You can also pass a single step for the
 `steps` parameter, without having to wrap it in an Array.
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
 assembly = transloadit.assembly(steps: store)
 
 response = assembly.create!(
@@ -159,6 +171,13 @@ simply need to `use` other steps. Following
 [their example](http://transloadit.com/docs/assemblies#special-parameters):
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
 encode = transloadit.step 'encode', '/video/encode', { ... }
 thumbs = transloadit.step 'thumbs', '/video/thumbs', { ... }
 export = transloadit.step 'store',  '/s3/store',     { ... }
@@ -167,7 +186,7 @@ export.use [ encode, thumbs ]
 
 transloadit.assembly(
   :steps => [ encode, thumbs, export ]
-).create! open('ninja-cat.mpg')
+).create! open('/PATH/TO/FILE.mpg')
 ```
 
 You can also tell a step to use the original uploaded file by passing the
@@ -182,9 +201,16 @@ Transloadit allows you to use custom [templates](https://github.com/transloadit/
 for recurring encoding tasks. In order to use these do the following:
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
 transloadit.assembly(
   :template_id => 'YOUR_TEMPLATE_ID'
-).create! open('ninja-cat.mpg')
+).create! open('/PATH/TO/FILE.mpg')
 ```
 
 You can use your steps together with this template and even use variables.
@@ -198,9 +224,19 @@ notification. This is quite handy if you want to add additional custom meta data
 to the upload itself. You can use fields like the following:
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
 transloadit.assembly(
-  :fields => {:tag => 'ninjacats'}
-).create! open('ninja-cat.mpg')
+  :fields => {
+    :tag => 'some_tag_name',
+    :field_name => 'field_value'
+  }
+).create! open('/PATH/TO/FILE.mpg')
 ```
 
 ### 6. Notify URL
@@ -209,9 +245,16 @@ If you want to be notified when the processing is finished you can provide
 a notify url for the assembly.
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
 transloadit.assembly(
   :notify_url => 'http://example.com/processing_finished'
-).create! open('ninja-cat.mpg')
+).create! open('/PATH/TO/FILE.mpg')
 ```
 
 Read up more on the notifications [on Transloadit's documentation page](http://transloadit.com/docs/notifications-vs-redirect-url)
@@ -221,6 +264,13 @@ Read up more on the notifications [on Transloadit's documentation page](http://t
 Transloadit also provides methods to retrieve/replay assemblies and their notifications.
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
 assembly = transloadit.assembly
 
 # returns a list of all assemblies
@@ -247,6 +297,13 @@ Transloadit provides a [templates api](https://transloadit.com/docs/templates)
 for recurring encoding tasks. Here's how you would create a template:
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
 template = transloadit.template
 
 # creates a new template
@@ -267,6 +324,15 @@ template.create(
 There are also some other methods to retrieve, update and delete a template.
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
+template = transloadit.template
+
 # returns a list of all templates.
 template.list
 
@@ -297,6 +363,13 @@ If you want to retrieve your transloadit account billing report for a particular
 you can use the `bill` method passing the required month and year like the following:
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
 # returns bill report for February, 2016.
 transloadit.bill(2, 2016)
 ```
@@ -314,23 +387,30 @@ To change the number of attempts that will be made when creating an assembly, yo
 assembly like so.
 
 ```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'TRANSLOADIT_KEY',
+  :secret => 'TRANSLOADIT_SECRET'
+)
+
 # would make one extra attempt after a failed attempt.
-transloadit.assembly(:tries => 2).create! open('ninja-cat.mpg')
+transloadit.assembly(:tries => 2).create! open('/PATH/TO/FILE.mpg')
 
 # Would make no attempt at all. Your request would not be sent.
-transloadit.assembly(:tries => 0).create! open('ninja-cat.mpg')
+transloadit.assembly(:tries => 0).create! open('/PATH/TO/FILE.mpg')
 ```
+
+## Example
+
+A small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
+and more can be found [here](https://github.com/transloadit/ruby-sdk/tree/master/examples).
 
 ## Documentation
 
 Up-to-date YARD documentation is automatically generated. You can view the
 docs for the [released gem](http://rubydoc.info/gems/transloadit/frames) or
 for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/master/frames).
-
-## Examples
-
-An small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
-and more can be found [here](examples/README.md).
 
 ## Compatibility
 
