@@ -409,7 +409,7 @@ and more can be found [here](https://github.com/transloadit/ruby-sdk/tree/master
 ## Documentation
 
 Up-to-date YARD documentation is automatically generated. You can view the
-docs for the [released gem](http://rubydoc.info/gems/transloadit/frames) or
+docs for the <a href="http://rubydoc.info/gems/transloadit/frames" rel="canonical">released gem</a> or
 for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/master/frames).
 
 ## Compatibility
