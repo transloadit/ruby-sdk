@@ -129,8 +129,8 @@ response.reload_until_finished! tries: 300 # default is 600
 ```
 
 In general, you use hash accessor syntax to query any direct attribute from
-the [response](http://transloadit.com/docs/assemblies#response-format).
-Methods suffixed by a question mark provide a more readable way of quering
+the [response](https://transloadit.com/docs/#assembly-status-response).
+Methods suffixed by a question mark provide a more readable way of querying
 state (e.g., `assembly.completed?` vs. checking the result of
 `assembly[:ok]`). Methods suffixed by a bang make a live query against the
 Transloadit HTTP API.
@@ -168,7 +168,7 @@ response = assembly.create! *files
 
 Transloadit allows you to perform several processing steps in parallel. You
 simply need to `use` other steps. Following
-[their example](http://transloadit.com/docs/assemblies#special-parameters):
+[their example](https://transloadit.com/docs/#special-parameters):
 
 ```ruby
 require 'transloadit'
@@ -214,7 +214,7 @@ transloadit.assembly(
 ```
 
 You can use your steps together with this template and even use variables.
-The [Transloadit documentation](http://transloadit.com/docs/templates#passing-variables-into-a-template) has some nice
+The [Transloadit documentation](https://transloadit.com/docs/#passing-variables-into-a-template) has some nice
 examples for that.
 
 ### 5. Using fields
@@ -380,7 +380,7 @@ Not specifying the `month` or `year` would default to the current month or year.
 Transloadit enforces rate limits to guarantee that no customers are adversely affected by the usage
 of any given customer. See [Rate Limiting](https://transloadit.com/docs/api-docs/#rate-limiting).
 
-While creating an assembly, if a rate limit error is received, by default, 2 more attempts would be made for a succesful
+While creating an assembly, if a rate limit error is received, by default, 2 more attempts would be made for a successful
 response. If after these attempts the rate limit error persists, a `RateLimitReached` exception will be raised.
 
 To change the number of attempts that will be made when creating an assembly, you may pass the `tries` option to your
