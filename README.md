@@ -129,7 +129,7 @@ response.reload_until_finished! tries: 300 # default is 600
 ```
 
 In general, you use hash accessor syntax to query any direct attribute from
-the [response](https://transloadit.com/docs/#assembly-status-response).
+the [response](https://transloadit.com/docs/api-docs/#assembly-status-response).
 Methods suffixed by a question mark provide a more readable way of querying
 state (e.g., `assembly.completed?` vs. checking the result of
 `assembly[:ok]`). Methods suffixed by a bang make a live query against the
