@@ -40,7 +40,36 @@ transloadit = Transloadit.new(
 )
 ```
 
-### 1. Resize and store an image
+## Example
+
+A small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
+and more can be found [here](https://github.com/transloadit/ruby-sdk/tree/master/examples).
+
+## Documentation
+
+Up-to-date YARD documentation is automatically generated. You can view the
+docs for the <a href="http://rubydoc.info/gems/transloadit/frames">released gem</a> or
+for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/master/frames).
+
+## Compatibility
+
+At a minimum, this gem should work on MRI 2.3.0, 2.2.0, 2.1.0, Rubinius,
+and JRuby. It may also work on older ruby versions, but support for those
+Rubies is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
+[bug report](https://github.com/transloadit/ruby-sdk/issues). Compatibility patches for other Rubies
+are welcome.
+
+Testing against these versions is performed automatically by
+[Travis CI](https://travis-ci.org/transloadit/ruby-sdk).
+
+### Ruby 1.9.x & 2.0
+
+If you still need support for older versions of Ruby, 1.2.0 is the last version that
+supports those.
+
+
+
+## 1. Resize and store an image
 
 This example demonstrates how you can create an assembly to resize an image
 and store the result on [Amazon S3](http://aws.amazon.com/s3/).
@@ -135,7 +164,7 @@ state (e.g., `assembly.completed?` vs. checking the result of
 `assembly[:ok]`). Methods suffixed by a bang make a live query against the
 Transloadit HTTP API.
 
-### 2. Uploading multiple files
+## 2. Uploading multiple files
 
 Multiple files can be given to the `create!` method in order to upload more
 than one file in the same request. You can also pass a single step for the
@@ -164,7 +193,7 @@ files = [open('puppies.jpg'), open('kittens.jpg'), open('ferrets.jpg')]
 response = assembly.create! *files
 ```
 
-### 3. Parallel Assembly
+## 3. Parallel Assembly
 
 Transloadit allows you to perform several processing steps in parallel. You
 simply need to `use` other steps. Following
@@ -195,7 +224,7 @@ Symbol `:original` instead of another step.
 Check the YARD documentation for more information on using
 [use](http://rubydoc.info/gems/transloadit/frames/Transloadit/Step#use-instance_method).
 
-### 4. Creating an Assembly with Templates
+## 4. Creating an Assembly with Templates
 
 Transloadit allows you to use custom [templates](https://github.com/transloadit/ruby-sdk/blob/master/README.md#8-templates)
 for recurring encoding tasks. In order to use these do the following:
@@ -217,7 +246,7 @@ You can use your steps together with this template and even use variables.
 The [Transloadit documentation](https://transloadit.com/docs/#passing-variables-into-a-template) has some nice
 examples for that.
 
-### 5. Using fields
+## 5. Using fields
 
 Transloadit allows you to submit form field values that you'll get back in the
 notification. This is quite handy if you want to add additional custom meta data
@@ -239,7 +268,7 @@ transloadit.assembly(
 ).create! open('/PATH/TO/FILE.mpg')
 ```
 
-### 6. Notify URL
+## 6. Notify URL
 
 If you want to be notified when the processing is finished you can provide
 a notify url for the assembly.
@@ -259,7 +288,7 @@ transloadit.assembly(
 
 Read up more on the notifications [on Transloadit's documentation page](http://transloadit.com/docs/notifications-vs-redirect-url)
 
-### 7. Other Assembly methods
+## 7. Other Assembly methods
 
 Transloadit also provides methods to retrieve/replay assemblies and their notifications.
 
@@ -291,7 +320,7 @@ assembly.get_notifications
 assembly.replay_notification 'YOUR_ASSEMBLY_ID'
 ```
 
-### 8. Templates
+## 8. Templates
 
 Transloadit provides a [templates api](https://transloadit.com/docs/templates)
 for recurring encoding tasks. Here's how you would create a template:
@@ -357,7 +386,7 @@ template.update(
 template.delete 'YOUR_TEMPLATE_ID'
 ```
 
-### 9. Getting Bill reports
+## 9. Getting Bill reports
 
 If you want to retrieve your transloadit account billing report for a particular month and year
 you can use the `bill` method passing the required month and year like the following:
@@ -375,7 +404,7 @@ transloadit.bill(2, 2016)
 ```
 Not specifying the `month` or `year` would default to the current month or year.
 
-### 10. Rate limits
+## 10. Rate limits
 
 Transloadit enforces rate limits to guarantee that no customers are adversely affected by the usage
 of any given customer. See [Rate Limiting](https://transloadit.com/docs/api-docs/#rate-limiting).
@@ -400,30 +429,3 @@ transloadit.assembly(:tries => 2).create! open('/PATH/TO/FILE.mpg')
 # Would make no attempt at all. Your request would not be sent.
 transloadit.assembly(:tries => 0).create! open('/PATH/TO/FILE.mpg')
 ```
-
-## Example
-
-A small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
-and more can be found [here](https://github.com/transloadit/ruby-sdk/tree/master/examples).
-
-## Documentation
-
-Up-to-date YARD documentation is automatically generated. You can view the
-docs for the <a href="http://rubydoc.info/gems/transloadit/frames" rel="canonical">released gem</a> or
-for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/master/frames).
-
-## Compatibility
-
-At a minimum, this gem should work on MRI 2.3.0, 2.2.0, 2.1.0, Rubinius,
-and JRuby. It may also work on older ruby versions, but support for those
-Rubies is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
-[bug report](https://github.com/transloadit/ruby-sdk/issues). Compatibility patches for other Rubies
-are welcome.
-
-Testing against these versions is performed automatically by
-[Travis CI](https://travis-ci.org/transloadit/ruby-sdk).
-
-### Ruby 1.9.x & 2.0
-
-If you still need support for older versions of Ruby, 1.2.0 is the last version that
-supports those.
