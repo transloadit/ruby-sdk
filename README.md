@@ -35,8 +35,8 @@ credentials and allow us to make requests to the API.
 
 ```ruby
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 ```
 
@@ -49,8 +49,8 @@ and store the result on [Amazon S3](http://aws.amazon.com/s3/).
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 # First, we create two steps: one to resize the image to 320x240, and another to
@@ -60,9 +60,9 @@ resize = transloadit.step 'resize', '/image/resize',
   :height => 240
 
 store  = transloadit.step 'store', '/s3/store',
-  :key    => 'AWS-ACCESS-KEY-ID',
-  :secret => 'AWS-SECRET-ACCESS-KEY',
-  :bucket => 'S3-BUCKET-NAME'
+  :key    => 'YOUR_AWS_KEY',
+  :secret => 'YOUR_AWS_SECRET',
+  :bucket => 'YOUR_S3_BUCKET'
 
 # Now that we have the steps, we create an assembly (which is just a request to
 # process a file or set of files) and let Transloadit do the rest.
@@ -145,8 +145,8 @@ than one file in the same request. You can also pass a single step for the
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 assembly = transloadit.assembly(steps: store)
@@ -174,8 +174,8 @@ simply need to `use` other steps. Following
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 encode = transloadit.step 'encode', '/video/encode', { ... }
@@ -204,8 +204,8 @@ for recurring encoding tasks. In order to use these do the following:
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 transloadit.assembly(
@@ -227,8 +227,8 @@ to the upload itself. You can use fields like the following:
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 transloadit.assembly(
@@ -248,8 +248,8 @@ a notify url for the assembly.
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 transloadit.assembly(
@@ -267,8 +267,8 @@ Transloadit also provides methods to retrieve/replay assemblies and their notifi
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 assembly = transloadit.assembly
@@ -300,8 +300,8 @@ for recurring encoding tasks. Here's how you would create a template:
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 template = transloadit.template
@@ -327,8 +327,8 @@ There are also some other methods to retrieve, update and delete a template.
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 template = transloadit.template
@@ -366,8 +366,8 @@ you can use the `bill` method passing the required month and year like the follo
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 # returns bill report for February, 2016.
@@ -390,8 +390,8 @@ assembly like so.
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_AUTH_KEY',
-  :secret => 'YOUR_TRANSLOADIT_AUTH_SECRET'
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
 )
 
 # would make one extra attempt after a failed attempt.
