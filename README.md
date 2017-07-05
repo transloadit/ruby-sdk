@@ -30,8 +30,9 @@ $ irb -rubygems
 => true
 ```
 
-Then create a Transloadit instance, which will maintain your authentication
-credentials and allow us to make requests to the API.
+Then create a Transloadit instance, which will maintain your 
+[authentication credentials](https://transloadit.com/accounts/credentials) 
+and allow us to make requests to [the API](https://transloadit.com/docs/api-docs/).
 
 ```ruby
 transloadit = Transloadit.new(
@@ -42,8 +43,8 @@ transloadit = Transloadit.new(
 
 ### 1. Resize and store an image
 
-This example demonstrates how you can create an assembly to resize an image
-and store the result on [Amazon S3](http://aws.amazon.com/s3/).
+This example demonstrates how you can create an <dfn>Assembly</dfn> to resize an image
+and store the result on [Amazon S3](https://aws.amazon.com/s3/).
 
 ```ruby
 require 'transloadit'
@@ -83,8 +84,8 @@ else
 end
 ```
 
-*(note: the assembly method `submit!` has been deprecated and replaced with `create!`.
-The submit! method remains as an alias of `create!` for backward Compatibility)*
+**Note:** the <dfn>Assembly</dfn> method `submit!` has been deprecated and replaced with `create!`.
+The submit! method remains as an alias of `create!` for backward Compatibility)
 
 When the `create!` method returns, the file has been uploaded but may not yet
 be done processing. We can use the returned object to check if processing has
@@ -116,8 +117,8 @@ response.error? # => false
 
 It's important to note that none of these queries are "live" (with the
 exception of the `cancel!` method). They all check the response given by the
-API at the time the assembly was created. You have to explicitly ask the
-assembly to reload its results from the API.
+API at the time the <dfn>Assembly</dfn> was created. You have to explicitly ask the
+<dfn>Assembly</dfn> to reload its results from the API.
 
 ```ruby
 # reloads the response's contents from the REST API
@@ -138,7 +139,7 @@ Transloadit HTTP API.
 ### 2. Uploading multiple files
 
 Multiple files can be given to the `create!` method in order to upload more
-than one file in the same request. You can also pass a single step for the
+than one file in the same request. You can also pass a single <dfn>Step</dfn> for the
 `steps` parameter, without having to wrap it in an Array.
 
 ```ruby
@@ -158,7 +159,9 @@ response = assembly.create!(
 )
 ```
 
-You can also pass an array of files to the `create!` method. Just unpack the array using the splat `*` operator.
+You can also pass an array of files to the `create!` method. 
+Just unpack the array using the splat `*` operator.
+
 ```ruby
 files = [open('puppies.jpg'), open('kittens.jpg'), open('ferrets.jpg')]
 response = assembly.create! *files
@@ -167,7 +170,7 @@ response = assembly.create! *files
 ### 3. Parallel Assembly
 
 Transloadit allows you to perform several processing steps in parallel. You
-simply need to `use` other steps. Following
+simply need to `use` other <dfn>Steps</dfn>. Following
 [their example](https://transloadit.com/docs/#special-parameters):
 
 ```ruby
@@ -214,8 +217,8 @@ transloadit.assembly(
 ```
 
 You can use your steps together with this template and even use variables.
-The [Transloadit documentation](https://transloadit.com/docs/#passing-variables-into-a-template) has some nice
-examples for that.
+The [Transloadit documentation](https://transloadit.com/docs/#passing-variables-into-a-template) 
+has some nice examples for that.
 
 ### 5. Using fields
 
@@ -242,7 +245,7 @@ transloadit.assembly(
 ### 6. Notify URL
 
 If you want to be notified when the processing is finished you can provide
-a notify url for the assembly.
+a Notify URL for the <dfn>Assembly</dfn>.
 
 ```ruby
 require 'transloadit'
@@ -257,11 +260,11 @@ transloadit.assembly(
 ).create! open('/PATH/TO/FILE.mpg')
 ```
 
-Read up more on the notifications [on Transloadit's documentation page](http://transloadit.com/docs/notifications-vs-redirect-url)
+Read up more on the <dfn>Notifications</dfn> [on Transloadit's documentation page](https://transloadit.com/docs/#notifications)
 
 ### 7. Other Assembly methods
 
-Transloadit also provides methods to retrieve/replay assemblies and their notifications.
+Transloadit also provides methods to retrieve/replay <dfn>Assemblies</dfn> and their <dfn>Notifications</dfn>.
 
 ```ruby
 require 'transloadit'
@@ -293,8 +296,8 @@ assembly.replay_notification 'YOUR_ASSEMBLY_ID'
 
 ### 8. Templates
 
-Transloadit provides a [templates api](https://transloadit.com/docs/templates)
-for recurring encoding tasks. Here's how you would create a template:
+Transloadit provides a [templates api](https://transloadit.com/docs/#templates)
+for recurring encoding tasks. Here's how you would create a <dfn>Template</dfn>:
 
 ```ruby
 require 'transloadit'
@@ -321,7 +324,7 @@ template.create(
 )
 ```
 
-There are also some other methods to retrieve, update and delete a template.
+There are also some other methods to retrieve, update and delete a <dfn>Template</dfn>.
 
 ```ruby
 require 'transloadit'
@@ -359,7 +362,7 @@ template.delete 'YOUR_TEMPLATE_ID'
 
 ### 9. Getting Bill reports
 
-If you want to retrieve your transloadit account billing report for a particular month and year
+If you want to retrieve your Transloadit account billing report for a particular month and year
 you can use the `bill` method passing the required month and year like the following:
 
 ```ruby
@@ -373,6 +376,7 @@ transloadit = Transloadit.new(
 # returns bill report for February, 2016.
 transloadit.bill(2, 2016)
 ```
+
 Not specifying the `month` or `year` would default to the current month or year.
 
 ### 10. Rate limits
@@ -380,11 +384,9 @@ Not specifying the `month` or `year` would default to the current month or year.
 Transloadit enforces rate limits to guarantee that no customers are adversely affected by the usage
 of any given customer. See [Rate Limiting](https://transloadit.com/docs/api-docs/#rate-limiting).
 
-While creating an assembly, if a rate limit error is received, by default, 2 more attempts would be made for a successful
-response. If after these attempts the rate limit error persists, a `RateLimitReached` exception will be raised.
+While creating an <dfn>Assembly</dfn>, if a rate limit error is received, by default, 2 more attempts would be made for a successful response. If after these attempts the rate limit error persists, a `RateLimitReached` exception will be raised.
 
-To change the number of attempts that will be made when creating an assembly, you may pass the `tries` option to your
-assembly like so.
+To change the number of attempts that will be made when creating an <dfn>Assembly</dfn>, you may pass the `tries` option to your <dfn>Assembly</dfn> like so.
 
 ```ruby
 require 'transloadit'
