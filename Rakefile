@@ -1,12 +1,5 @@
-require 'rubygems/package_task'
+require "bundler/gem_tasks"
 require 'rake/testtask'
-
-GEMSPEC = 'transloadit.gemspec'
-
-spec = eval open(GEMSPEC).read
-Gem::PackageTask.new(spec) do |gem|
-  gem.need_tar = true
-end
 
 Rake::TestTask.new do |test|
   test.libs   << 'test'
@@ -28,3 +21,5 @@ rescue
   desc 'You need the `yard` gem to generate documentation'
   task :doc
 end
+
+task default: :test
