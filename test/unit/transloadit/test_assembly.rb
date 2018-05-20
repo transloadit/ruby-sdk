@@ -168,6 +168,15 @@ describe Transloadit::Assembly do
       @assembly.to_hash[:steps].keys.must_include @encode.name
       @assembly.to_hash[:steps].keys.must_include @thumbs.name
     end
+
+    it 'must not allow duplicate steps' do
+      thumbs = @transloadit.step('thumbs', '/video/thumbs')
+      thumbs_duplicate = @transloadit.step('thumbs', '/video/encode')
+      options = { :steps => [ thumbs, thumbs_duplicate ] }
+      assert_raises ArgumentError do
+        response = @assembly.create! open('lib/transloadit/version.rb'), options
+      end
+    end
   end
 
   describe 'using assembly API methods' do
