@@ -1,3 +1,7 @@
+### 3.0.0 / ????-??-?? ###
+
+* Prevent duplicate assembly steps [#49](https://github.com/transloadit/ruby-sdk/issues/27) (@ifedapoolarewaju)
+
 ### 2.0.1 / 2017-01-23 ###
 
 * Use the ssl enabled url as the API base url (@ifedapoolarewaju)

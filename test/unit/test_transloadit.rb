@@ -75,8 +75,8 @@ describe Transloadit do
 
     it 'must create assemblies with multiple steps' do
       steps = [
-        @transloadit.step(nil, nil),
-        @transloadit.step(nil, nil),
+        @transloadit.step('step1', nil),
+        @transloadit.step('step2', nil),
       ]
 
       assembly = @transloadit.assembly :steps => steps

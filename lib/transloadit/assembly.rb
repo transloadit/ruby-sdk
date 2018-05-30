@@ -144,6 +144,9 @@ class Transloadit::Assembly < Transloadit::ApiModel
       when Hash               then steps
       when Transloadit::Step  then steps.to_hash
       else
+        if steps.uniq(&:name) != steps
+          raise ArgumentError, "There are different Assembly steps using the same name"
+        end
         steps.inject({}) {|h, s| h.update s }
     end
   end
