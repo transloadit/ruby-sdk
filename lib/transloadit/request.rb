@@ -13,7 +13,7 @@ class Transloadit::Request
   API_ENDPOINT = URI.parse('https://api2.transloadit.com/')
 
   # The default headers to send to the API.
-  API_HEADERS  = { 'User-Agent' => "Transloadit Ruby SDK #{Transloadit::VERSION}" }
+  API_HEADERS  = { 'Transloadit-Client' => "ruby-sdk:#{Transloadit::VERSION}" }
 
   # The HMAC algorithm used for calculation request signatures.
   HMAC_ALGORITHM = OpenSSL::Digest.new('sha1')
