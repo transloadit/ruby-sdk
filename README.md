@@ -32,7 +32,7 @@ $ irb -rubygems
 
 Then create a Transloadit instance, which will maintain your 
 [authentication credentials](https://transloadit.com/accounts/credentials) 
-and allow us to make requests to [the API](https://transloadit.com/docs/api-docs/).
+and allow us to make requests to [the API](https://transloadit.com/docs/api/).
 
 ```ruby
 transloadit = Transloadit.new(
@@ -108,7 +108,7 @@ response.finished? # => false
 # cancels further processing on the assembly
 response.cancel! # => true
 
-# checks if processing was succesfully completed
+# checks if processing was successfully completed
 response.completed? # => true
 
 # checks if the processing returned with an error
@@ -125,12 +125,12 @@ API at the time the <dfn>Assembly</dfn> was created. You have to explicitly ask 
 response.reload!
 
 # reloads once per second until all processing is finished, up to number of 
-# times specified in :tries option, othewise will raise ReloadLimitReached
+# times specified in :tries option, otherwise will raise ReloadLimitReached
 response.reload_until_finished! tries: 300 # default is 600
 ```
 
 In general, you use hash accessor syntax to query any direct attribute from
-the [response](https://transloadit.com/docs/api-docs/#assembly-status-response).
+the [response](https://transloadit.com/docs/api/#assembly-status-response).
 Methods suffixed by a question mark provide a more readable way of querying
 state (e.g., `assembly.completed?` vs. checking the result of
 `assembly[:ok]`). Methods suffixed by a bang make a live query against the
@@ -382,7 +382,7 @@ Not specifying the `month` or `year` would default to the current month or year.
 ### 10. Rate limits
 
 Transloadit enforces rate limits to guarantee that no customers are adversely affected by the usage
-of any given customer. See [Rate Limiting](https://transloadit.com/docs/api-docs/#rate-limiting).
+of any given customer. See [Rate Limiting](https://transloadit.com/docs/api/#rate-limiting).
 
 While creating an <dfn>Assembly</dfn>, if a rate limit error is received, by default, 2 more attempts would be made for a successful response. If after these attempts the rate limit error persists, a `RateLimitReached` exception will be raised.
 
