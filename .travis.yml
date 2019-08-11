@@ -10,7 +10,4 @@ script: "COVERAGE=false bundle exec rake test"
 matrix:
   allow_failures:
   - rvm: rbx-2
-cache: bundler
-before_install:
-  - gem update bundler
 
