@@ -84,8 +84,10 @@ else
 end
 ```
 
-**Note:** the <dfn>Assembly</dfn> method `submit!` has been deprecated and replaced with `create!`.
-The submit! method remains as an alias of `create!` for backward Compatibility)
+<div class="tip" markdown="1">
+  The <dfn>Assembly</dfn> method `submit!` has been deprecated and replaced with `create!`.
+  The `submit!` method remains as an alias of `create!` for backward Compatibility.
+</div>
 
 When the `create!` method returns, the file has been uploaded but may not yet
 be done processing. We can use the returned object to check if processing has
@@ -223,7 +225,7 @@ has some nice examples for that.
 ### 5. Using fields
 
 Transloadit allows you to submit form field values that you'll get back in the
-notification. This is quite handy if you want to add additional custom meta data
+notification. This is quite handy if you want to add additional custom metadata
 to the upload itself. You can use fields like the following:
 
 ```ruby
