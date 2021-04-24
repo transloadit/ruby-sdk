@@ -1,0 +1,36 @@
+Documentation:
+  Enabled: false
+Gemspec/RequiredRubyVersion:
+  Enabled: false
+Layout/LineLength:
+  Enabled: false
+Lint/ConstantDefinitionInBlock:
+  Enabled: false
+Lint/IneffectiveAccessModifier:
+  Enabled: false
+Lint/MissingSuper:
+  Enabled: false
+Lint/SelfAssignment:
+  Enabled: false
+Lint/UriEscapeUnescape:
+  Enabled: false
+Lint/UselessAssignment:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+Security/Open:
+  Enabled: false
+Style/AsciiComments:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+Style/Semicolon:
+  Enabled: false
+Style/StringConcatenation:
+  Enabled: false
