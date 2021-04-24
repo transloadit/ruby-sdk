@@ -6,7 +6,9 @@ rvm:
   - 2.3.0
   - rbx-2
   - jruby-9.1.17.0
-script: "COVERAGE=false bundle exec rake test"
+script:
+  - rubocop
+  - COVERAGE=false bundle exec rake test
 matrix:
   allow_failures:
   - rvm: rbx-2
