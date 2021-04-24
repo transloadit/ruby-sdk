@@ -1,22 +1,26 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 describe Transloadit::ApiModel do
   let(:foo) { 'foo' }
   let(:bar) { 'bar' }
-  let(:transloadit) { Transloadit.new(:key => '') }
+  let(:transloadit) { Transloadit.new(key: '') }
 
-  let(:api) { Transloadit::ApiModel.new(
-    transloadit,
-    :foo => foo,
-    :bar => bar
-  )}
+  let(:api) do
+    Transloadit::ApiModel.new(
+      transloadit,
+      foo: foo,
+      bar: bar
+    )
+  end
 
   it 'must allow initialization' do
-    Transloadit::ApiModel.new(transloadit).
-      must_be_kind_of Transloadit::ApiModel
+    Transloadit::ApiModel.new(transloadit)
+                         .must_be_kind_of Transloadit::ApiModel
 
-    Transloadit::Template.new(transloadit).
-      must_be_kind_of Transloadit::Template
+    Transloadit::Template.new(transloadit)
+                         .must_be_kind_of Transloadit::Template
   end
 
   describe 'when initialized' do
@@ -26,8 +30,8 @@ describe Transloadit::ApiModel do
 
     it 'must remember the options passed' do
       api.options.must_equal(
-        :foo => foo,
-        :bar => bar
+        foo: foo,
+        bar: bar
       )
     end
 
@@ -37,9 +41,9 @@ describe Transloadit::ApiModel do
 
     it 'must produce Transloadit-compatible hash output' do
       api.to_hash.must_equal(
-        :auth => transloadit.to_hash,
-        :foo  => foo,
-        :bar  => bar
+        auth: transloadit.to_hash,
+        foo: foo,
+        bar: bar
       )
     end
 

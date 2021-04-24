@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 describe Transloadit do
@@ -9,34 +11,34 @@ describe Transloadit do
   end
 
   it 'must allow initialization' do
-    t = Transloadit.new(:key => @key, :secret => @secret)
+    t = Transloadit.new(key: @key, secret: @secret)
     t.must_be_kind_of Transloadit
   end
 
   it 'must not be initialized with no arguments' do
-    lambda { Transloadit.new }.must_raise ArgumentError
+    -> { Transloadit.new }.must_raise ArgumentError
   end
 
   it 'must require a key' do
-    lambda { Transloadit.new(:secret => @secret) }.must_raise ArgumentError
+    -> { Transloadit.new(secret: @secret) }.must_raise ArgumentError
   end
 
   it 'must not require a secret' do
-    t = Transloadit.new(:key => @key)
+    t = Transloadit.new(key: @key)
     t.must_be_kind_of Transloadit
   end
 
   it 'must provide a default duration' do
-    Transloadit.new(:key => @key).duration.wont_be_nil
+    Transloadit.new(key: @key).duration.wont_be_nil
   end
 
   describe 'when initialized' do
     before do
       @transloadit = Transloadit.new(
-        :key      => @key,
-        :secret   => @secret,
-        :duration => @duration,
-        :max_size => @max_size
+        key: @key,
+        secret: @secret,
+        duration: @duration,
+        max_size: @max_size
       )
     end
 
@@ -57,17 +59,17 @@ describe Transloadit do
     end
 
     it 'must create steps' do
-      step = @transloadit.step('resize', '/image/resize', :width => 320)
+      step = @transloadit.step('resize', '/image/resize', width: 320)
 
       step.must_be_kind_of Transloadit::Step
-      step.name.   must_equal 'resize'
-      step.robot.  must_equal '/image/resize'
-      step.options.must_equal :width => 320
+      step.name.must_equal 'resize'
+      step.robot.must_equal '/image/resize'
+      step.options.must_equal width: 320
     end
 
     it 'must create assembly api instances' do
       step     = @transloadit.step(nil, nil)
-      assembly = @transloadit.assembly :steps => step
+      assembly = @transloadit.assembly steps: step
 
       assembly.must_be_kind_of Transloadit::Assembly
       assembly.steps.must_equal step.to_hash
@@ -76,16 +78,16 @@ describe Transloadit do
     it 'must create assemblies with multiple steps' do
       steps = [
         @transloadit.step('step1', nil),
-        @transloadit.step('step2', nil),
+        @transloadit.step('step2', nil)
       ]
 
-      assembly = @transloadit.assembly :steps => steps
-      assembly.steps.must_equal steps.inject({}) {|h,s| h.merge s }
+      assembly = @transloadit.assembly steps: steps
+      assembly.steps.must_equal steps.inject({}) { |h, s| h.merge s }
     end
 
     it 'must get user billing report' do
       VCR.use_cassette 'fetch_billing' do
-        bill = Transloadit.new(:key => '').bill(9, 2016)
+        bill = Transloadit.new(key: '').bill(9, 2016)
         bill['ok'].must_equal 'BILL_FOUND'
         bill['invoice_id'].must_equal '76fe5df1c93a0a530f3e583805cf98b4'
       end
@@ -101,10 +103,10 @@ describe Transloadit do
     end
 
     it 'must produce Transloadit-compatible hash output' do
-      @transloadit.to_hash[:key]     .must_equal @key
+      @transloadit.to_hash[:key].must_equal @key
       @transloadit.to_hash[:max_size].must_equal @max_size
-      @transloadit.to_hash[:expires] .
-        must_match %r{\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\+00:00}
+      @transloadit.to_hash[:expires]
+                  .must_match %r{\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\+00:00}
     end
 
     it 'must produce Transloadit-compatible JSON output' do
@@ -114,7 +116,7 @@ describe Transloadit do
 
   describe 'with no secret' do
     before do
-      @transloadit = Transloadit.new(:key => @key)
+      @transloadit = Transloadit.new(key: @key)
     end
 
     it 'must not include a secret in its hash output' do

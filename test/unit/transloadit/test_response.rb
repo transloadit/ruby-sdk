@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 describe Transloadit::Response do
@@ -22,13 +24,13 @@ describe Transloadit::Response do
     end
 
     it 'must allow access to body attributes' do
-      %w{ ok message assembly_id assembly_url }.each do |attribute|
+      %w[ok message assembly_id assembly_url].each do |attribute|
         @response[attribute].must_equal @response.body[attribute]
       end
     end
 
     it 'must allow access to body attributes as symbols' do
-      [:ok, :message, :assembly_id, :assembly_url].each do |attribute|
+      %i[ok message assembly_id assembly_url].each do |attribute|
         @response[attribute].must_equal @response.body[attribute.to_s]
       end
     end
@@ -55,12 +57,12 @@ describe Transloadit::Response do
 
     # TODO: can this be tested better?
     it 'must allow reloading the assembly' do
-      VCR.use_cassette 'fetch_assembly_ok', :allow_playback_repeats => true do
-        @response.send(:__getobj__).
-          wont_be_same_as @response.reload!.send(:__getobj__)
+      VCR.use_cassette 'fetch_assembly_ok', allow_playback_repeats: true do
+        @response.send(:__getobj__)
+                 .wont_be_same_as @response.reload!.send(:__getobj__)
 
-        @response.object_id.
-          must_equal @response.reload!.object_id
+        @response.object_id
+                 .must_equal @response.reload!.object_id
       end
     end
 
@@ -69,7 +71,7 @@ describe Transloadit::Response do
         @response.cancel!
 
         @response.completed?.must_equal false
-        @response['ok']     .must_equal 'ASSEMBLY_CANCELED'
+        @response['ok'].must_equal 'ASSEMBLY_CANCELED'
         @response.canceled?.must_equal true
         @response.finished?.must_equal true
       end
@@ -99,7 +101,7 @@ describe Transloadit::Response do
 
     it 'must raise exception if reload until finished tries exceeded' do
       assert_raises Transloadit::Exception::ReloadLimitReached do
-        VCR.use_cassette 'fetch_assembly_executing', :allow_playback_repeats => true do
+        VCR.use_cassette 'fetch_assembly_executing', allow_playback_repeats: true do
           @response.reload_until_finished! tries: 1
         end
       end

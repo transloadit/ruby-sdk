@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AudioConcatTranscoder < MediaTranscoder
   require 'transloadit'
   require_relative 'media-transcoder'
@@ -5,25 +7,25 @@ class AudioConcatTranscoder < MediaTranscoder
   # in this example a file is encoded as an mp3, id3 tags are added, and it is stored in s3
   def transcode!(files)
     concat = transloadit_client.step('concat', '/audio/concat', {
-      preset: 'mp3',
-      use: {
-        steps: files.map.each_with_index do |f, i|
-          { name: ':original', as: "audio_#{i}", fields: "file_#{i}" }
-        end
-      },
-      result: true
-    })
+                                       preset: 'mp3',
+                                       use: {
+                                         steps: files.map.each_with_index do |_f, i|
+                                           { name: ':original', as: "audio_#{i}", fields: "file_#{i}" }
+                                         end
+                                       },
+                                       result: true
+                                     })
 
     steps = [concat]
 
     begin
       store = transloadit_client.step('store', '/s3/store', {
-        key: ENV.fetch('S3_ACCESS_KEY'),
-        secret: ENV.fetch('S3_SECRET_KEY'),
-        bucket: ENV.fetch('S3_BUCKET'),
-        bucket_region: ENV.fetch('S3_REGION'),
-        use: ['concat']
-      })
+                                        key: ENV.fetch('S3_ACCESS_KEY'),
+                                        secret: ENV.fetch('S3_SECRET_KEY'),
+                                        bucket: ENV.fetch('S3_BUCKET'),
+                                        bucket_region: ENV.fetch('S3_REGION'),
+                                        use: ['concat']
+                                      })
 
       steps.push(store)
     rescue KeyError => e
@@ -31,7 +33,7 @@ class AudioConcatTranscoder < MediaTranscoder
     end
 
     assembly = transloadit_client.assembly(steps: steps)
-    assembly.create! *open_files(files)
+    assembly.create!(*open_files(files))
   end
 
   def open_files(files)

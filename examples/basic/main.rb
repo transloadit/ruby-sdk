@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'open-uri'
 require_relative 'media-transcoder'
 require_relative 'image-transcoder'

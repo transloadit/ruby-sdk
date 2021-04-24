@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 describe Transloadit::Step do
   it 'must allow initialization' do
-    Transloadit::Step.new('store', '/s3/store').
-      must_be_kind_of Transloadit::Step
+    Transloadit::Step.new('store', '/s3/store')
+                     .must_be_kind_of Transloadit::Step
   end
 
   describe 'when initialized' do
@@ -15,9 +17,9 @@ describe Transloadit::Step do
       @bucket = 's3-bucket-name'
 
       @step = Transloadit::Step.new @name, @robot,
-        :key    => @key,
-        :secret => @secret,
-        :bucket => @bucket
+                                    key: @key,
+                                    secret: @secret,
+                                    bucket: @bucket
     end
 
     it 'should use the name given' do
@@ -30,9 +32,9 @@ describe Transloadit::Step do
 
     it 'must remember the parameters' do
       @step.options.must_equal(
-        :key    => @key,
-        :secret => @secret,
-        :bucket => @bucket
+        key: @key,
+        secret: @secret,
+        bucket: @bucket
       )
     end
 
@@ -43,10 +45,10 @@ describe Transloadit::Step do
     it 'must produce Transloadit-compatible hash output' do
       @step.to_hash.must_equal(
         @step.name => {
-          :robot  => @robot,
-          :key    => @key,
-          :secret => @secret,
-          :bucket => @bucket
+          robot: @robot,
+          key: @key,
+          secret: @secret,
+          bucket: @bucket
         }
       )
     end
@@ -63,14 +65,14 @@ describe Transloadit::Step do
 
     it 'must allow using the original file as input' do
       @step.use(:original).must_equal ':original'
-      @step.options[:use] .must_equal ':original'
+      @step.options[:use].must_equal ':original'
     end
 
     it 'must allow using another step' do
       input = Transloadit::Step.new 'thumbnail', '/video/thumbnail'
 
-      @step.use(input).   must_equal [ input.name ]
-      @step.options[:use].must_equal [ input.name ]
+      @step.use(input).must_equal [input.name]
+      @step.options[:use].must_equal [input.name]
     end
 
     it 'must allow using multiple steps' do
@@ -79,8 +81,8 @@ describe Transloadit::Step do
         Transloadit::Step.new('resize',    '/image/resize')
       ]
 
-      @step.use(inputs).  must_equal inputs.map {|i| i.name }
-      @step.options[:use].must_equal inputs.map {|i| i.name }
+      @step.use(inputs).must_equal inputs.map(&:name)
+      @step.options[:use].must_equal inputs.map(&:name)
     end
 
     it 'must allow using nothing' do
@@ -90,7 +92,7 @@ describe Transloadit::Step do
     end
 
     it 'must include the used steps in the hash output' do
-      @step.use(:original).           must_equal ':original'
+      @step.use(:original).must_equal ':original'
       @step.to_hash[@step.name][:use].must_equal ':original'
     end
   end

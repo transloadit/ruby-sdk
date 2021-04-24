@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 describe Transloadit::Request do
@@ -17,14 +19,14 @@ describe Transloadit::Request do
 
     it 'must perform a GET against the resource' do
       VCR.use_cassette 'fetch_root' do
-        @request.get(:params => { :foo => 'bar'})['ok'].
-          must_equal 'SERVER_ROOT'
+        @request.get(params: { foo: 'bar' })['ok']
+                .must_equal 'SERVER_ROOT'
       end
     end
 
     describe 'with secret' do
       before do
-        @request.secret = "tehsupersecrettoken"
+        @request.secret = 'tehsupersecrettoken'
       end
 
       it 'must inspect to the API URL' do
@@ -33,11 +35,10 @@ describe Transloadit::Request do
 
       it 'must perform a GET against the resource' do
         VCR.use_cassette 'fetch_root' do
-          @request.get(:params => { :foo => 'bar'})['ok'].
-              must_equal 'SERVER_ROOT'
+          @request.get(params: { foo: 'bar' })['ok']
+                  .must_equal 'SERVER_ROOT'
         end
       end
-
     end
   end
 
@@ -46,11 +47,11 @@ describe Transloadit::Request do
       @request = Transloadit::Request.new('assemblies', 'secret')
 
       VCR.use_cassette 'post_assembly' do
-        @request.post(:params => {
-          :auth  => { :key     => '',
-                      :expires => (Time.now + 10).utc.strftime('%Y/%m/%d %H:%M:%S+00:00') },
-          :steps => { :encode => { :robot => '/video/encode' } }
-        })['ok'].must_equal 'ASSEMBLY_COMPLETED'
+        @request.post(params: {
+                        auth: { key: '',
+                                expires: (Time.now + 10).utc.strftime('%Y/%m/%d %H:%M:%S+00:00') },
+                        steps: { encode: { robot: '/video/encode' } }
+                      })['ok'].must_equal 'ASSEMBLY_COMPLETED'
       end
     end
   end
@@ -59,10 +60,10 @@ describe Transloadit::Request do
     it 'must perform a PUT against the resource' do
       @request = Transloadit::Request.new('templates/55c965a063a311e6ba2d379ef10b28f7', 'secret')
       VCR.use_cassette 'update_template' do
-        @request.put(:params => {
-          :name => 'foo',
-          :template => {:key => 'value'}
-        })['ok'].must_equal 'TEMPLATE_UPDATED'
+        @request.put(params: {
+                       name: 'foo',
+                       template: { key: 'value' }
+                     })['ok'].must_equal 'TEMPLATE_UPDATED'
       end
     end
   end

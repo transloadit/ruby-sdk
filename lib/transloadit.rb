@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'multi_json'
 require 'date'
 
@@ -103,31 +105,31 @@ class Transloadit
     month = format '%02d', month
     path = "bill/#{year}-#{month}"
 
-    Transloadit::Request.new(path, self.secret).get({ :auth => self.to_hash })
+    Transloadit::Request.new(path, secret).get({ auth: to_hash })
   end
 
   #
   # @return [String] a human-readable version of the Transloadit.
   #
   def inspect
-    self.to_hash.inspect
+    to_hash.inspect
   end
 
   #
   # @return [Hash] a Transloadit-compatible Hash of the instance's contents
   #
   def to_hash
-    result = { :key => self.key }
-    result.update(:max_size => self.max_size) unless self.max_size.nil?
-    result.update(:expires => _generate_expiry) unless self.secret.nil?
+    result = { key: key }
+    result.update(max_size: max_size) unless max_size.nil?
+    result.update(expires: _generate_expiry) unless secret.nil?
     result
   end
 
   #
   # @return [String] JSON-encoded String containing the object's hash contents
   #
-  def to_json
-    MultiJson.dump(self.to_hash)
+  def to_json(*_args)
+    MultiJson.dump(to_hash)
   end
 
   private
@@ -136,9 +138,7 @@ class Transloadit
   # Raises an ArgumentError if no {#key} has been assigned.
   #
   def _ensure_key_provided
-    unless self.key
-      raise ArgumentError, 'an authentication key must be provided'
-    end
+    raise ArgumentError, 'an authentication key must be provided' unless key
   end
 
   #
@@ -148,6 +148,6 @@ class Transloadit
   # @return [String] an API-compatible timestamp
   #
   def _generate_expiry
-    (Time.now + self.duration).utc.strftime('%Y/%m/%d %H:%M:%S+00:00')
+    (Time.now + duration).utc.strftime('%Y/%m/%d %H:%M:%S+00:00')
   end
 end
