@@ -138,7 +138,7 @@ describe Transloadit::Assembly do
 
         VCR.use_cassette "rate_limit_succeed" do
           assert_raises Transloadit::Exception::RateLimitReached do
-            response = @assembly.create! open("lib/transloadit/version.rb")
+            @assembly.create! open("lib/transloadit/version.rb")
           end
         end
       end
@@ -146,7 +146,7 @@ describe Transloadit::Assembly do
       it "must raise RateLimitReached exception after multiple retries request" do
         VCR.use_cassette "rate_limit_fail" do
           assert_raises Transloadit::Exception::RateLimitReached do
-            response = @assembly.create! open("lib/transloadit/version.rb")
+            @assembly.create! open("lib/transloadit/version.rb")
           end
         end
       end
@@ -172,7 +172,7 @@ describe Transloadit::Assembly do
       thumbs_duplicate = @transloadit.step("thumbs", "/video/encode")
       options = {steps: [thumbs, thumbs_duplicate]}
       assert_raises ArgumentError do
-        response = @assembly.create! open("lib/transloadit/version.rb"), options
+        @assembly.create! open("lib/transloadit/version.rb"), options
       end
     end
   end

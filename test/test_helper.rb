@@ -17,5 +17,5 @@ VCR.configure do |c|
 end
 
 def values_from_post_body(body)
-  Addressable::URI.parse("?" + URI.decode(body)).query_values
+  Addressable::URI.parse("?" + CGI.unescape(body)).query_values
 end

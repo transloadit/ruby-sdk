@@ -1,7 +1,7 @@
 require "test_helper"
 
 describe Transloadit::Response do
-  REQUEST_URI = "http://api2.jane.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4"
+  request_uri = "http://api2.jane.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4"
 
   it "must allow delegate initialization" do
     response = Transloadit::Response.new("test")
@@ -12,7 +12,7 @@ describe Transloadit::Response do
     before do
       VCR.use_cassette "fetch_assembly_ok" do
         @response = Transloadit::Response.new(
-          RestClient::Resource.new(REQUEST_URI).get
+          RestClient::Resource.new(request_uri).get
         )
       end
     end
@@ -42,7 +42,7 @@ describe Transloadit::Response do
     before do
       VCR.use_cassette "fetch_assembly_ok" do
         @response = Transloadit::Response.new(
-          RestClient::Resource.new(REQUEST_URI).get
+          RestClient::Resource.new(request_uri).get
         ).extend!(Transloadit::Response::Assembly)
       end
     end
@@ -80,7 +80,7 @@ describe Transloadit::Response do
     before do
       VCR.use_cassette "fetch_assembly_executing" do
         @response = Transloadit::Response.new(
-          RestClient::Resource.new(REQUEST_URI).get
+          RestClient::Resource.new(request_uri).get
         ).extend!(Transloadit::Response::Assembly)
       end
     end
@@ -110,7 +110,7 @@ describe Transloadit::Response do
     it "must allow checking for upload" do
       VCR.use_cassette "fetch_assembly_uploading" do
         @response = Transloadit::Response.new(
-          RestClient::Resource.new(REQUEST_URI).get
+          RestClient::Resource.new(request_uri).get
         ).extend!(Transloadit::Response::Assembly)
       end
 
@@ -122,7 +122,7 @@ describe Transloadit::Response do
     it "must allow to check for executing" do
       VCR.use_cassette "fetch_assembly_executing" do
         @response = Transloadit::Response.new(
-          RestClient::Resource.new(REQUEST_URI).get
+          RestClient::Resource.new(request_uri).get
         ).extend!(Transloadit::Response::Assembly)
       end
 
@@ -148,7 +148,7 @@ describe Transloadit::Response do
     it "must allow to check for aborted" do
       VCR.use_cassette "fetch_assembly_aborted" do
         @response = Transloadit::Response.new(
-          RestClient::Resource.new(REQUEST_URI).get
+          RestClient::Resource.new(request_uri).get
         ).extend!(Transloadit::Response::Assembly)
       end
 
@@ -159,7 +159,7 @@ describe Transloadit::Response do
     it "must allow to check for errors" do
       VCR.use_cassette "fetch_assembly_errors" do
         @response = Transloadit::Response.new(
-          RestClient::Resource.new(REQUEST_URI).get
+          RestClient::Resource.new(request_uri).get
         ).extend!(Transloadit::Response::Assembly)
       end
 

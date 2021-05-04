@@ -26,7 +26,7 @@ class AudioConcatTranscoder < MediaTranscoder
       })
 
       steps.push(store)
-    rescue KeyError => e
+    rescue KeyError
       p "s3 config not set. Skipping s3 storage..."
     end
 
@@ -36,7 +36,7 @@ class AudioConcatTranscoder < MediaTranscoder
 
   def open_files(files)
     files.map do |f|
-      open(f)
+      File.open(f)
     end
   end
 

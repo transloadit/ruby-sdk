@@ -29,12 +29,12 @@ class AudioTranscoder < MediaTranscoder
       })
 
       steps.push(store)
-    rescue KeyError => e
+    rescue KeyError
       p "s3 config not set. Skipping s3 storage..."
     end
 
     assembly = transloadit_client.assembly(steps: steps)
-    assembly.create! open(file)
+    assembly.create! File.open(file)
   end
 
   def mp3_metadata

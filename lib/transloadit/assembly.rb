@@ -163,7 +163,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
       warn "Rate limit reached. Waiting for #{response.wait_time} seconds before retrying."
       sleep response.wait_time
       # RestClient closes file streams at the end of a request.
-      ios.collect! { |file| open file.path }
+      ios.collect! { |file| File.open file.path }
     else
       raise Transloadit::Exception::RateLimitReached.new(response)
     end

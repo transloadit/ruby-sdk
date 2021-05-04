@@ -61,7 +61,7 @@ class Transloadit::Request
   def delete(payload = {})
     request! do
       options = {payload: to_payload(payload)}
-      api(options = options)[url.path].delete(API_HEADERS)
+      api(options)[url.path].delete(API_HEADERS)
     end
   end
 
@@ -111,8 +111,8 @@ class Transloadit::Request
   #
   def api(options = {})
     @api ||= case url.host
-        when String then RestClient::Resource.new(url.host, options = options)
-        else RestClient::Resource.new(API_ENDPOINT.host, options = options)
+        when String then RestClient::Resource.new(url.host, options)
+        else RestClient::Resource.new(API_ENDPOINT.host, options)
     end
   end
 
@@ -179,8 +179,6 @@ class Transloadit::Request
   def signature(params)
     self.class._hmac(secret, params) if secret.to_s.length > 0
   end
-
-  private
 
   #
   # Computes an HMAC digest from the key and message.
