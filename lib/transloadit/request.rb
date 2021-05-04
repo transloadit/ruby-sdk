@@ -98,6 +98,17 @@ class Transloadit::Request
     url.to_s.inspect
   end
 
+  #
+  # Computes an HMAC digest from the key and message.
+  #
+  # @param  [String] key     the secret key to sign with
+  # @param  [String] message the message to sign
+  # @return [String]         the signature of the message
+  #
+  def self._hmac(key, message)
+    OpenSSL::HMAC.hexdigest HMAC_ALGORITHM, key, message
+  end
+
   protected
 
   attr_writer :url
@@ -178,16 +189,5 @@ class Transloadit::Request
   #
   def signature(params)
     self.class._hmac(secret, params) if secret.to_s.length > 0
-  end
-
-  #
-  # Computes an HMAC digest from the key and message.
-  #
-  # @param  [String] key     the secret key to sign with
-  # @param  [String] message the message to sign
-  # @return [String]         the signature of the message
-  #
-  def self._hmac(key, message)
-    OpenSSL::HMAC.hexdigest HMAC_ALGORITHM, key, message
   end
 end
