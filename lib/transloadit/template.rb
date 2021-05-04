@@ -1,4 +1,4 @@
-require 'transloadit'
+require "transloadit"
 
 #
 # Represents a Template API ready to interact with its corresponding REST API.
@@ -18,7 +18,7 @@ class Transloadit::Template < Transloadit::ApiModel
   #   see {template}[https://transloadit.com/templates]
   #
   def create(params)
-    _do_request('/templates', params, 'post')
+    _do_request("/templates", params, "post")
   end
 
   #
@@ -26,7 +26,7 @@ class Transloadit::Template < Transloadit::ApiModel
   # @param [Hash]    additional GET data to submit with the request
   #
   def list(params = {})
-    _do_request('/templates', params)
+    _do_request("/templates", params)
   end
 
   #
@@ -49,7 +49,7 @@ class Transloadit::Template < Transloadit::ApiModel
   #   see {template}[https://transloadit.com/templates]
   #
   def update(id, params = {})
-    _do_request("/templates/#{id}", params, 'put')
+    _do_request("/templates/#{id}", params, "put")
   end
 
   #
@@ -58,6 +58,6 @@ class Transloadit::Template < Transloadit::ApiModel
   # @param [Hash]    additional POST data to submit with the request
   #
   def delete(id, params = {})
-    _do_request("/templates/#{id}", params, 'delete')
+    _do_request("/templates/#{id}", params, "delete")
   end
 end

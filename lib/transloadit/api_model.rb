@@ -1,4 +1,4 @@
-require 'transloadit'
+require "transloadit"
 
 #
 # Represents an API class that more Transloadit specific API classes
@@ -20,30 +20,30 @@ class Transloadit::ApiModel
   #
   def initialize(transloadit, options = {})
     self.transloadit = transloadit
-    self.options     = options
+    self.options = options
   end
 
   #
   # @return [String] a human-readable version of the API
   #
   def inspect
-    self.to_hash.inspect
+    to_hash.inspect
   end
 
   #
   # @return [Hash] a Transloadit-compatible Hash of the API's contents
   #
   def to_hash
-    self.options.merge(
-      :auth  => self.transloadit.to_hash,
-    ).delete_if {|_,v| v.nil?}
+    options.merge(
+      auth: transloadit.to_hash
+    ).delete_if { |_, v| v.nil? }
   end
 
   #
   # @return [String] JSON-encoded String containing the API's contents
   #
   def to_json
-    MultiJson.dump(self.to_hash)
+    MultiJson.dump(to_hash)
   end
 
   protected
@@ -62,12 +62,12 @@ class Transloadit::ApiModel
   #
   # @return [Transloadit::Response] the response
   #
-  def _do_request(path, params = nil, method = 'get', extra_params = nil)
+  def _do_request(path, params = nil, method = "get", extra_params = nil)
     if !params.nil?
-      params = self.to_hash.update(params)
-      params = { :params => params } if ['post', 'put', 'delete'].include? method
-      params.merge!(extra_params) if !extra_params.nil?
+      params = to_hash.update(params)
+      params = {params: params} if ["post", "put", "delete"].include? method
+      params.merge!(extra_params) unless extra_params.nil?
     end
-    Transloadit::Request.new(path, self.transloadit.secret).public_send(method, params)
+    Transloadit::Request.new(path, transloadit.secret).public_send(method, params)
   end
 end

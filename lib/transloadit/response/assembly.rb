@@ -1,36 +1,36 @@
-require 'transloadit'
+require "transloadit"
 
 module Transloadit::Response::Assembly
   def reload!
-    self.replace Transloadit::Request.new(self['assembly_url']).get
+    replace Transloadit::Request.new(self["assembly_url"]).get
   end
 
   def cancel!
-    self.replace Transloadit::Request.new(self['assembly_url']).delete
+    replace Transloadit::Request.new(self["assembly_url"]).delete
   end
 
   def aborted?
-    self['ok'] == 'REQUEST_ABORTED'
+    self["ok"] == "REQUEST_ABORTED"
   end
 
   def canceled?
-    self['ok'] == 'ASSEMBLY_CANCELED'
+    self["ok"] == "ASSEMBLY_CANCELED"
   end
 
   def completed?
-    self['ok'] == 'ASSEMBLY_COMPLETED'
+    self["ok"] == "ASSEMBLY_COMPLETED"
   end
 
   def error?
-    self['error'] != nil
+    self["error"] != nil
   end
 
   def executing?
-    self['ok'] == 'ASSEMBLY_EXECUTING'
+    self["ok"] == "ASSEMBLY_EXECUTING"
   end
 
   def replaying?
-    self['ok'] == 'ASSEMBLY_REPLAYING'
+    self["ok"] == "ASSEMBLY_REPLAYING"
   end
 
   def finished?
@@ -38,15 +38,15 @@ module Transloadit::Response::Assembly
   end
 
   def uploading?
-    self['ok'] == 'ASSEMBLY_UPLOADING'
+    self["ok"] == "ASSEMBLY_UPLOADING"
   end
 
   def rate_limit?
-    self['error'] == 'RATE_LIMIT_REACHED'
+    self["error"] == "RATE_LIMIT_REACHED"
   end
 
   def wait_time
-    self['info']['retryIn'] || 0
+    self["info"]["retryIn"] || 0
   end
 
   DEFAULT_RELOAD_TRIES = 600

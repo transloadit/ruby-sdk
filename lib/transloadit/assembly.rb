@@ -1,4 +1,4 @@
-require 'transloadit'
+require "transloadit"
 
 #
 # Represents an Assembly API ready to make calls to the REST API endpoints.
@@ -46,18 +46,18 @@ class Transloadit::Assembly < Transloadit::ApiModel
   #     specifying params here directly
   #
   def create!(*ios, **params)
-    params[:steps] = _wrap_steps_in_hash(params[:steps]) if !params[:steps].nil?
+    params[:steps] = _wrap_steps_in_hash(params[:steps]) unless params[:steps].nil?
 
     extra_params = {}
-    extra_params.merge!(self.options[:fields]) if self.options[:fields]
+    extra_params.merge!(options[:fields]) if options[:fields]
 
-    trials = self.options[:tries] || DEFAULT_TRIES
+    trials = options[:tries] || DEFAULT_TRIES
     (1..trials).each do |trial|
       # update the payload with file entries
-      ios.each_with_index {|f, i| extra_params.update :"file_#{i}" => f }
+      ios.each_with_index { |f, i| extra_params.update "file_#{i}": f }
 
       response = _do_request(
-        '/assemblies',params,'post', extra_params
+        "/assemblies", params, "post", extra_params
       ).extend!(Transloadit::Response::Assembly)
 
       return response unless response.rate_limit?
@@ -71,9 +71,9 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # keeping this method for backward compatibility
   #
   def submit!(*ios)
-    warn "#{caller(1)[0]}: warning: Transloadit::Assembly#submit!"\
+    warn "#{caller(1..1).first}: warning: Transloadit::Assembly#submit!"\
       " is deprecated. use Transloadit::Assembly#create! instead"
-    self.create!(*ios)
+    create!(*ios)
   end
 
   #
@@ -81,7 +81,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # @param [Hash]        additional GET data to submit with the request
   #
   def list(params = {})
-    _do_request('/assemblies', params)
+    _do_request("/assemblies", params)
   end
 
   #
@@ -98,8 +98,8 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # @param [Hash]     params   additional POST data to submit with the request
   #
   def replay(id, params = {})
-    params.merge!({ :wait => false })
-    _do_request("/assemblies/#{id}/replay", params, 'post').extend!(Transloadit::Response::Assembly)
+    params[:wait] = false
+    _do_request("/assemblies/#{id}/replay", params, "post").extend!(Transloadit::Response::Assembly)
   end
 
   #
@@ -116,17 +116,17 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # @param [Hash]        params     additional POST data to submit with the request
   #
   def replay_notification(id, params = {})
-    _do_request("/assembly_notifications/#{id}/replay", params, 'post')
+    _do_request("/assembly_notifications/#{id}/replay", params, "post")
   end
 
   #
   # @return [Hash] a Transloadit-compatible Hash of the Assembly's contents
   #
   def to_hash
-    self.options.merge(
-      :auth  => self.transloadit.to_hash,
-      :steps => self.steps
-    ).delete_if {|k,v| v.nil?}
+    options.merge(
+      auth: transloadit.to_hash,
+      steps: steps
+    ).delete_if { |k, v| v.nil? }
   end
 
   private
@@ -140,14 +140,14 @@ class Transloadit::Assembly < Transloadit::ApiModel
   #
   def _wrap_steps_in_hash(steps)
     case steps
-      when nil                then steps
-      when Hash               then steps
-      when Transloadit::Step  then steps.to_hash
+      when nil then steps
+      when Hash then steps
+      when Transloadit::Step then steps.to_hash
       else
         if steps.uniq(&:name) != steps
           raise ArgumentError, "There are different Assembly steps using the same name"
         end
-        steps.inject({}) {|h, s| h.update s }
+        steps.inject({}) { |h, s| h.update s }
     end
   end
 
@@ -163,7 +163,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
       warn "Rate limit reached. Waiting for #{response.wait_time} seconds before retrying."
       sleep response.wait_time
       # RestClient closes file streams at the end of a request.
-      ios.collect! {|file| open file.path }
+      ios.collect! { |file| open file.path }
     else
       raise Transloadit::Exception::RateLimitReached.new(response)
     end
