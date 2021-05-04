@@ -63,7 +63,7 @@ class Transloadit::ApiModel
   # @return [Transloadit::Response] the response
   #
   def _do_request(path, params = nil, method = "get", extra_params = nil)
-    if !params.nil?
+    unless params.nil?
       params = to_hash.update(params)
       params = {params: params} if ["post", "put", "delete"].include? method
       params.merge!(extra_params) unless extra_params.nil?

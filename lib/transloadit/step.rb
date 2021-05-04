@@ -49,7 +49,7 @@ class Transloadit::Step
   #   that will actually be sent to the REST API.
   #
   def use(input)
-    options.delete(:use) and return if input.nil?
+    options.delete(:use) && return if input.nil?
 
     options[:use] = case input
       when Symbol then input.inspect
