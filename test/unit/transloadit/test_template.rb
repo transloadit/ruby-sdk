@@ -2,7 +2,7 @@ require "test_helper"
 
 describe Transloadit::Template do
   it "must inherit from Transloadit::ApiModel class" do
-    (Transloadit::Template < Transloadit::ApiModel).must_equal true
+    _(Transloadit::Template < Transloadit::ApiModel).must_equal true
   end
 
   describe "using template API methods" do
@@ -22,9 +22,9 @@ describe Transloadit::Template do
             template: {"key" => "value"}
           }
         )
-        response["ok"].must_equal "TEMPLATE_CREATED"
-        response["template_name"].must_equal "foo"
-        response["template_content"]["key"].must_equal "value"
+        _(response["ok"]).must_equal "TEMPLATE_CREATED"
+        _(response["template_name"]).must_equal "foo"
+        _(response["template_content"]["key"]).must_equal "value"
       end
     end
 
@@ -40,8 +40,8 @@ describe Transloadit::Template do
         VCR.use_cassette "fetch_templates" do
           response = @template.list
 
-          response["items"].must_equal []
-          response["count"].must_equal 0
+          _(response["items"]).must_equal []
+          _(response["count"]).must_equal 0
         end
       end
     end
@@ -60,8 +60,8 @@ describe Transloadit::Template do
       it "must get template with specified id" do
         VCR.use_cassette "fetch_template" do
           response = @template.get "76fe5df1c93a0a530f3e583805cf98b4"
-          response["ok"].must_equal "TEMPLATE_FOUND"
-          response["template_id"].must_equal "76fe5df1c93a0a530f3e583805cf98b4"
+          _(response["ok"]).must_equal "TEMPLATE_FOUND"
+          _(response["template_id"]).must_equal "76fe5df1c93a0a530f3e583805cf98b4"
         end
       end
     end
@@ -78,8 +78,8 @@ describe Transloadit::Template do
         assert_requested(:put, url) do |req|
           values = values_from_post_body(req.body)
           data = MultiJson.load(values["params"])
-          data["name"].must_equal "foo"
-          data["template"]["key"].must_equal "value"
+          _(data["name"]).must_equal "foo"
+          _(data["template"]["key"]).must_equal "value"
         end
       end
 
@@ -87,8 +87,8 @@ describe Transloadit::Template do
         VCR.use_cassette "update_template" do
           response = @template.update "55c965a063a311e6ba2d379ef10b28f7"
 
-          response["ok"].must_equal "TEMPLATE_UPDATED"
-          response["template_id"].must_equal "55c965a063a311e6ba2d379ef10b28f7"
+          _(response["ok"]).must_equal "TEMPLATE_UPDATED"
+          _(response["template_id"]).must_equal "55c965a063a311e6ba2d379ef10b28f7"
         end
       end
     end
@@ -105,7 +105,7 @@ describe Transloadit::Template do
         VCR.use_cassette "delete_template" do
           response = @template.delete "55c965a063a311e6ba2d379ef10b28f7"
 
-          response["ok"].must_equal "TEMPLATE_DELETED"
+          _(response["ok"]).must_equal "TEMPLATE_DELETED"
         end
       end
     end

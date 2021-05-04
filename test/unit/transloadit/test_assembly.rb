@@ -6,7 +6,7 @@ describe Transloadit::Assembly do
   end
 
   it "must inherit from Transloadit::ApiModel class" do
-    (Transloadit::Assembly < Transloadit::ApiModel).must_equal true
+    _(Transloadit::Assembly < Transloadit::ApiModel).must_equal true
   end
 
   describe "when initialized" do
@@ -20,21 +20,21 @@ describe Transloadit::Assembly do
     end
 
     it "must wrap its step in a hash" do
-      @assembly.steps.must_equal @step.to_hash
+      _(@assembly.steps).must_equal @step.to_hash
     end
 
     it "must not wrap a nil step" do
       @assembly.options[:steps] = nil
-      @assembly.steps.must_equal nil
+      assert_nil @assembly.steps
     end
 
     it "must not wrap a hash step" do
       @assembly.options[:steps] = {foo: 1}
-      @assembly.steps.must_equal foo: 1
+      _(@assembly.steps).must_equal foo: 1
     end
 
     it "must produce Transloadit-compatible hash output" do
-      @assembly.to_hash.must_equal(
+      _(@assembly.to_hash).must_equal(
         auth: @transloadit.to_hash,
         steps: @assembly.steps,
         redirect_url: @redirect
@@ -44,8 +44,8 @@ describe Transloadit::Assembly do
     it "must submit files for upload" do
       VCR.use_cassette "submit_assembly" do
         response = @assembly.create! open("lib/transloadit/version.rb")
-        response.code.must_equal 302
-        response.headers[:location].must_match %r{^http://foo.bar/}
+        _(response.code).must_equal 302
+        _(response.headers[:location]).must_match %r{^http://foo.bar/}
       end
     end
 
@@ -70,7 +70,7 @@ describe Transloadit::Assembly do
 
         assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
-          MultiJson.load(values["params"])["template_id"].must_equal "TEMPLATE_ID"
+          _(MultiJson.load(values["params"])["template_id"]).must_equal "TEMPLATE_ID"
         end
       end
 
@@ -82,8 +82,8 @@ describe Transloadit::Assembly do
 
         assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
-          values["tag"].must_equal "ninja-cat"
-          MultiJson.load(values["params"])["fields"]["tag"].must_equal "ninja-cat"
+          _(values["tag"]).must_equal "ninja-cat"
+          _(MultiJson.load(values["params"])["fields"]["tag"]).must_equal "ninja-cat"
         end
       end
 
@@ -94,7 +94,7 @@ describe Transloadit::Assembly do
 
         assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
-          MultiJson.load(values["params"])["steps"].must_equal({"thumbs" => {"robot" => "/video/thumbs"}})
+          _(MultiJson.load(values["params"])["steps"]).must_equal({"thumbs" => {"robot" => "/video/thumbs"}})
         end
       end
 
@@ -103,7 +103,7 @@ describe Transloadit::Assembly do
 
         assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
-          MultiJson.load(values["params"])["steps"].must_equal({"resize" => {"robot" => "/image/resize"}})
+          _(MultiJson.load(values["params"])["steps"]).must_equal({"resize" => {"robot" => "/image/resize"}})
         end
       end
     end
@@ -127,9 +127,9 @@ describe Transloadit::Assembly do
         VCR.use_cassette "rate_limit_succeed" do
           _, warning = capture_io do
             response = @assembly.create! open("lib/transloadit/version.rb")
-            response["ok"].must_equal "ASSEMBLY_COMPLETED"
+            _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
           end
-          warning.must_equal "Rate limit reached. Waiting for 0 seconds before retrying.\n"
+          _(warning).must_equal "Rate limit reached. Waiting for 0 seconds before retrying.\n"
         end
       end
 
@@ -163,8 +163,8 @@ describe Transloadit::Assembly do
     end
 
     it "must wrap its steps into one hash" do
-      @assembly.to_hash[:steps].keys.must_include @encode.name
-      @assembly.to_hash[:steps].keys.must_include @thumbs.name
+      _(@assembly.to_hash[:steps].keys).must_include @encode.name
+      _(@assembly.to_hash[:steps].keys).must_include @thumbs.name
     end
 
     it "must not allow duplicate steps" do
@@ -197,8 +197,8 @@ describe Transloadit::Assembly do
         VCR.use_cassette "fetch_assemblies" do
           response = @assembly.list
 
-          response["items"].must_equal []
-          response["count"].must_equal 0
+          _(response["items"]).must_equal []
+          _(response["count"]).must_equal 0
         end
       end
     end
@@ -214,7 +214,7 @@ describe Transloadit::Assembly do
       it "must get assembly with specified id" do
         VCR.use_cassette "fetch_assembly_ok" do
           response = @assembly.get "76fe5df1c93a0a530f3e583805cf98b4"
-          response["assembly_id"].must_equal "76fe5df1c93a0a530f3e583805cf98b4"
+          _(response["assembly_id"]).must_equal "76fe5df1c93a0a530f3e583805cf98b4"
         end
       end
     end
@@ -234,8 +234,8 @@ describe Transloadit::Assembly do
         VCR.use_cassette "fetch_assembly_notifications" do
           response = @assembly.get_notifications
 
-          response["items"].must_equal []
-          response["count"].must_equal 0
+          _(response["items"]).must_equal []
+          _(response["count"]).must_equal 0
         end
       end
     end
@@ -245,8 +245,8 @@ describe Transloadit::Assembly do
         VCR.use_cassette "replay_assembly" do
           response = @assembly.replay "55c965a063a311e6ba2d379ef10b28f7"
 
-          response["ok"].must_equal "ASSEMBLY_REPLAYING"
-          response["assembly_id"].must_equal "b8590300650211e6b826d727b2cfd9ce"
+          _(response["ok"]).must_equal "ASSEMBLY_REPLAYING"
+          _(response["assembly_id"]).must_equal "b8590300650211e6b826d727b2cfd9ce"
         end
       end
     end
@@ -256,8 +256,8 @@ describe Transloadit::Assembly do
         VCR.use_cassette "replay_assembly_notification" do
           response = @assembly.replay_notification "2ea5d21063ad11e6bc93e53395ce4e7d"
 
-          response["ok"].must_equal "ASSEMBLY_NOTIFICATION_REPLAYED"
-          response["assembly_id"].must_equal "2ea5d21063ad11e6bc93e53395ce4e7d"
+          _(response["ok"]).must_equal "ASSEMBLY_NOTIFICATION_REPLAYED"
+          _(response["assembly_id"]).must_equal "2ea5d21063ad11e6bc93e53395ce4e7d"
         end
       end
     end

@@ -5,7 +5,7 @@ describe Transloadit::Response do
 
   it "must allow delegate initialization" do
     response = Transloadit::Response.new("test")
-    response.class.must_equal Transloadit::Response
+    _(response.class).must_equal Transloadit::Response
   end
 
   describe "when initialized" do
@@ -18,23 +18,23 @@ describe Transloadit::Response do
     end
 
     it "must parse the body" do
-      @response.body.must_be_kind_of Hash
+      _(@response.body).must_be_kind_of Hash
     end
 
     it "must allow access to body attributes" do
       %w[ok message assembly_id assembly_url].each do |attribute|
-        @response[attribute].must_equal @response.body[attribute]
+        _(@response[attribute]).must_equal @response.body[attribute]
       end
     end
 
     it "must allow access to body attributes as symbols" do
       [:ok, :message, :assembly_id, :assembly_url].each do |attribute|
-        @response[attribute].must_equal @response.body[attribute.to_s]
+        _(@response[attribute]).must_equal @response.body[attribute.to_s]
       end
     end
 
     it "must inspect as the body" do
-      @response.inspect.must_equal @response.body.inspect
+      _(@response.inspect).must_equal @response.body.inspect
     end
   end
 
@@ -48,18 +48,18 @@ describe Transloadit::Response do
     end
 
     it "must allow checking for completion" do
-      @response.completed?.must_equal true
-      @response.finished?.must_equal true
-      @response.error?.must_equal false
+      _(@response.completed?).must_equal true
+      _(@response.finished?).must_equal true
+      _(@response.error?).must_equal false
     end
 
     # TODO: can this be tested better?
     it "must allow reloading the assembly" do
       VCR.use_cassette "fetch_assembly_ok", allow_playback_repeats: true do
-        @response.send(:__getobj__)
+        _(@response.send(:__getobj__))
           .wont_be_same_as @response.reload!.send(:__getobj__)
 
-        @response.object_id
+        _(@response.object_id)
           .must_equal @response.reload!.object_id
       end
     end
@@ -68,10 +68,10 @@ describe Transloadit::Response do
       VCR.use_cassette "cancel_assembly" do
         @response.cancel!
 
-        @response.completed?.must_equal false
-        @response["ok"].must_equal "ASSEMBLY_CANCELED"
-        @response.canceled?.must_equal true
-        @response.finished?.must_equal true
+        _(@response.completed?).must_equal false
+        _(@response["ok"]).must_equal "ASSEMBLY_CANCELED"
+        _(@response.canceled?).must_equal true
+        _(@response.finished?).must_equal true
       end
     end
   end
@@ -86,7 +86,7 @@ describe Transloadit::Response do
     end
 
     it "must allow reloading until finished" do
-      @response.finished?.must_equal false
+      _(@response.finished?).must_equal false
 
       VCR.use_cassette "fetch_assembly_ok" do
         VCR.use_cassette "fetch_assembly_executing" do
@@ -94,7 +94,7 @@ describe Transloadit::Response do
         end
       end
 
-      @response.finished?.must_equal true
+      _(@response.finished?).must_equal true
     end
 
     it "must raise exception if reload until finished tries exceeded" do
@@ -114,9 +114,9 @@ describe Transloadit::Response do
         ).extend!(Transloadit::Response::Assembly)
       end
 
-      @response.finished?.must_equal false
-      @response.uploading?.must_equal true
-      @response.error?.must_equal false
+      _(@response.finished?).must_equal false
+      _(@response.uploading?).must_equal true
+      _(@response.error?).must_equal false
     end
 
     it "must allow to check for executing" do
@@ -126,9 +126,9 @@ describe Transloadit::Response do
         ).extend!(Transloadit::Response::Assembly)
       end
 
-      @response.finished?.must_equal false
-      @response.executing?.must_equal true
-      @response.error?.must_equal false
+      _(@response.finished?).must_equal false
+      _(@response.executing?).must_equal true
+      _(@response.error?).must_equal false
     end
 
     it "must allow to check for replaying" do
@@ -140,9 +140,9 @@ describe Transloadit::Response do
         ).extend!(Transloadit::Response::Assembly)
       end
 
-      @response.finished?.must_equal false
-      @response.replaying?.must_equal true
-      @response.error?.must_equal false
+      _(@response.finished?).must_equal false
+      _(@response.replaying?).must_equal true
+      _(@response.error?).must_equal false
     end
 
     it "must allow to check for aborted" do
@@ -152,8 +152,8 @@ describe Transloadit::Response do
         ).extend!(Transloadit::Response::Assembly)
       end
 
-      @response.finished?.must_equal true
-      @response.aborted?.must_equal true
+      _(@response.finished?).must_equal true
+      _(@response.aborted?).must_equal true
     end
 
     it "must allow to check for errors" do
@@ -163,8 +163,8 @@ describe Transloadit::Response do
         ).extend!(Transloadit::Response::Assembly)
       end
 
-      @response.error?.must_equal true
-      @response.finished?.must_equal true
+      _(@response.error?).must_equal true
+      _(@response.finished?).must_equal true
     end
   end
 end
