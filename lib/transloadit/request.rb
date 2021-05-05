@@ -164,7 +164,7 @@ class Transloadit::Request
 
     params = {
       params: uri_params,
-      signature: signature(params_in_json),
+      signature: signature(params_in_json)
     }
 
     "?" + params.map { |k, v| "#{k}=#{v}" if v }.compact.join("&")

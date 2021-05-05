@@ -46,7 +46,7 @@ p "fetching 3 soundbites from nasa..."
 files = [
   "https://www.nasa.gov/mp3/640148main_APU%20Shutdown.mp3",
   "https://www.nasa.gov/mp3/640164main_Go%20for%20Deploy.mp3",
-  "https://www.nasa.gov/mp3/640165main_Lookin%20At%20It.mp3",
+  "https://www.nasa.gov/mp3/640165main_Lookin%20At%20It.mp3"
 ]
 
 p "starting transcoding job..."

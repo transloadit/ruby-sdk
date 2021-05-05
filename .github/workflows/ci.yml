@@ -11,6 +11,6 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - if: ${{ matrix.ruby == '2.2' }}
+      - if: ${{ matrix.ruby == '2.5' }}
         run: bundle exec standardrb
       - run: COVERAGE=false bundle exec rake test

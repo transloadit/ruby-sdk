@@ -8,13 +8,13 @@ class AudioTranscoder < MediaTranscoder
       use: ":original",
       preset: "mp3",
       ffmpeg_stack: "v2.2.3",
-      result: true,
+      result: true
     })
     write_metadata = transloadit_client.step("mp3", "/meta/write", {
       use: "mp3_encode",
       ffmpeg_stack: "v2.2.3",
       result: true,
-      data_to_write: mp3_metadata,
+      data_to_write: mp3_metadata
     })
 
     steps = [encode_mp3, write_metadata]
@@ -25,7 +25,7 @@ class AudioTranscoder < MediaTranscoder
         secret: ENV.fetch("S3_SECRET_KEY"),
         bucket: ENV.fetch("S3_BUCKET"),
         bucket_region: ENV.fetch("S3_REGION"),
-        use: ["mp3"],
+        use: ["mp3"]
       })
 
       steps.push(store)

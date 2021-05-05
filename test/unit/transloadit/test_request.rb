@@ -47,8 +47,8 @@ describe Transloadit::Request do
       VCR.use_cassette "post_assembly" do
         _(@request.post(params: {
           auth: {key: "",
-                 expires: (Time.now + 10).utc.strftime("%Y/%m/%d %H:%M:%S+00:00"),},
-          steps: {encode: {robot: "/video/encode"}},
+                 expires: (Time.now + 10).utc.strftime("%Y/%m/%d %H:%M:%S+00:00")},
+          steps: {encode: {robot: "/video/encode"}}
         })["ok"]).must_equal "ASSEMBLY_COMPLETED"
       end
     end
@@ -60,7 +60,7 @@ describe Transloadit::Request do
       VCR.use_cassette "update_template" do
         _(@request.put(params: {
           name: "foo",
-          template: {key: "value"},
+          template: {key: "value"}
         })["ok"]).must_equal "TEMPLATE_UPDATED"
       end
     end
