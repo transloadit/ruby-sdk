@@ -10,6 +10,7 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
+      - run: bundle install
       - if: ${{ matrix.ruby == '2.4' }}
         run: standardrb
       - run: COVERAGE=false bundle exec rake test
