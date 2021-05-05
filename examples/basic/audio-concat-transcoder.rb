@@ -9,7 +9,7 @@ class AudioConcatTranscoder < MediaTranscoder
       use: {
         steps: files.map.each_with_index do |f, i|
           {name: ":original", as: "audio_#{i}", fields: "file_#{i}"}
-        end
+        end,
       },
       result: true,
     })
