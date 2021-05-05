@@ -7,7 +7,7 @@ class ImageTranscoder < MediaTranscoder
     optimize = transloadit_client.step("image", "/image/optimize", {
       progressive: true,
       use: ":original",
-      result: true
+      result: true,
     })
 
     steps = [optimize]
@@ -18,7 +18,7 @@ class ImageTranscoder < MediaTranscoder
         secret: ENV.fetch("S3_SECRET_KEY"),
         bucket: ENV.fetch("S3_BUCKET"),
         bucket_region: ENV.fetch("S3_REGION"),
-        use: "image"
+        use: "image",
       })
 
       steps.push(store)

@@ -11,7 +11,7 @@ class AudioConcatTranscoder < MediaTranscoder
           {name: ":original", as: "audio_#{i}", fields: "file_#{i}"}
         end
       },
-      result: true
+      result: true,
     })
 
     steps = [concat]
@@ -22,7 +22,7 @@ class AudioConcatTranscoder < MediaTranscoder
         secret: ENV.fetch("S3_SECRET_KEY"),
         bucket: ENV.fetch("S3_BUCKET"),
         bucket_region: ENV.fetch("S3_REGION"),
-        use: ["concat"]
+        use: ["concat"],
       })
 
       steps.push(store)

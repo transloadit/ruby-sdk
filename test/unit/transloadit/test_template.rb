@@ -19,7 +19,7 @@ describe Transloadit::Template do
         response = @template.create(
           {
             name: "foo",
-            template: {"key" => "value"}
+            template: {"key" => "value"},
           }
         )
         _(response["ok"]).must_equal "TEMPLATE_CREATED"

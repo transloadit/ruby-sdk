@@ -46,7 +46,7 @@ describe Transloadit::Step do
           robot: @robot,
           key: @key,
           secret: @secret,
-          bucket: @bucket
+          bucket: @bucket,
         }
       )
     end
@@ -76,11 +76,11 @@ describe Transloadit::Step do
     it "must allow using multiple steps" do
       inputs = [
         Transloadit::Step.new("thumbnail", "/video/thumbnail"),
-        Transloadit::Step.new("resize", "/image/resize")
+        Transloadit::Step.new("resize", "/image/resize"),
       ]
 
-      _(@step.use(inputs)).must_equal inputs.map { |i| i.name }
-      _(@step.options[:use]).must_equal inputs.map { |i| i.name }
+      _(@step.use(inputs)).must_equal(inputs.map { |i| i.name })
+      _(@step.options[:use]).must_equal(inputs.map { |i| i.name })
     end
 
     it "must allow using nothing" do
