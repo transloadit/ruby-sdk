@@ -7,7 +7,6 @@ rvm:
   - rbx-2
   - jruby-9.1.17.0
 script:
-  - standardrb
   - COVERAGE=false bundle exec rake test
 matrix:
   allow_failures:
