@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/transloadit/ruby-sdk.png?branch=master)](https://travis-ci.org/transloadit/ruby-sdk)
+[![Build Status](https://github.com/transloadit/ruby-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/transloadit/ruby-sdk/actions/workflows/ci.yml)
 [![Code Climate](https://codeclimate.com/github/transloadit/ruby-sdk.png)](https://codeclimate.com/github/transloadit/ruby-sdk)
 [![Dependency Status](https://gemnasium.com/transloadit/ruby-sdk.png)](https://gemnasium.com/transloadit/ruby-sdk)
 
@@ -418,14 +418,8 @@ for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/mast
 
 ## Compatibility
 
-At a minimum, this gem should work on MRI 2.3.0, 2.2.0, 2.1.0, Rubinius,
-and JRuby. It may also work on older ruby versions, but support for those
-Rubies is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
-[bug report](https://github.com/transloadit/ruby-sdk/issues). Compatibility patches for other Rubies
-are welcome.
-
-Testing against these versions is performed automatically by
-[Travis CI](https://travis-ci.org/transloadit/ruby-sdk).
+Please see [ci.yml](https://github.com/transloadit/ruby-sdk/tree/master/.github/workflows/ci.yml) for a list of supported ruby versions. It may also work on older Rubies, but support for those is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
+[bug report](https://github.com/transloadit/ruby-sdk/issues). Compatibility patches for other Rubies are welcome.
 
 ### Ruby 1.9.x & 2.0
 
