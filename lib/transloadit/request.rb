@@ -1,7 +1,7 @@
-require 'transloadit'
+require "transloadit"
 
-require 'rest-client'
-require 'openssl'
+require "rest-client"
+require "openssl"
 
 #
 # Wraps requests to the Transloadit API. Ensures all API requests return a
@@ -10,16 +10,16 @@ require 'openssl'
 #
 class Transloadit::Request
   # The default Transloadit API endpoint.
-  API_ENDPOINT = URI.parse('https://api2.transloadit.com/')
+  API_ENDPOINT = URI.parse("https://api2.transloadit.com/")
 
   # The default headers to send to the API.
-  API_HEADERS  = { 'Transloadit-Client' => "ruby-sdk:#{Transloadit::VERSION}" }
+  API_HEADERS = {"Transloadit-Client" => "ruby-sdk:#{Transloadit::VERSION}"}
 
   # The HMAC algorithm used for calculation request signatures.
-  HMAC_ALGORITHM = OpenSSL::Digest.new('sha1')
+  HMAC_ALGORITHM = OpenSSL::Digest.new("sha1")
 
   # @return [String] the API endpoint for the request
-  attr_reader   :url
+  attr_reader :url
 
   # @return [String] the authentication secret to sign the request with
   attr_accessor :secret
@@ -34,7 +34,7 @@ class Transloadit::Request
   # @param [String] secret an optional secret with which to sign the request
   #
   def initialize(url, secret = nil)
-    self.url    = URI.parse(url.to_s)
+    self.url = URI.parse(url.to_s)
     self.secret = secret
   end
 
@@ -46,8 +46,8 @@ class Transloadit::Request
   # @return [Transloadit::Response] the response
   #
   def get(params = {})
-    self.request! do
-      self.api[url.path + self.to_query(params)].get(API_HEADERS)
+    request! do
+      api[url.path + to_query(params)].get(API_HEADERS)
     end
   end
 
@@ -59,9 +59,9 @@ class Transloadit::Request
   # @return [Transloadit::Response] the response
   #
   def delete(payload = {})
-    self.request! do
-      options = {:payload => self.to_payload(payload)}
-      self.api(options = options)[url.path].delete(API_HEADERS)
+    request! do
+      options = {payload: to_payload(payload)}
+      api(options)[url.path].delete(API_HEADERS)
     end
   end
 
@@ -73,8 +73,8 @@ class Transloadit::Request
   # @return [Transloadit::Response] the response
   #
   def post(payload = {})
-    self.request! do
-      self.api[url.path].post(self.to_payload(payload), API_HEADERS)
+    request! do
+      api[url.path].post(to_payload(payload), API_HEADERS)
     end
   end
 
@@ -86,8 +86,8 @@ class Transloadit::Request
   # @return [Transloadit::Response] the response
   #
   def put(payload = {})
-    self.request! do
-      self.api[url.path].put(self.to_payload(payload), API_HEADERS)
+    request! do
+      api[url.path].put(to_payload(payload), API_HEADERS)
     end
   end
 
@@ -95,7 +95,18 @@ class Transloadit::Request
   # @return [String] a human-readable version of the prepared Request
   #
   def inspect
-    self.url.to_s.inspect
+    url.to_s.inspect
+  end
+
+  #
+  # Computes an HMAC digest from the key and message.
+  #
+  # @param  [String] key     the secret key to sign with
+  # @param  [String] message the message to sign
+  # @return [String]         the signature of the message
+  #
+  def self._hmac(key, message)
+    OpenSSL::HMAC.hexdigest HMAC_ALGORITHM, key, message
   end
 
   protected
@@ -110,11 +121,9 @@ class Transloadit::Request
   # @return [RestClient::Resource] the API endpoint for this instance
   #
   def api(options = {})
-    @api ||= begin
-      case self.url.host
-        when String then RestClient::Resource.new(self.url.host, options = options)
-        else RestClient::Resource.new(API_ENDPOINT.host, options = options)
-      end
+    @api ||= case url.host
+        when String then RestClient::Resource.new(url.host, options)
+        else RestClient::Resource.new(API_ENDPOINT.host, options)
     end
   end
 
@@ -128,11 +137,11 @@ class Transloadit::Request
   #
   def to_payload(payload = nil)
     return {} if payload.nil?
-    return {} if payload.respond_to?(:empty?) and payload.empty?
+    return {} if payload.respond_to?(:empty?) && payload.empty?
 
     # TODO: refactor this, don't update a hash that's not ours
-    payload.update :params    => MultiJson.dump(payload[:params])
-    payload.update :signature => self.signature(payload[:params])
+    payload.update params: MultiJson.dump(payload[:params])
+    payload.update signature: signature(payload[:params])
     payload.delete :signature if payload[:signature].nil?
     payload
   end
@@ -146,19 +155,19 @@ class Transloadit::Request
   # @return [String] the URI-encoded and escaped query parameters
   #
   def to_query(params = nil)
-    return '' if params.nil?
-    return '' if params.respond_to?(:empty?) and params.empty?
+    return "" if params.nil?
+    return "" if params.respond_to?(:empty?) && params.empty?
 
-    escape    = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
+    escape = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
     params_in_json = MultiJson.dump(params)
     uri_params = URI.escape(params_in_json, escape)
 
-    params    = {
-      :params    => uri_params,
-      :signature => self.signature(params_in_json)
+    params = {
+      params: uri_params,
+      signature: signature(params_in_json)
     }
 
-    '?' + params.map {|k,v| "#{k}=#{v}" if v }.compact.join('&')
+    "?" + params.map { |k, v| "#{k}=#{v}" if v }.compact.join("&")
   end
 
   #
@@ -166,7 +175,7 @@ class Transloadit::Request
   # is raised by RestClient.
   #
   def request!(&request)
-    Transloadit::Response.new request.call
+    Transloadit::Response.new yield
   rescue RestClient::Exception => e
     Transloadit::Response.new e.response
   end
@@ -179,19 +188,6 @@ class Transloadit::Request
   # @return [String] the HMAC signature for the params
   #
   def signature(params)
-    self.class._hmac(self.secret, params) if self.secret.to_s.length > 0
-  end
-
-  private
-
-  #
-  # Computes an HMAC digest from the key and message.
-  #
-  # @param  [String] key     the secret key to sign with
-  # @param  [String] message the message to sign
-  # @return [String]         the signature of the message
-  #
-  def self._hmac(key, message)
-    OpenSSL::HMAC.hexdigest HMAC_ALGORITHM, key, message
+    self.class._hmac(secret, params) if secret.to_s.length > 0
   end
 end

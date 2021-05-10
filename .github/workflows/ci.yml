@@ -1,0 +1,16 @@
+on: push
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: [2.2, 2.3, 2.4, 2.5, 2.6, 2.7, jruby, jruby-head, truffleruby, truffleruby-head]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - if: ${{ matrix.ruby == '2.5' }}
+        run: bundle exec standardrb
+      - run: COVERAGE=false bundle exec rake test

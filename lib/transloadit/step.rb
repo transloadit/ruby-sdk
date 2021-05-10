@@ -1,4 +1,4 @@
-require 'transloadit'
+require "transloadit"
 
 #
 # Implements the concept of a step in the Transloadit API. Each Step has a
@@ -27,8 +27,8 @@ class Transloadit::Step
   #   {Transloadit#step} for possible values
   #
   def initialize(name, robot, options = {})
-    self.name    = name
-    self.robot   = robot
+    self.name = name
+    self.robot = robot
     self.options = options
   end
 
@@ -49,12 +49,12 @@ class Transloadit::Step
   #   that will actually be sent to the REST API.
   #
   def use(input)
-    self.options.delete(:use) and return if input.nil?
+    options.delete(:use) && return if input.nil?
 
-    self.options[:use] = case input
+    options[:use] = case input
       when Symbol then input.inspect
-      when Array  then input.map {|i| i.name }
-      else             [ input.name ]
+      when Array then input.map { |i| i.name }
+      else [input.name]
     end
   end
 
@@ -62,21 +62,21 @@ class Transloadit::Step
   # @return [String] a human-readable version of the Step
   #
   def inspect
-    self.to_hash[self.name].inspect
+    to_hash[name].inspect
   end
 
   #
   # @return [Hash] a Transloadit-compatible Hash of the Step's contents
   #
   def to_hash
-    { self.name => options.merge(:robot => self.robot) }
+    {name => options.merge(robot: robot)}
   end
 
   #
   # @return [String] JSON-encoded String containing the Step's hash contents
   #
   def to_json
-    MultiJson.dump(self.to_hash)
+    MultiJson.dump(to_hash)
   end
 
   protected
