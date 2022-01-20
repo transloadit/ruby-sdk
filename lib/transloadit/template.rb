@@ -3,7 +3,7 @@ require 'transloadit'
 #
 # Represents a Template API ready to interact with its corresponding REST API.
 #
-# See the Transloadit {documentation}[https://transloadit.com/docs/api-docs/#template-api]
+# See the Transloadit {documentation}[https://transloadit.com/docs/api/templates/]
 # for futher information on Templates and their parameters.
 #
 class Transloadit::Template < Transloadit::ApiModel

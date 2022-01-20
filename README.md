@@ -132,7 +132,7 @@ response.reload_until_finished! tries: 300 # default is 600
 ```
 
 In general, you use hash accessor syntax to query any direct attribute from
-the [response](https://transloadit.com/docs/api/#assembly-status-response).
+the [response](https://transloadit.com/docs/api/assembly-status-response/).
 Methods suffixed by a question mark provide a more readable way of querying
 state (e.g., `assembly.completed?` vs. checking the result of
 `assembly[:ok]`). Methods suffixed by a bang make a live query against the
@@ -173,7 +173,7 @@ response = assembly.create! *files
 
 Transloadit allows you to perform several processing steps in parallel. You
 simply need to `use` other <dfn>Steps</dfn>. Following
-[their example](https://transloadit.com/docs/#special-parameters):
+[their example](https://transloadit.com/docs/topics/assembly-instructions/#step-parameters):
 
 ```ruby
 require 'transloadit'
@@ -219,7 +219,7 @@ transloadit.assembly(
 ```
 
 You can use your steps together with this template and even use variables.
-The [Transloadit documentation](https://transloadit.com/docs/#passing-variables-into-a-template) 
+The [Transloadit documentation](https://transloadit.com/docs/topics/templates/#passing-variables-into-a-template) 
 has some nice examples for that.
 
 ### 5. Using fields
@@ -262,7 +262,7 @@ transloadit.assembly(
 ).create! open('/PATH/TO/FILE.mpg')
 ```
 
-Read up more on the <dfn>Notifications</dfn> [on Transloadit's documentation page](https://transloadit.com/docs/#notifications)
+Read up more on the <dfn>Notifications</dfn> [on Transloadit's documentation page](https://transloadit.com/docs/topics/assembly-notifications/)
 
 ### 7. Other Assembly methods
 
@@ -298,7 +298,7 @@ assembly.replay_notification 'YOUR_ASSEMBLY_ID'
 
 ### 8. Templates
 
-Transloadit provides a [templates api](https://transloadit.com/docs/#templates)
+Transloadit provides a [templates api](https://transloadit.com/docs/topics/templates/)
 for recurring encoding tasks. Here's how you would create a <dfn>Template</dfn>:
 
 ```ruby
@@ -384,7 +384,7 @@ Not specifying the `month` or `year` would default to the current month or year.
 ### 10. Rate limits
 
 Transloadit enforces rate limits to guarantee that no customers are adversely affected by the usage
-of any given customer. See [Rate Limiting](https://transloadit.com/docs/api/#rate-limiting).
+of any given customer. See [Rate Limiting](https://transloadit.com/docs/api/rate-limiting/).
 
 While creating an <dfn>Assembly</dfn>, if a rate limit error is received, by default, 2 more attempts would be made for a successful response. If after these attempts the rate limit error persists, a `RateLimitReached` exception will be raised.
 

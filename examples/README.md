@@ -128,7 +128,7 @@ robot.
 
 The second step takes the first step as input, and adds the appropriate metadata using the `meta/write`
 robot. In our simple example we set the track name to the name of the file using variable
-name substitution (see https://transloadit.com/docs/#assembly-variables), and set canned
+name substitution (see https://transloadit.com/docs/topics/assembly-instructions/#assembly-variables), and set canned
 values for all other ID3 fields
 
 ```ruby
