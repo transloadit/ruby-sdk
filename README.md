@@ -84,9 +84,9 @@ else
 end
 ```
 
-<div class="tip" markdown="1">
-  The <dfn>Assembly</dfn> method `submit!` has been deprecated and replaced with `create!`.
-  The `submit!` method remains as an alias of `create!` for backward Compatibility.
+<div class="alert alert-note">
+  <strong>Note:</strong> The <dfn>Assembly</dfn> method <code>submit!</code> has been deprecated and replaced with <code>create!</code>.
+  The <code>submit!</code> method remains as an alias of <code>create!</code> for backward Compatibility.
 </div>
 
 When the `create!` method returns, the file has been uploaded but may not yet
