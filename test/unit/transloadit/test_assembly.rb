@@ -89,7 +89,7 @@ describe Transloadit::Assembly do
 
       it "must allow steps through the create! method" do
         Transloadit::Assembly.new(@transloadit).create!(
-          **{steps: @transloadit.step("thumbs", "/video/thumbs")}
+          steps: @transloadit.step("thumbs", "/video/thumbs")
         )
 
         assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
@@ -99,7 +99,7 @@ describe Transloadit::Assembly do
       end
 
       it "must allow steps passed through the create! method override steps previously set" do
-        @assembly.create!(**{steps: @transloadit.step("resize", "/image/resize")})
+        @assembly.create!(steps: @transloadit.step("resize", "/image/resize"))
 
         assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
