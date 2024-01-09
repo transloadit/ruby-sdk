@@ -89,7 +89,7 @@ describe Transloadit::Assembly do
 
       it "must allow steps through the create! method" do
         Transloadit::Assembly.new(@transloadit).create!(
-          {steps: @transloadit.step("thumbs", "/video/thumbs")}
+          **{steps: @transloadit.step("thumbs", "/video/thumbs")}
         )
 
         assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
@@ -99,7 +99,7 @@ describe Transloadit::Assembly do
       end
 
       it "must allow steps passed through the create! method override steps previously set" do
-        @assembly.create!({steps: @transloadit.step("resize", "/image/resize")})
+        @assembly.create!(**{steps: @transloadit.step("resize", "/image/resize")})
 
         assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
@@ -112,7 +112,7 @@ describe Transloadit::Assembly do
       it "must call the create! method with the same parameters" do
         VCR.use_cassette "submit_assembly" do
           file = open("lib/transloadit/version.rb")
-          mocker = MiniTest::Mock.new
+          mocker = Minitest::Mock.new
           mocker.expect :call, nil, [file]
           @assembly.stub :create!, mocker do
             @assembly.submit!(file)
@@ -172,7 +172,7 @@ describe Transloadit::Assembly do
       thumbs_duplicate = @transloadit.step("thumbs", "/video/encode")
       options = {steps: [thumbs, thumbs_duplicate]}
       assert_raises ArgumentError do
-        @assembly.create! open("lib/transloadit/version.rb"), options
+        @assembly.create! open("lib/transloadit/version.rb"), **options
       end
     end
   end

@@ -158,9 +158,8 @@ class Transloadit::Request
     return "" if params.nil?
     return "" if params.respond_to?(:empty?) && params.empty?
 
-    escape = Regexp.new("[^#{URI::PATTERN::UNRESERVED}]")
     params_in_json = MultiJson.dump(params)
-    uri_params = URI.escape(params_in_json, escape)
+    uri_params = URI.encode_www_form_component(params_in_json)
 
     params = {
       params: uri_params,
