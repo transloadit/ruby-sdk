@@ -71,7 +71,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # keeping this method for backward compatibility
   #
   def submit!(*ios)
-    warn "#{caller(1..1).first}: warning: Transloadit::Assembly#submit!"\
+    warn "#{caller(1..1).first}: warning: Transloadit::Assembly#submit!" \
       " is deprecated. use Transloadit::Assembly#create! instead"
     create!(*ios)
   end
@@ -140,14 +140,14 @@ class Transloadit::Assembly < Transloadit::ApiModel
   #
   def _wrap_steps_in_hash(steps)
     case steps
-      when nil then steps
-      when Hash then steps
-      when Transloadit::Step then steps.to_hash
-      else
-        if steps.uniq(&:name) != steps
-          raise ArgumentError, "There are different Assembly steps using the same name"
-        end
-        steps.inject({}) { |h, s| h.update s }
+    when nil then steps
+    when Hash then steps
+    when Transloadit::Step then steps.to_hash
+    else
+      if steps.uniq(&:name) != steps
+        raise ArgumentError, "There are different Assembly steps using the same name"
+      end
+      steps.inject({}) { |h, s| h.update s }
     end
   end
 

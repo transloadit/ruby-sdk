@@ -421,7 +421,6 @@ for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/mast
 Please see [ci.yml](https://github.com/transloadit/ruby-sdk/tree/master/.github/workflows/ci.yml) for a list of supported ruby versions. It may also work on older Rubies, but support for those is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
 [bug report](https://github.com/transloadit/ruby-sdk/issues). Compatibility patches for other Rubies are welcome.
 
-### Ruby 1.9.x & 2.0
+### Ruby 2.x
 
-If you still need support for older versions of Ruby, 1.2.0 is the last version that
-supports those.
+If you still need support for Ruby 2.x, 2.0.1 is the last version that supports it.

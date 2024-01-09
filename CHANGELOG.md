@@ -1,5 +1,6 @@
 ### 3.0.0 / ????-??-?? ###
 
+* BREAKING: Drop support for EOL'd Ruby 2.x
 * Prevent duplicate assembly steps [#49](https://github.com/transloadit/ruby-sdk/issues/27) (@ifedapoolarewaju)
 * Send "Transloadit-Client" header for every request (@ifedapoolarewaju)
 

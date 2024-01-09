@@ -52,9 +52,9 @@ class Transloadit::Step
     options.delete(:use) && return if input.nil?
 
     options[:use] = case input
-      when Symbol then input.inspect
-      when Array then input.map { |i| i.name }
-      else [input.name]
+    when Symbol then input.inspect
+    when Array then input.map { |i| i.name }
+    else [input.name]
     end
   end
 
