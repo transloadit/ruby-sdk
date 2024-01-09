@@ -30,7 +30,7 @@ describe Transloadit::Template do
 
     describe "when fetching all templates" do
       it "must perform GET request to /templates" do
-        stub = stub_request(:get, "api2.transloadit.com/templates?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D")
+        stub = stub_request(:get, "https://api2.transloadit.com/templates?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D")
         @template.list
 
         assert_requested(stub)
@@ -50,7 +50,7 @@ describe Transloadit::Template do
       it "must perform GET request to /templates/[id]" do
         stub = stub_request(
           :get,
-          "api2.transloadit.com/templates/76fe5df1c93a0a530f3e583805cf98b4?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D"
+          "https://api2.transloadit.com/templates/76fe5df1c93a0a530f3e583805cf98b4?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D"
         )
         @template.get "76fe5df1c93a0a530f3e583805cf98b4"
 
@@ -68,7 +68,7 @@ describe Transloadit::Template do
 
     describe "when updating template" do
       it "must perform PUT request to templates/[id]" do
-        url = "api2.transloadit.com/templates/76fe5df1c93a0a530f3e583805cf98b4"
+        url = "https://api2.transloadit.com/templates/76fe5df1c93a0a530f3e583805cf98b4"
         stub_request(:put, url)
         @template.update(
           "76fe5df1c93a0a530f3e583805cf98b4",
@@ -95,7 +95,7 @@ describe Transloadit::Template do
 
     describe "when deleting a template" do
       it "must perform DELETE request to templates/[id]" do
-        stub = stub_request(:delete, "api2.transloadit.com/templates/76fe5df1c93a0a530f3e583805cf98b4")
+        stub = stub_request(:delete, "https://api2.transloadit.com/templates/76fe5df1c93a0a530f3e583805cf98b4")
         @template.delete "76fe5df1c93a0a530f3e583805cf98b4"
 
         assert_requested(stub)

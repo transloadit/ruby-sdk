@@ -98,7 +98,7 @@ completed, or examine other attributes of the request.
 response[:assembly_id] # => '9bd733a...'
 
 # returns the API URL endpoint for the assembly
-response[:assembly_url] # => 'http://api2.vivian.transloadit.com/assemblies/9bd733a...'
+response[:assembly_ssl_url] # => 'https://api2.vivian.transloadit.com/assemblies/9bd733a...'
 
 # checks how many bytes were expected / received by transloadit
 response[:bytes_expected] # => 92933
@@ -198,7 +198,7 @@ You can also tell a step to use the original uploaded file by passing the
 Symbol `:original` instead of another step.
 
 Check the YARD documentation for more information on using
-[use](http://rubydoc.info/gems/transloadit/frames/Transloadit/Step#use-instance_method).
+[use](https://rubydoc.info/gems/transloadit/frames/Transloadit/Step#use-instance_method).
 
 ### 4. Creating an Assembly with Templates
 
@@ -258,7 +258,7 @@ transloadit = Transloadit.new(
 )
 
 transloadit.assembly(
-  :notify_url => 'http://example.com/processing_finished'
+  :notify_url => 'https://example.com/processing_finished'
 ).create! open('/PATH/TO/FILE.mpg')
 ```
 
@@ -413,8 +413,8 @@ and more can be found [here](https://github.com/transloadit/ruby-sdk/tree/master
 ## Documentation
 
 Up-to-date YARD documentation is automatically generated. You can view the
-docs for the <a href="http://rubydoc.info/gems/transloadit/frames" rel="canonical">released gem</a> or
-for the latest [git master](http://rubydoc.info/github/transloadit/ruby-sdk/master/frames).
+docs for the <a href="https://rubydoc.info/gems/transloadit/frames" rel="canonical">released gem</a> or
+for the latest [git master](https://rubydoc.info/github/transloadit/ruby-sdk/master/frames).
 
 ## Compatibility
 

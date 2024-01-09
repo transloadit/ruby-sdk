@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: http://api2.transloadit.com/assembly_notifications/2ea5d21063ad11e6bc93e53395ce4e7d/replay
+    uri: https://api2.transloadit.com/assembly_notifications/2ea5d21063ad11e6bc93e53395ce4e7d/replay
     body:
       encoding: UTF-8
       string: params=%%7B%22auth%22:%7B%22key%22:%22%22%7D%7D

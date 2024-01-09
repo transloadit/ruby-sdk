@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: delete
-    uri: http://api2.transloadit.com/templates/55c965a063a311e6ba2d379ef10b28f7
+    uri: https://api2.transloadit.com/templates/55c965a063a311e6ba2d379ef10b28f7
     body:
       encoding: US-ASCII
       string: ''

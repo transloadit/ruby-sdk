@@ -53,7 +53,7 @@ class Transloadit
   # @param  [String] name  the name to give the step
   # @param  [String] robot the robot to use in this step (e.g., '/image/resize')
   # @param  [Hash]   options a hash of options to customize the robot's
-  #   operation; see the {online documentation}[http://transloadit.com/docs/building-assembly-instructions]
+  #   operation; see the {online documentation}[https://transloadit.com/docs/building-assembly-instructions]
   #   for robot-specific options
   # @return [Step]   the created Step
   #
@@ -66,7 +66,7 @@ class Transloadit
   #
   # @param [Hash] options additional parameters to send with the assembly
   #   submission; for a full list of parameters, see the official
-  #   documentation on {templates}[http://transloadit.com/docs/templates].
+  #   documentation on {templates}[https://transloadit.com/docs/templates].
   # @option options [Step, Array<Step>] :steps the steps to perform in this
   #   assembly
   # @option options [String] :notify_url A URL to be POSTed when the assembly
