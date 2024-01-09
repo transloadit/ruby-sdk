@@ -122,8 +122,8 @@ class Transloadit::Request
   #
   def api(options = {})
     @api ||= case url.host
-        when String then RestClient::Resource.new(url.host, options)
-        else RestClient::Resource.new(API_ENDPOINT.host, options)
+    when String then RestClient::Resource.new(url.host, options)
+    else RestClient::Resource.new(API_ENDPOINT.host, options)
     end
   end
 

@@ -19,7 +19,6 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = ">= 2.1.0"
 
   gem.files = `git ls-files`.split("\n")
-  gem.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.require_paths = %w[lib]
 
   gem.add_dependency "rest-client"
