@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.description = "The transloadit gem allows you to automate uploading files through the Transloadit REST API"
 
   gem.required_rubygems_version = ">= 2.2.0"
-  gem.required_ruby_version = ">= 2.1.0"
+  gem.required_ruby_version = ">= 3.0.0"
 
   gem.files = `git ls-files`.split("\n")
   gem.require_paths = %w[lib]
