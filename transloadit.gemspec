@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
 
   gem.authors = ["Stephen Touset", "Robin Mehner"]
   gem.email = %w[stephen@touset.org robin@coding-robin.de]
-  gem.homepage = "http://github.com/transloadit/ruby-sdk/"
+  gem.homepage = "https://github.com/transloadit/ruby-sdk/"
   gem.license = "MIT"
 
   gem.summary = "Official Ruby gem for Transloadit"

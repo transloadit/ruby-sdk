@@ -12,7 +12,7 @@ describe Transloadit::Assembly do
   describe "when initialized" do
     before do
       @step = @transloadit.step "thumbs", "/video/thumbs"
-      @redirect = "http://foo.bar/"
+      @redirect = "https://foo.bar/"
 
       @assembly = Transloadit::Assembly.new @transloadit,
         steps: @step,
@@ -45,7 +45,7 @@ describe Transloadit::Assembly do
       VCR.use_cassette "submit_assembly" do
         response = @assembly.create! open("lib/transloadit/version.rb")
         _(response.code).must_equal 302
-        _(response.headers[:location]).must_match %r{^http://foo.bar/}
+        _(response.headers[:location]).must_match %r{^https://foo.bar/}
       end
     end
 
@@ -54,7 +54,7 @@ describe Transloadit::Assembly do
 
       before do
         WebMock.reset!
-        stub_request(:post, "api2.transloadit.com/assemblies")
+        stub_request(:post, "https://api2.transloadit.com/assemblies")
           .to_return(body: '{"ok":"ASSEMBLY_COMPLETED"}')
       end
 
@@ -68,7 +68,7 @@ describe Transloadit::Assembly do
           template_id: "TEMPLATE_ID"
         ).create!
 
-        assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
+        assert_requested(:post, "https://api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
           _(MultiJson.load(values["params"])["template_id"]).must_equal "TEMPLATE_ID"
         end
@@ -80,7 +80,7 @@ describe Transloadit::Assembly do
           fields: {tag: "ninja-cat"}
         ).create!
 
-        assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
+        assert_requested(:post, "https://api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
           _(values["tag"]).must_equal "ninja-cat"
           _(MultiJson.load(values["params"])["fields"]["tag"]).must_equal "ninja-cat"
@@ -92,7 +92,7 @@ describe Transloadit::Assembly do
           steps: @transloadit.step("thumbs", "/video/thumbs")
         )
 
-        assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
+        assert_requested(:post, "https://api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
           _(MultiJson.load(values["params"])["steps"]).must_equal({"thumbs" => {"robot" => "/video/thumbs"}})
         end
@@ -101,7 +101,7 @@ describe Transloadit::Assembly do
       it "must allow steps passed through the create! method override steps previously set" do
         @assembly.create!(steps: @transloadit.step("resize", "/image/resize"))
 
-        assert_requested(:post, "api2.transloadit.com/assemblies") do |req|
+        assert_requested(:post, "https://api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
           _(MultiJson.load(values["params"])["steps"]).must_equal({"resize" => {"robot" => "/image/resize"}})
         end
@@ -187,7 +187,7 @@ describe Transloadit::Assembly do
 
     describe "when fetching all assemblies" do
       it "must perform GET request to /assemblies" do
-        stub = stub_request(:get, "api2.transloadit.com/assemblies?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D")
+        stub = stub_request(:get, "https://api2.transloadit.com/assemblies?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D")
         @assembly.list
 
         assert_requested(stub)
@@ -205,7 +205,7 @@ describe Transloadit::Assembly do
 
     describe "when fetching single assembly" do
       it "must perform GET request to /assemblies/[id]" do
-        stub = stub_request(:get, "api2.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4")
+        stub = stub_request(:get, "https://api2.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4")
         @assembly.get "76fe5df1c93a0a530f3e583805cf98b4"
 
         assert_requested(stub)
@@ -223,7 +223,7 @@ describe Transloadit::Assembly do
       it "must perform GET request to /assembly_notifications" do
         stub = stub_request(
           :get,
-          "api2.transloadit.com/assembly_notifications?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D"
+          "https://api2.transloadit.com/assembly_notifications?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D"
         )
         @assembly.get_notifications
 

@@ -22,7 +22,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # server-side template. It's submitted along with a list of files to process,
   # at which point Transloadit will process and store the files according to the
   # rules in the Assembly.
-  # See the Transloadit {documentation}[http://transloadit.com/docs/building-assembly-instructions]
+  # See the Transloadit {documentation}[https://transloadit.com/docs/building-assembly-instructions]
   # for futher information on Assemblies and their parameters.
   #
   # Accepts as many IO objects as you wish to process in the assembly.
@@ -36,7 +36,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
   #   @param [Array<IO>] *ios   the files for the assembly to process
   #   @param [Hash]      params additional POST data to submit with the request;
   #     for a full list of parameters, see the official documentation
-  #     on {templates}[http://transloadit.com/docs/templates].
+  #     on {templates}[https://transloadit.com/docs/templates].
   #   @option params [Step, Array<Step>] :steps the steps to perform in this
   #     assembly
   #   @option params [String] :notify_url A URL to be POSTed when the assembly

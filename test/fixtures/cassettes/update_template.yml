@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: put
-    uri: http://api2.transloadit.com/templates/55c965a063a311e6ba2d379ef10b28f7
+    uri: https://api2.transloadit.com/templates/55c965a063a311e6ba2d379ef10b28f7
     body:
       encoding: UTF-8
       string: params=%7B%22auth%22%3A%7B%22key%22%3A%22%22%7D%7D

@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: http://api2.transloadit.com/assemblies/55c965a063a311e6ba2d379ef10b28f7/replay
+    uri: https://api2.transloadit.com/assemblies/55c965a063a311e6ba2d379ef10b28f7/replay
     body:
       encoding: UTF-8
       string: params=%%7B%22auth%22:%7B%22key%22:%22%22%7D%7D
@@ -43,7 +43,7 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"ok":"ASSEMBLY_REPLAYING","message":"The assembly is now in the process
-        of being replayed.","success":true,"assembly_id":"b8590300650211e6b826d727b2cfd9ce","assembly_url":"http://api2.sayuri.transloadit.com/assemblies/b8590300650211e6b826d727b2cfd9ce","notify_url":null}'
+        of being replayed.","success":true,"assembly_id":"b8590300650211e6b826d727b2cfd9ce","assembly_ssl_url":"https://api2.sayuri.transloadit.com/assemblies/b8590300650211e6b826d727b2cfd9ce","notify_url":null}'
     http_version: 
   recorded_at: Tue, 16 Aug 2016 11:19:45 GMT
 recorded_with: VCR 3.0.3

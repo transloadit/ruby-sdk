@@ -1,7 +1,7 @@
 require "test_helper"
 
 describe Transloadit::Response do
-  request_uri = "http://api2.jane.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4"
+  request_uri = "https://api2.jane.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4"
 
   it "must allow delegate initialization" do
     response = Transloadit::Response.new("test")
@@ -22,13 +22,13 @@ describe Transloadit::Response do
     end
 
     it "must allow access to body attributes" do
-      %w[ok message assembly_id assembly_url].each do |attribute|
+      %w[ok message assembly_id assembly_ssl_url].each do |attribute|
         _(@response[attribute]).must_equal @response.body[attribute]
       end
     end
 
     it "must allow access to body attributes as symbols" do
-      [:ok, :message, :assembly_id, :assembly_url].each do |attribute|
+      [:ok, :message, :assembly_id, :assembly_ssl_url].each do |attribute|
         _(@response[attribute]).must_equal @response.body[attribute.to_s]
       end
     end
@@ -135,7 +135,7 @@ describe Transloadit::Response do
       VCR.use_cassette "replay_assembly" do
         @response = Transloadit::Response.new(
           RestClient::Resource.new(
-            "http://api2.transloadit.com/assemblies/55c965a063a311e6ba2d379ef10b28f7/replay"
+            "https://api2.transloadit.com/assemblies/55c965a063a311e6ba2d379ef10b28f7/replay"
           ).post({})
         ).extend!(Transloadit::Response::Assembly)
       end

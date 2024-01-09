@@ -2,11 +2,11 @@ require "transloadit"
 
 module Transloadit::Response::Assembly
   def reload!
-    replace Transloadit::Request.new(self["assembly_url"]).get
+    replace Transloadit::Request.new(self["assembly_ssl_url"]).get
   end
 
   def cancel!
-    replace Transloadit::Request.new(self["assembly_url"]).delete
+    replace Transloadit::Request.new(self["assembly_ssl_url"]).delete
   end
 
   def aborted?
