@@ -3,6 +3,7 @@
 * BREAKING: Drop support for EOL'd Ruby 2.x
 * Prevent duplicate assembly steps [#49](https://github.com/transloadit/ruby-sdk/issues/27) (@ifedapoolarewaju)
 * Send "Transloadit-Client" header for every request (@ifedapoolarewaju)
+* Send all requests via HTTPS by default
 
 ### 2.0.1 / 2017-01-23 ###
 
