@@ -1,6 +1,5 @@
 [![Build Status](https://github.com/transloadit/ruby-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/transloadit/ruby-sdk/actions/workflows/ci.yml)
 [![Code Climate](https://codeclimate.com/github/transloadit/ruby-sdk.png)](https://codeclimate.com/github/transloadit/ruby-sdk)
-[![Dependency Status](https://gemnasium.com/transloadit/ruby-sdk.png)](https://gemnasium.com/transloadit/ruby-sdk)
 
 ## ruby-sdk
 
