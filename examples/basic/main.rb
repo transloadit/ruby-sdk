@@ -5,7 +5,7 @@ require_relative "audio-concat-transcoder"
 
 puts "starting image transcoding job..."
 
-open("#{__dir__}/assets/cat.jpg") do |f|
+File.open("#{__dir__}/assets/cat.jpg") do |f|
   image_transcoder = ImageTranscoder.new
   response = image_transcoder.transcode!(f)
 
@@ -21,7 +21,7 @@ end
 
 puts "starting audio transcoding job..."
 
-open("#{__dir__}/assets/Computers_are_in_Control.flac") do |f|
+File.open("#{__dir__}/assets/Computers_are_in_Control.flac") do |f|
   audio_transcoder = AudioTranscoder.new
   response = audio_transcoder.transcode!(f)
 
