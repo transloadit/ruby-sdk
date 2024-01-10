@@ -187,6 +187,11 @@ class Transloadit::Request
   def request!(&request)
     Transloadit::Response.new yield
   rescue RestClient::Exception => e
+    # The response attribute can be nil, for example for RestClient::Exceptions::OpenTimeout exceptions.
+    # Then, we cannot convert them into a Transloadit::Response, so instead we raise them again for
+    # the user to be visible.
+    # See https://github.com/transloadit/ruby-sdk/issues/53
+    raise e if e.response.nil?
     Transloadit::Response.new e.response
   end
 
