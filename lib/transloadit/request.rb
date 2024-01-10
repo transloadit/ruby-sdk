@@ -146,7 +146,7 @@ class Transloadit::Request
     # follows the order of the entries in the returned hash here.
     # See https://github.com/transloadit/ruby-sdk/issues/51
     new_payload = {
-      :params => MultiJson.dump(payload[:params])
+      params: MultiJson.dump(payload[:params])
     }
     sig = signature(new_payload[:params])
     new_payload[:signature] = sig unless sig.nil?
