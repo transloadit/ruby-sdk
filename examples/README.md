@@ -65,7 +65,7 @@ begin
 
   steps.push(store)
 rescue KeyError => e
-  p 's3 config not set. Skipping s3 storage...'
+  puts 's3 config not set. Skipping s3 storage...'
 end
 
  ```
@@ -119,7 +119,7 @@ begin
 
   steps.push(store)
 rescue KeyError => e
-  p 's3 config not set. Skipping s3 storage...'
+  puts 's3 config not set. Skipping s3 storage...'
 end
 ```
 
@@ -205,7 +205,7 @@ begin
 
   steps.push(store)
 rescue KeyError => e
-  p 's3 config not set. Skipping s3 storage...'
+  puts 's3 config not set. Skipping s3 storage...'
 end
 
 assembly = transloadit_client.assembly(steps: steps)
