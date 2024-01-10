@@ -40,8 +40,8 @@ utilizing our credentials that we set in environment variables.
 ### First example
 
 In the [first example](https://github.com/transloadit/ruby-sdk/blob/main/examples/basic/image-transcoder.rb)
-that gets played, we fetch an image from the cat api, optimize it using the Transloadit `/image/optimize` robot, and then optionally
-stores it in s3 if the s3 credentials are set.
+that gets played, we load an image, optimize it using the Transloadit `/image/optimize` robot, and then optionally
+store it in s3 if the s3 credentials are set.
 
 There are only two steps:
 
@@ -65,7 +65,7 @@ begin
 
   steps.push(store)
 rescue KeyError => e
-  p 's3 config not set. Skipping s3 storage...'
+  puts 's3 config not set. Skipping s3 storage...'
 end
 
  ```
@@ -119,7 +119,7 @@ begin
 
   steps.push(store)
 rescue KeyError => e
-  p 's3 config not set. Skipping s3 storage...'
+  puts 's3 config not set. Skipping s3 storage...'
 end
 ```
 
@@ -175,10 +175,10 @@ concat = transloadit_client.step('concat', '/audio/concat', {
 
 Taking a look at the `concat` step, we see a different usage of the `use` parameter
 than we have seen in previous examples. We are effectively able to define the ordering of the
-concatenation by specifying the ```name```,  `as` and `fields` parameters.
+concatenation by specifying the ```name```, `as` and `fields` parameters.
  
 In this example, we have set the name for each to `:original`, specifying that the input
-at index `i` should be the input file defined at index  `i`.
+at index `i` should be the input file defined at index `i`.
  
 It is equally important to specify the `as` parameter. This simple parameter tells the assembly
 the ordering.
@@ -205,7 +205,7 @@ begin
 
   steps.push(store)
 rescue KeyError => e
-  p 's3 config not set. Skipping s3 storage...'
+  puts 's3 config not set. Skipping s3 storage...'
 end
 
 assembly = transloadit_client.assembly(steps: steps)

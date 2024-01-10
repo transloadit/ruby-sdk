@@ -30,7 +30,7 @@ class AudioTranscoder < MediaTranscoder
 
       steps.push(store)
     rescue KeyError
-      p "s3 config not set. Skipping s3 storage..."
+      puts "s3 config not set. Skipping s3 storage..."
     end
 
     assembly = transloadit_client.assembly(steps: steps)
