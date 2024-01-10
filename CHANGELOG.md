@@ -1,10 +1,12 @@
-### 3.0.0 / ????-??-?? ###
+### 3.0.0 / 2024-01-10
 
-* BREAKING: Drop support for EOL'd Ruby 2.x
-* Prevent duplicate assembly steps [#49](https://github.com/transloadit/ruby-sdk/issues/27) (@ifedapoolarewaju)
-* Send "Transloadit-Client" header for every request (@ifedapoolarewaju)
-* Send all requests via HTTPS by default
-* Position signature before any files in requests [#51](https://github.com/transloadit/ruby-sdk/issues/51)
+- BREAKING: Drop support for EOL'd Ruby 2.x
+- Ensure that signature is sent before files [#65](https://github.com/transloadit/ruby-sdk/pull/65) (@Acconut)
+- Send requests via HTTPS by default [#64](https://github.com/transloadit/ruby-sdk/pull/64) (@Acconut)
+- Prevent duplicate assembly steps [#49](https://github.com/transloadit/ruby-sdk/issues/27) (@ifedapoolarewaju)
+- Send "Transloadit-Client" header for every request (@ifedapoolarewaju)
+- Send all requests via HTTPS by default
+- Position signature before any files in requests [#51](https://github.com/transloadit/ruby-sdk/issues/51)
 
 ### 2.0.1 / 2017-01-23
 
