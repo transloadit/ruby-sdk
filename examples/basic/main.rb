@@ -18,7 +18,7 @@ open("#{__dir__}/assets/cat.jpg") do |f|
   response.reload_until_finished!
 
   p response[:message]
-  p response[:results]["image"][0]["url"]
+  p response[:results]["image"][0]["ssl_url"]
 end
 
 p "starting audio transcoding job..."
@@ -36,7 +36,7 @@ open("#{__dir__}/assets/Computers_are_in_Control.flac") do |f|
   response.reload_until_finished!
 
   p response[:message]
-  p response[:results]["mp3"][0]["url"]
+  p response[:results]["mp3"][0]["ssl_url"]
   p "\n"
 end
 
@@ -59,5 +59,5 @@ p "checking job status..."
 response.reload_until_finished!
 
 p response[:message]
-p response[:results]["concat"][0]["url"]
+p response[:results]["concat"][0]["ssl_url"]
 p "\n"
