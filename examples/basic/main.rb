@@ -7,7 +7,7 @@ require_relative "audio-concat-transcoder"
 p "starting image transcoding job..."
 p "fetching image from the cat api..."
 
-open("http://thecatapi.com/api/images/get") do |f|
+open("#{__dir__}/assets/cat.jpg") do |f|
   p "starting transcoding job..."
   image_transcoder = ImageTranscoder.new
   response = image_transcoder.transcode!(f)
@@ -25,7 +25,7 @@ p "starting audio transcoding job..."
 p "fetching soundbite from nasa..."
 p "\n"
 
-open("https://www.nasa.gov/640379main_Computers_are_in_Control.m4r") do |f|
+open("#{__dir__}/assets/Computers_are_in_Control.flac") do |f|
   p "starting transcoding job..."
   audio_transcoder = AudioTranscoder.new
   response = audio_transcoder.transcode!(f)
@@ -44,9 +44,9 @@ p "starting audio concat transcoding job..."
 p "fetching 3 soundbites from nasa..."
 
 files = [
-  "https://www.nasa.gov/mp3/640148main_APU%20Shutdown.mp3",
-  "https://www.nasa.gov/mp3/640164main_Go%20for%20Deploy.mp3",
-  "https://www.nasa.gov/mp3/640165main_Lookin%20At%20It.mp3"
+  "#{__dir__}/assets/APU_Shutdown.mp3",
+  "#{__dir__}/assets/Go_for_Deploy.mp3",
+  "#{__dir__}/assets/Lookin_At_It.mp3"
 ]
 
 p "starting transcoding job..."
