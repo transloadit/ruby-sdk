@@ -202,7 +202,7 @@ Check the YARD documentation for more information on using
 
 ### 4. Creating an Assembly with Templates
 
-Transloadit allows you to use custom [templates](https://github.com/transloadit/ruby-sdk/blob/master/README.md#8-templates)
+Transloadit allows you to use custom [templates](https://github.com/transloadit/ruby-sdk/blob/main/README.md#8-templates)
 for recurring encoding tasks. In order to use these do the following:
 
 ```ruby
@@ -408,17 +408,17 @@ transloadit.assembly(:tries => 0).create! open('/PATH/TO/FILE.mpg')
 ## Example
 
 A small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
-and more can be found [here](https://github.com/transloadit/ruby-sdk/tree/master/examples).
+and more can be found [here](https://github.com/transloadit/ruby-sdk/tree/main/examples).
 
 ## Documentation
 
 Up-to-date YARD documentation is automatically generated. You can view the
 docs for the <a href="https://rubydoc.info/gems/transloadit/frames" rel="canonical">released gem</a> or
-for the latest [git master](https://rubydoc.info/github/transloadit/ruby-sdk/master/frames).
+for the latest [git main](https://rubydoc.info/github/transloadit/ruby-sdk/main/frames).
 
 ## Compatibility
 
-Please see [ci.yml](https://github.com/transloadit/ruby-sdk/tree/master/.github/workflows/ci.yml) for a list of supported ruby versions. It may also work on older Rubies, but support for those is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
+Please see [ci.yml](https://github.com/transloadit/ruby-sdk/tree/main/.github/workflows/ci.yml) for a list of supported ruby versions. It may also work on older Rubies, but support for those is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
 [bug report](https://github.com/transloadit/ruby-sdk/issues). Compatibility patches for other Rubies are welcome.
 
 ### Ruby 2.x

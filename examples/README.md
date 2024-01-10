@@ -39,7 +39,7 @@ utilizing our credentials that we set in environment variables.
 
 ### First example
 
-In the [first example](https://github.com/transloadit/ruby-sdk/blob/master/examples/basic/image-transcoder.rb)
+In the [first example](https://github.com/transloadit/ruby-sdk/blob/main/examples/basic/image-transcoder.rb)
 that gets played, we fetch an image from the cat api, optimize it using the Transloadit `/image/optimize` robot, and then optionally
 stores it in s3 if the s3 credentials are set.
 
@@ -85,7 +85,7 @@ assumes the file object passed in responds to `open`.
 
 ### Second example
 
-In the [second example](https://github.com/transloadit/ruby-sdk/blob/master/examples/basic/audio-transcoder.rb),
+In the [second example](https://github.com/transloadit/ruby-sdk/blob/main/examples/basic/audio-transcoder.rb),
 we take a non-mp3 audio file, encode it as an mp3, add ID3 tags to it, and then optionally store it in s3.
 There are many use cases for audio uploads, and adding ID3 tags provides the necessary metadata to display artist and track information
 in audio players such as iTunes.
@@ -153,7 +153,7 @@ assembly.create! open(file)
 
 ### Third example
 
-In the [third example](https://github.com/transloadit/ruby-sdk/blob/master/examples/basic/audio-concat-transcoder.rb),
+In the [third example](https://github.com/transloadit/ruby-sdk/blob/main/examples/basic/audio-concat-transcoder.rb),
 we take a series of mp3 files and concatenate them together. We then optionally upload the result to s3.
 
 This example is provided to showcase advanced usage of the `use` parameter in the `audio/concat` assembly.
