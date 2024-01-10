@@ -49,6 +49,40 @@ describe Transloadit::Assembly do
       end
     end
 
+    describe "with a secret" do
+      include WebMock::API
+
+      before do
+        WebMock.reset!
+        stub_request(:post, "https://api2.transloadit.com/assemblies")
+          .to_return(body: '{"ok":"ASSEMBLY_COMPLETED"}')
+      end
+
+      after do
+        WebMock.reset!
+      end
+
+      it "must send the signature before any file" do
+        transloadit = Transloadit.new(key: "", secret: "foo")
+        Transloadit::Assembly.new(
+          transloadit
+        ).create! open("lib/transloadit/version.rb")
+
+        assert_requested(:post, "https://api2.transloadit.com/assemblies") do |req|
+          position_params = req.body.index 'name="params"'
+          position_signature = req.body.index 'name="signature"'
+          position_file = req.body.index 'name="file_0"'
+
+          _(position_params).wont_be_nil
+          _(position_signature).wont_be_nil
+          _(position_file).wont_be_nil
+
+          _(position_params < position_signature).must_equal true
+          _(position_signature < position_file).must_equal true
+        end
+      end
+    end
+
     describe "with additional parameters" do
       include WebMock::API
 

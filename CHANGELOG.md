@@ -4,6 +4,7 @@
 * Prevent duplicate assembly steps [#49](https://github.com/transloadit/ruby-sdk/issues/27) (@ifedapoolarewaju)
 * Send "Transloadit-Client" header for every request (@ifedapoolarewaju)
 * Send all requests via HTTPS by default
+* Position signature before any files in requests [#51](https://github.com/transloadit/ruby-sdk/issues/51)
 
 ### 2.0.1 / 2017-01-23 ###
 

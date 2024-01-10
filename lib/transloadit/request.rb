@@ -139,11 +139,22 @@ class Transloadit::Request
     return {} if payload.nil?
     return {} if payload.respond_to?(:empty?) && payload.empty?
 
-    # TODO: refactor this, don't update a hash that's not ours
-    payload.update params: MultiJson.dump(payload[:params])
-    payload.update signature: signature(payload[:params])
-    payload.delete :signature if payload[:signature].nil?
-    payload
+    # Create a new hash with JSONified params and a signature if a secret was provided.
+    # Note: We first set :params and :signature to ensure that these are the first fields
+    # in the multipart requests, before any file. Otherwise, a signature will only be transmitted
+    # after all files have been uploaded. The order of the fields in a multipart request
+    # follows the order of the entries in the returned hash here.
+    # See https://github.com/transloadit/ruby-sdk/issues/51
+    new_payload = {
+      params: MultiJson.dump(payload[:params])
+    }
+    sig = signature(new_payload[:params])
+    new_payload[:signature] = sig unless sig.nil?
+
+    # Copy all values, excluding :params and :signature keys.
+    new_payload.update payload.reject { |key, _| key == :params || key == :signature }
+
+    new_payload
   end
 
   #
