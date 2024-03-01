@@ -72,7 +72,7 @@ http_interactions:
   recorded_at: Fri, 08 Mar 2013 15:13:10 GMT
 - request:
     method: get
-    uri: https://api2.transloadit.com/?params=%7B%22params%22:%7B%22foo%22:%22bar%22%7D%7D&signature=78f291e3038e3eeb82d9f79e11a68fe7b858ee97
+    uri: https://api2.transloadit.com/?params=%7B%22params%22:%7B%22foo%22:%22bar%22%7D%7D&signature=sha384:edccc99aef8cb46e087e17093fbcd6a2316e2fbe31dc0842c4af87a52808d0736d94a3bd5774deca2c215b53804ca572
     body:
       encoding: US-ASCII
       string: ''

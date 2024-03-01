@@ -16,7 +16,7 @@ class Transloadit::Request
   API_HEADERS = {"Transloadit-Client" => "ruby-sdk:#{Transloadit::VERSION}"}
 
   # The HMAC algorithm used for calculation request signatures.
-  HMAC_ALGORITHM = OpenSSL::Digest.new("sha1")
+  HMAC_ALGORITHM = OpenSSL::Digest.new("sha384")
 
   # @return [String] the API endpoint for the request
   attr_reader :url
@@ -203,6 +203,6 @@ class Transloadit::Request
   # @return [String] the HMAC signature for the params
   #
   def signature(params)
-    self.class._hmac(secret, params) if secret.to_s.length > 0
+    "sha384:" + self.class._hmac(secret, params) if secret.to_s.length > 0
   end
 end
