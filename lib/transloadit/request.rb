@@ -203,6 +203,6 @@ class Transloadit::Request
   # @return [String] the HMAC signature for the params
   #
   def signature(params)
-    self.class._hmac(secret, params) if secret.to_s.length > 0
+    "sha384:" + self.class._hmac(secret, params) if secret.to_s.length > 0
   end
 end
