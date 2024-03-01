@@ -1,3 +1,7 @@
+### 3.0.2 / 2024-03-01
+
+- Upgrade signature algorithm to more secure SHA-384 [#69](https://github.com/transloadit/ruby-sdk/pull/69) (@aduh95)
+
 ### 3.0.1 / 2024-01-10
 
 - Fix `undefined method` errors when handling network exceptions [#67](https://github.com/transloadit/ruby-sdk/pull/67) (@Acconut)
