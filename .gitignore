@@ -12,3 +12,4 @@ pkg
 transloadit-*.gem
 
 .DS_Store
+env.sh
