@@ -4,7 +4,7 @@ require "transloadit"
 # Represents an Assembly API ready to make calls to the REST API endpoints.
 #
 # See the Transloadit {documentation}[https://transloadit.com/docs/api-docs/#assembly-api]
-# for futher information on Assemblies and available endpoints.
+# for further information on Assemblies and available endpoints.
 #
 class Transloadit::Assembly < Transloadit::ApiModel
   DEFAULT_TRIES = 3
@@ -23,7 +23,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # at which point Transloadit will process and store the files according to the
   # rules in the Assembly.
   # See the Transloadit {documentation}[https://transloadit.com/docs/building-assembly-instructions]
-  # for futher information on Assemblies and their parameters.
+  # for further information on Assemblies and their parameters.
   #
   # Accepts as many IO objects as you wish to process in the assembly.
   # The last argument is an optional Hash

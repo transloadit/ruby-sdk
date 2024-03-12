@@ -83,7 +83,7 @@ class Transloadit
   # Creates a Transloadit::Template instance ready to interact with its corresponding REST API.
   #
   # See the Transloadit {documentation}[https://transloadit.com/docs/api-docs/#template-api]
-  # for futher information on Templates and available endpoints.
+  # for further information on Templates and available endpoints.
   #
   def template(options = {})
     Transloadit::Template.new(self, options)

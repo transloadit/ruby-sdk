@@ -286,7 +286,7 @@ describe Transloadit::Assembly do
     end
 
     describe "when replaying assembly notification" do
-      it "must replay notification of sepcified assembly" do
+      it "must replay notification of specified assembly" do
         VCR.use_cassette "replay_assembly_notification" do
           response = @assembly.replay_notification "2ea5d21063ad11e6bc93e53395ce4e7d"
 

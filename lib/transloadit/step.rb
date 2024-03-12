@@ -6,7 +6,7 @@ require "transloadit"
 # +options+ specific to the chosen robot.
 #
 # See the Transloadit {documentation}[https://transloadit.com/docs/building-assembly-instructions]
-# for futher information on robot types and their parameters.
+# for further information on robot types and their parameters.
 #
 class Transloadit::Step
   # @return [String] the name to give the step
