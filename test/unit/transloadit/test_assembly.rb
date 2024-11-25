@@ -142,14 +142,14 @@ describe Transloadit::Assembly do
       end
     end
 
-    describe 'when using the "submit!" method' do
+    describe 'when using the "create!" method' do
       it "must call the create! method with the same parameters" do
         VCR.use_cassette "submit_assembly" do
           file = open("lib/transloadit/version.rb")
           mocker = Minitest::Mock.new
           mocker.expect :call, nil, [file]
           @assembly.stub :create!, mocker do
-            @assembly.submit!(file)
+            @assembly.create!(file)
           end
           mocker.verify
         end
