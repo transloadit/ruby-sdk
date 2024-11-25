@@ -3,7 +3,6 @@
 // And CLI tester to see if Ruby implementation
 // matches Node's
 
-// Add Node.js type definitions at the top of the file
 /// <reference types="node" />
 
 import { createHmac } from 'node:crypto'
