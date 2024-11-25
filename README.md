@@ -11,7 +11,7 @@ A **Ruby** Integration for [Transloadit](https://transloadit.com)'s file uploadi
 
 This is a **Ruby** SDK to make it easy to talk to the [Transloadit](https://transloadit.com) REST API.
 
-*If you run Ruby on Rails and are looking to integrate with the browser for file uploads, checkout the [rails-sdk](https://github.com/transloadit/rails-sdk).*
+_If you run Ruby on Rails and are looking to integrate with the browser for file uploads, checkout the [rails-sdk](https://github.com/transloadit/rails-sdk)._
 
 ## Install
 
@@ -29,8 +29,8 @@ $ irb -rubygems
 => true
 ```
 
-Then create a Transloadit instance, which will maintain your 
-[authentication credentials](https://transloadit.com/accounts/credentials) 
+Then create a Transloadit instance, which will maintain your
+[authentication credentials](https://transloadit.com/accounts/credentials)
 and allow us to make requests to [the API](https://transloadit.com/docs/api/).
 
 ```ruby
@@ -125,7 +125,7 @@ API at the time the <dfn>Assembly</dfn> was created. You have to explicitly ask 
 # reloads the response's contents from the REST API
 response.reload!
 
-# reloads once per second until all processing is finished, up to number of 
+# reloads once per second until all processing is finished, up to number of
 # times specified in :tries option, otherwise will raise ReloadLimitReached
 response.reload_until_finished! tries: 300 # default is 600
 ```
@@ -160,7 +160,7 @@ response = assembly.create!(
 )
 ```
 
-You can also pass an array of files to the `create!` method. 
+You can also pass an array of files to the `create!` method.
 Just unpack the array using the splat `*` operator.
 
 ```ruby
@@ -218,7 +218,7 @@ transloadit.assembly(
 ```
 
 You can use your steps together with this template and even use variables.
-The [Transloadit documentation](https://transloadit.com/docs/#passing-variables-into-a-template) 
+The [Transloadit documentation](https://transloadit.com/docs/#passing-variables-into-a-template)
 has some nice examples for that.
 
 ### 5. Using fields
@@ -423,3 +423,12 @@ Please see [ci.yml](https://github.com/transloadit/ruby-sdk/tree/main/.github/wo
 ### Ruby 2.x
 
 If you still need support for Ruby 2.x, 2.0.1 is the last version that supports it.
+
+## Contributing
+
+### Running tests
+
+```bash
+bundle install
+bundle exec rake test
+```
