@@ -6,6 +6,7 @@ describe Transloadit do
     @workspace = "my-app"
     @template = "test-smart-cdn"
     @input = "inputs/prinsengracht.jpg"
+    @expire_at = 1732550672867
   end
 
   describe "#signed_smart_cdn_url" do
@@ -43,7 +44,8 @@ describe Transloadit do
       url = @transloadit.signed_smart_cdn_url(
         workspace: @workspace,
         template: @template,
-        input: @input
+        input: @input,
+        expire_at_ms: @expire_at
       )
       assert_match(/auth_key=my-key/, url)
     end
@@ -53,6 +55,7 @@ describe Transloadit do
         workspace: @workspace,
         template: @template,
         input: @input,
+        expire_at_ms: @expire_at,
         auth_key: "override-key",
         auth_secret: "override-secret"
       )

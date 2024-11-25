@@ -410,31 +410,34 @@ You can generate signed Smart CDN URLs using your Transloadit instance:
 
 ```ruby
 transloadit = Transloadit.new(
-  key: 'YOUR_TRANSLOADIT_KEY',
-  secret: 'YOUR_TRANSLOADIT_SECRET'
+  key: "YOUR_TRANSLOADIT_KEY",
+  secret: "YOUR_TRANSLOADIT_SECRET"
 )
 
+# Create a SmartCDN instance
+smart_cdn = Transloadit::SmartCDN.new(transloadit)
+
 # Generate a signed URL using instance credentials
-url = transloadit.signed_smart_cdn_url(
-  workspace: 'YOUR_WORKSPACE',
-  template: 'YOUR_TEMPLATE',
-  input: 'path/to/file.jpg'
+url = smart_cdn.signed_url(
+  workspace: "YOUR_WORKSPACE",
+  template: "YOUR_TEMPLATE",
+  input: "path/to/file.jpg"
 )
 
 # Optionally override credentials
-url = transloadit.signed_smart_cdn_url(
-  workspace: 'YOUR_WORKSPACE',
-  template: 'YOUR_TEMPLATE',
-  input: 'path/to/file.jpg',
-  auth_key: 'DIFFERENT_KEY',
-  auth_secret: 'DIFFERENT_SECRET'
+url = smart_cdn.signed_url(
+  workspace: "YOUR_WORKSPACE",
+  template: "YOUR_TEMPLATE",
+  input: "path/to/file.jpg",
+  auth_key: "DIFFERENT_KEY",
+  auth_secret: "DIFFERENT_SECRET"
 )
 
 # Add URL parameters
-url = transloadit.signed_smart_cdn_url(
-  workspace: 'YOUR_WORKSPACE',
-  template: 'YOUR_TEMPLATE',
-  input: 'path/to/file.jpg',
+url = smart_cdn.signed_url(
+  workspace: "YOUR_WORKSPACE",
+  template: "YOUR_TEMPLATE",
+  input: "path/to/file.jpg",
   url_params: {
     width: 100,
     height: 200
@@ -442,10 +445,18 @@ url = transloadit.signed_smart_cdn_url(
 )
 
 # Set expiration time
-url = transloadit.signed_smart_cdn_url(
-  workspace: 'YOUR_WORKSPACE',
-  template: 'YOUR_TEMPLATE',
-  input: 'path/to/file.jpg',
+url = smart_cdn.signed_url(
+  workspace: "YOUR_WORKSPACE",
+  template: "YOUR_TEMPLATE",
+  input: "path/to/file.jpg",
+  expire_at_ms: 1732550672867  # Specific timestamp
+)
+
+# Or set relative expiration time
+url = smart_cdn.signed_url(
+  workspace: "YOUR_WORKSPACE",
+  template: "YOUR_TEMPLATE",
+  input: "path/to/file.jpg",
   expire_in_ms: 3600000  # 1 hour from now
 )
 ```

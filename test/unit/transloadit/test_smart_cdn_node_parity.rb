@@ -2,7 +2,7 @@ require "test_helper"
 
 describe Transloadit do
   # Only run these tests if we're in CI or explicitly requested
-  if ENV["CI"] == "true" || ENV["TEST_NODE_PARITY"] == "true"
+  if ENV["TEST_NODE_PARITY"] == "1"
     before do
       @transloadit = Transloadit.new(key: "my-key", secret: "my-secret")
       @workspace = "my-app"

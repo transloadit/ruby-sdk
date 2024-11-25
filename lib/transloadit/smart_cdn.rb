@@ -7,12 +7,12 @@ class Transloadit
   # @param template [String] Template slug or template ID
   # @param input [String] Input value that is provided as `${fields.input}` in the template
   # @param url_params [Hash] Additional parameters for the URL query string (optional)
-  # @param expire_in_ms [Integer] Expiration time in milliseconds from now (optional)
   # @param expire_at_ms [Integer] Expiration time as Unix timestamp in milliseconds (optional)
+  # @param expire_in_ms [Integer] Expiration time in milliseconds from now (optional)
   # @param auth_key [String] Optional authentication key, defaults to instance key
   # @param auth_secret [String] Optional authentication secret, defaults to instance secret
   # @return [String] Signed Smart CDN URL
-  def signed_smart_cdn_url(workspace:, template:, input:, url_params: {}, expire_in_ms: nil, expire_at_ms: nil, auth_key: nil, auth_secret: nil)
+  def signed_smart_cdn_url(workspace:, template:, input:, url_params: {}, expire_at_ms: nil, expire_in_ms: nil, auth_key: nil, auth_secret: nil)
     raise ArgumentError, "workspace is required" if workspace.nil? || workspace.empty?
     raise ArgumentError, "template is required" if template.nil? || template.empty?
     raise ArgumentError, "input is required" if input.nil?

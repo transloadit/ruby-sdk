@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -24,4 +24,4 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - run: bundle exec standardrb
-      - run: COVERAGE=false bundle exec rake test
+      - run: COVERAGE=false TEST_NODE_PARITY=1 bundle exec rake test
