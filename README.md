@@ -414,18 +414,15 @@ transloadit = Transloadit.new(
   secret: "YOUR_TRANSLOADIT_SECRET"
 )
 
-# Create a SmartCDN instance
-smart_cdn = Transloadit::SmartCDN.new(transloadit)
-
 # Generate a signed URL using instance credentials
-url = smart_cdn.signed_url(
+url = transloadit.signed_smart_cdn_url(
   workspace: "YOUR_WORKSPACE",
   template: "YOUR_TEMPLATE",
   input: "path/to/file.jpg"
 )
 
 # Optionally override credentials
-url = smart_cdn.signed_url(
+url = transloadit.signed_smart_cdn_url(
   workspace: "YOUR_WORKSPACE",
   template: "YOUR_TEMPLATE",
   input: "path/to/file.jpg",
@@ -434,7 +431,7 @@ url = smart_cdn.signed_url(
 )
 
 # Add URL parameters
-url = smart_cdn.signed_url(
+url = transloadit.signed_smart_cdn_url(
   workspace: "YOUR_WORKSPACE",
   template: "YOUR_TEMPLATE",
   input: "path/to/file.jpg",
@@ -445,7 +442,7 @@ url = smart_cdn.signed_url(
 )
 
 # Set expiration time
-url = smart_cdn.signed_url(
+url = transloadit.signed_smart_cdn_url(
   workspace: "YOUR_WORKSPACE",
   template: "YOUR_TEMPLATE",
   input: "path/to/file.jpg",
@@ -453,7 +450,7 @@ url = smart_cdn.signed_url(
 )
 
 # Or set relative expiration time
-url = smart_cdn.signed_url(
+url = transloadit.signed_smart_cdn_url(
   workspace: "YOUR_WORKSPACE",
   template: "YOUR_TEMPLATE",
   input: "path/to/file.jpg",
