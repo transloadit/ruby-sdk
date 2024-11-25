@@ -404,6 +404,54 @@ transloadit.assembly(:tries => 2).create! open('/PATH/TO/FILE.mpg')
 transloadit.assembly(:tries => 0).create! open('/PATH/TO/FILE.mpg')
 ```
 
+### Smart CDN URLs
+
+You can generate signed Smart CDN URLs using your Transloadit instance:
+
+```ruby
+transloadit = Transloadit.new(
+  key: 'YOUR_TRANSLOADIT_KEY',
+  secret: 'YOUR_TRANSLOADIT_SECRET'
+)
+
+# Generate a signed URL using instance credentials
+url = transloadit.signed_smart_cdn_url(
+  workspace: 'YOUR_WORKSPACE',
+  template: 'YOUR_TEMPLATE',
+  input: 'path/to/file.jpg'
+)
+
+# Optionally override credentials
+url = transloadit.signed_smart_cdn_url(
+  workspace: 'YOUR_WORKSPACE',
+  template: 'YOUR_TEMPLATE',
+  input: 'path/to/file.jpg',
+  auth_key: 'DIFFERENT_KEY',
+  auth_secret: 'DIFFERENT_SECRET'
+)
+
+# Add URL parameters
+url = transloadit.signed_smart_cdn_url(
+  workspace: 'YOUR_WORKSPACE',
+  template: 'YOUR_TEMPLATE',
+  input: 'path/to/file.jpg',
+  url_params: {
+    width: 100,
+    height: 200
+  }
+)
+
+# Set expiration time
+url = transloadit.signed_smart_cdn_url(
+  workspace: 'YOUR_WORKSPACE',
+  template: 'YOUR_TEMPLATE',
+  input: 'path/to/file.jpg',
+  expire_in_ms: 3600000  # 1 hour from now
+)
+```
+
+The generated URL will be signed using your Transloadit credentials and can be used to access files through the Smart CDN.
+
 ## Example
 
 A small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
