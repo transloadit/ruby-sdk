@@ -25,7 +25,7 @@ describe Transloadit::SmartCDN do
         expire_at_ms: @expire_at
       )
 
-      node_url = `tsx #{File.expand_path("../../../dev/smartcdn-sig.ts", __dir__)} #{@expire_at} #{@workspace} #{@template} #{@input}`.strip
+      node_url = `tsx #{File.expand_path("./node-smartcdn-sig", __dir__)} #{@expire_at} #{@workspace} #{@template} #{@input}`.strip
       assert_equal node_url, url
     end
 
@@ -43,7 +43,7 @@ describe Transloadit::SmartCDN do
         }
       )
 
-      node_url = `tsx #{File.expand_path("../../../dev/smartcdn-sig.ts", __dir__)} #{@expire_at} #{@workspace} #{@template} #{@input} width=100 height=200`.strip
+      node_url = `tsx #{File.expand_path("./node-smartcdn-sig", __dir__)} #{@expire_at} #{@workspace} #{@template} #{@input} width=100 height=200`.strip
       assert_equal node_url, url
     end
 
@@ -61,7 +61,7 @@ describe Transloadit::SmartCDN do
         }
       )
 
-      node_url = `tsx #{File.expand_path("../../../dev/smartcdn-sig.ts", __dir__)} #{@expire_at} #{@workspace} #{@template} #{@input} width=null height=200`.strip
+      node_url = `tsx #{File.expand_path("./node-smartcdn-sig", __dir__)} #{@expire_at} #{@workspace} #{@template} #{@input} width=null height=200`.strip
       assert_equal node_url, url
     end
   end
