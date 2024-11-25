@@ -380,14 +380,9 @@ transloadit.bill(2, 2016)
 
 Not specifying the `month` or `year` would default to the current month or year.
 
-### 10. Rate limits
+### 10. Signing Smart CDN URLs
 
-Transloadit enforces rate limits to guarantee that no customers are adversely affected by the usage
-of any given customer. See [Rate Limiting](https://transloadit.com/docs/api/#rate-limiting).
-
-While creating an <dfn>Assembly</dfn>, if a rate limit error is received, by default, 2 more attempts would be made for a successful response. If after these attempts the rate limit error persists, a `RateLimitReached` exception will be raised.
-
-To change the number of attempts that will be made when creating an <dfn>Assembly</dfn>, you may pass the `tries` option to your <dfn>Assembly</dfn> like so.
+You can generate signed [Smart CDN](https://transloadit.com/services/content-delivery/) URLs using your Transloadit instance:
 
 ```ruby
 require 'transloadit'
@@ -395,23 +390,6 @@ require 'transloadit'
 transloadit = Transloadit.new(
   :key    => 'YOUR_TRANSLOADIT_KEY',
   :secret => 'YOUR_TRANSLOADIT_SECRET'
-)
-
-# would make one extra attempt after a failed attempt.
-transloadit.assembly(:tries => 2).create! open('/PATH/TO/FILE.mpg')
-
-# Would make no attempt at all. Your request would not be sent.
-transloadit.assembly(:tries => 0).create! open('/PATH/TO/FILE.mpg')
-```
-
-### Smart CDN URLs
-
-You can generate signed Smart CDN URLs using your Transloadit instance:
-
-```ruby
-transloadit = Transloadit.new(
-  key: "YOUR_TRANSLOADIT_KEY",
-  secret: "YOUR_TRANSLOADIT_SECRET"
 )
 
 # Generate a signed URL using instance credentials
@@ -458,7 +436,31 @@ url = transloadit.signed_smart_cdn_url(
 )
 ```
 
-The generated URL will be signed using your Transloadit credentials and can be used to access files through the Smart CDN.
+The generated URL will be signed using your Transloadit credentials and can be used to access files through the Smart CDN in a secure manner.
+
+### 11. Rate limits
+
+Transloadit enforces rate limits to guarantee that no customers are adversely affected by the usage
+of any given customer. See [Rate Limiting](https://transloadit.com/docs/api/#rate-limiting).
+
+While creating an <dfn>Assembly</dfn>, if a rate limit error is received, by default, 2 more attempts would be made for a successful response. If after these attempts the rate limit error persists, a `RateLimitReached` exception will be raised.
+
+To change the number of attempts that will be made when creating an <dfn>Assembly</dfn>, you may pass the `tries` option to your <dfn>Assembly</dfn> like so.
+
+```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'YOUR_TRANSLOADIT_KEY',
+  :secret => 'YOUR_TRANSLOADIT_SECRET'
+)
+
+# would make one extra attempt after a failed attempt.
+transloadit.assembly(:tries => 2).create! open('/PATH/TO/FILE.mpg')
+
+# Would make no attempt at all. Your request would not be sent.
+transloadit.assembly(:tries => 0).create! open('/PATH/TO/FILE.mpg')
+```
 
 ## Example
 
