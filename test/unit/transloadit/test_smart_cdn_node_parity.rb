@@ -12,8 +12,10 @@ describe Transloadit do
       @input = "inputs/prinsengracht.jpg"
       @expire_at = 1732550672867
 
-      # Skip if tsx is not available
-      skip "tsx not available" unless system("which tsx > /dev/null 2>&1")
+      # Fail if tsx is not available but was explicitly requested
+      unless system("which tsx > /dev/null 2>&1")
+        raise "tsx is required for node parity tests. Please install with: npm install -g tsx"
+      end
     end
 
     def run_node_script(params)
