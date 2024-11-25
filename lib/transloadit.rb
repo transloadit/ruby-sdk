@@ -11,6 +11,7 @@ class Transloadit
   autoload :Exception, "transloadit/exception"
   autoload :Request, "transloadit/request"
   autoload :Response, "transloadit/response"
+  autoload :SmartCDN, "transloadit/smart_cdn"
   autoload :Step, "transloadit/step"
   autoload :Template, "transloadit/template"
   autoload :VERSION, "transloadit/version"
