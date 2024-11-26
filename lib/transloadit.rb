@@ -171,7 +171,7 @@ class Transloadit
       end
     end
 
-    query_params["auth_key"] = [self.key]
+    query_params["auth_key"] = [key]
     query_params["exp"] = [expire_at.to_s]
 
     # Sort parameters to ensure consistent ordering
@@ -181,7 +181,7 @@ class Transloadit
 
     string_to_sign = "#{workspace_slug}/#{template_slug}/#{input_field}?#{sorted_params}"
 
-    signature = OpenSSL::HMAC.hexdigest("sha256", self.secret, string_to_sign)
+    signature = OpenSSL::HMAC.hexdigest("sha256", secret, string_to_sign)
 
     final_params = "#{sorted_params}&sig=#{CGI.escape("sha256:#{signature}")}"
     "https://#{workspace_slug}.tlcdn.com/#{template_slug}/#{input_field}?#{final_params}"
