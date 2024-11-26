@@ -490,3 +490,15 @@ If you still need support for Ruby 2.x, 2.0.1 is the last version that supports 
 bundle install
 bundle exec rake test
 ```
+
+To also test parity against the Node.js reference implementation, run:
+
+```bash
+TEST_NODE_PARITY=1 bundle exec rake test
+```
+
+To disable coverage reporting, run:
+
+```bash
+COVERAGE=0 bundle exec rake test
+```

@@ -13,3 +13,4 @@ transloadit-*.gem
 
 .DS_Store
 env.sh
+.env

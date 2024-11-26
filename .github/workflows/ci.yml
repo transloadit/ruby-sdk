@@ -31,4 +31,4 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - run: bundle exec standardrb
-      - run: COVERAGE=false TEST_NODE_PARITY=1 bundle exec rake test
+      - run: COVERAGE=0 TEST_NODE_PARITY=1 bundle exec rake test

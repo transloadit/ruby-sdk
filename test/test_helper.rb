@@ -1,7 +1,7 @@
 $:.unshift File.dirname(__FILE__)
 $:.unshift File.expand_path("../../lib", __FILE__)
 
-if ENV["COVERAGE"] != "false"
+if ENV["COVERAGE"] != "0"
   require "simplecov"
   SimpleCov.start { add_filter "/test/" }
 end
