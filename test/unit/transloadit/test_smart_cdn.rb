@@ -47,7 +47,7 @@ describe Transloadit do
         input: "",
         expire_at_ms: @expire_at
       )
-      assert_match(/test-smart-cdn\/\?auth_key/, url)
+      assert_match %r{^https://my-app\.tlcdn\.com/test-smart-cdn/\?auth_key=my-key&exp=1732550672867&sig=sha256%3A[a-f0-9]+$}, url
     end
 
     it "uses instance credentials by default" do
@@ -57,7 +57,7 @@ describe Transloadit do
         input: @input,
         expire_at_ms: @expire_at
       )
-      assert_match(/auth_key=my-key/, url)
+      assert_match %r{^https://my-app\.tlcdn\.com/test-smart-cdn/inputs%2Fprinsengracht\.jpg\?auth_key=my-key&exp=1732550672867&sig=sha256%3A[a-f0-9]+$}, url
     end
 
     it "allows overriding credentials" do
@@ -69,10 +69,10 @@ describe Transloadit do
         auth_key: "override-key",
         auth_secret: "override-secret"
       )
-      assert_match(/auth_key=override-key/, url)
+      assert_match %r{^https://my-app\.tlcdn\.com/test-smart-cdn/inputs%2Fprinsengracht\.jpg\?auth_key=override-key&exp=1732550672867&sig=sha256%3A[a-f0-9]+$}, url
     end
 
-    it "excludes empty width parameter" do
+    it "includes empty width parameter" do
       url = @transloadit.signed_smart_cdn_url(
         workspace: @workspace,
         template: @template,
@@ -83,8 +83,7 @@ describe Transloadit do
           height: 200
         }
       )
-      refute_match(/width=/, url)
-      assert_match(/height=200/, url)
+      assert_match %r{^https://my-app\.tlcdn\.com/test-smart-cdn/inputs%2Fprinsengracht\.jpg\?auth_key=my-key&exp=1732550672867&height=200&width=&sig=sha256%3A[a-f0-9]+$}, url
     end
   end
 end

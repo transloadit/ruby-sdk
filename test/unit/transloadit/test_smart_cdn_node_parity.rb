@@ -32,7 +32,9 @@ describe Transloadit do
           workspace: @workspace,
           template: @template,
           input: @input,
-          expire_at_ms: @expire_at
+          expire_at_ms: @expire_at,
+          auth_key: "my-key",
+          auth_secret: "my-secret"
         }
 
         url = @transloadit.signed_smart_cdn_url(**params)
@@ -46,6 +48,8 @@ describe Transloadit do
           template: @template,
           input: @input,
           expire_at_ms: @expire_at,
+          auth_key: "my-key",
+          auth_secret: "my-secret",
           url_params: {
             width: 100,
             height: 200
@@ -63,6 +67,8 @@ describe Transloadit do
           template: @template,
           input: @input,
           expire_at_ms: @expire_at,
+          auth_key: "my-key",
+          auth_secret: "my-secret",
           url_params: {
             width: nil,
             height: 200
@@ -80,6 +86,8 @@ describe Transloadit do
           template: @template,
           input: @input,
           expire_at_ms: @expire_at,
+          auth_key: "my-key",
+          auth_secret: "my-secret",
           url_params: {
             width: "",
             height: 200
@@ -89,8 +97,6 @@ describe Transloadit do
         url = @transloadit.signed_smart_cdn_url(**params)
         node_url = run_node_script(params)
         assert_equal node_url, url
-        refute_match(/width=/, url)
-        assert_match(/height=200/, url)
       end
 
       it "handles array values in parameters the same as node" do
@@ -99,6 +105,8 @@ describe Transloadit do
           template: @template,
           input: @input,
           expire_at_ms: @expire_at,
+          auth_key: "my-key",
+          auth_secret: "my-secret",
           url_params: {
             tags: ["landscape", "amsterdam", nil, ""],
             height: 200
@@ -115,7 +123,9 @@ describe Transloadit do
           workspace: @workspace,
           template: @template,
           input: "",
-          expire_at_ms: @expire_at
+          expire_at_ms: @expire_at,
+          auth_key: "my-key",
+          auth_secret: "my-secret"
         }
 
         url = @transloadit.signed_smart_cdn_url(**params)
