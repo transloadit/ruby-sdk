@@ -1,3 +1,7 @@
+# This file merely tests the output URL against our reference Node.js SDK implementation
+# This ensures as we make changes to this client, it's still going to be compatible with our Node.js based server
+# There are also regular unit tests for the SmartCDN signing logic, but those reside in `test/unit/transloadit/test_smart_cdn.rb`
+
 require "test_helper"
 require "json"
 require "open3"
