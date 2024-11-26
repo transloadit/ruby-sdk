@@ -140,24 +140,17 @@ class Transloadit
   # @param input [String] Input value that is provided as `${fields.input}` in the template
   # @param url_params [Hash] Additional parameters for the URL query string (optional)
   # @param expire_at_ms [Integer] Expiration time as Unix timestamp in milliseconds (optional)
-  # @param auth_key [String] Optional authentication key, defaults to instance key
-  # @param auth_secret [String] Optional authentication secret, defaults to instance secret
   # @return [String] Signed Smart CDN URL
   def signed_smart_cdn_url(
     workspace:,
     template:,
     input:,
     expire_at_ms: nil,
-    auth_key: nil,
-    auth_secret: nil,
     url_params: {}
   )
     raise ArgumentError, "workspace is required" if workspace.nil?
     raise ArgumentError, "template is required" if template.nil?
     raise ArgumentError, "input is required" if input.nil?
-
-    auth_key ||= self.key
-    auth_secret ||= self.secret
 
     workspace_slug = CGI.escape(workspace)
     template_slug = CGI.escape(template)
@@ -178,7 +171,7 @@ class Transloadit
       end
     end
 
-    query_params["auth_key"] = [auth_key]
+    query_params["auth_key"] = [self.key]
     query_params["exp"] = [expire_at.to_s]
 
     # Sort parameters to ensure consistent ordering
@@ -188,7 +181,7 @@ class Transloadit
 
     string_to_sign = "#{workspace_slug}/#{template_slug}/#{input_field}?#{sorted_params}"
 
-    signature = OpenSSL::HMAC.hexdigest("sha256", auth_secret, string_to_sign)
+    signature = OpenSSL::HMAC.hexdigest("sha256", self.secret, string_to_sign)
 
     final_params = "#{sorted_params}&sig=#{CGI.escape("sha256:#{signature}")}"
     "https://#{workspace_slug}.tlcdn.com/#{template_slug}/#{input_field}?#{final_params}"
