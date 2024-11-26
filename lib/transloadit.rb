@@ -161,14 +161,10 @@ class Transloadit
     query_params = {}
     url_params.each do |key, value|
       next if value.nil?
-      if value.is_a?(Array)
-        value.each do |val|
-          next if val.nil?
-          (query_params[key.to_s] ||= []) << val.to_s
-        end
-      else
-        query_params[key.to_s] = [value.to_s]
-      end
+  Array(value).each do |val|
+    next if val.nil?
+    (query_params[key.to_s] ||= []) << val.to_s
+  end
     end
 
     query_params["auth_key"] = [key]
