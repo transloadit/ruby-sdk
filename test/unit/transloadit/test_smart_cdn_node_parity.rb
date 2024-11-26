@@ -107,6 +107,19 @@ describe Transloadit do
         node_url = run_node_script(params)
         assert_equal node_url, url
       end
+
+      it "handles empty input string the same as node" do
+        params = {
+          workspace: @workspace,
+          template: @template,
+          input: "",
+          expire_at_ms: @expire_at
+        }
+
+        url = @transloadit.signed_smart_cdn_url(**params)
+        node_url = run_node_script(params)
+        assert_equal node_url, url
+      end
     end
   end
 end

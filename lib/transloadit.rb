@@ -169,11 +169,10 @@ class Transloadit
       next if value.nil?
       if value.is_a?(Array)
         value.each do |val|
-          next if val.nil? || val.to_s.empty?
+          next if val.nil?
           (query_params[key.to_s] ||= []) << val.to_s
         end
       else
-        next if value.to_s.empty?
         query_params[key.to_s] = [value.to_s]
       end
     end

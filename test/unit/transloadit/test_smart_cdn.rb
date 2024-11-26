@@ -40,6 +40,16 @@ describe Transloadit do
       end
     end
 
+    it "allows empty input string" do
+      url = @transloadit.signed_smart_cdn_url(
+        workspace: @workspace,
+        template: @template,
+        input: "",
+        expire_at_ms: @expire_at
+      )
+      assert_match(/test-smart-cdn\/\?auth_key/, url)
+    end
+
     it "uses instance credentials by default" do
       url = @transloadit.signed_smart_cdn_url(
         workspace: @workspace,

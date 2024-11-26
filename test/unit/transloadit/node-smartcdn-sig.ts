@@ -32,7 +32,8 @@ function signSmartCDNUrl(params: SmartCDNParams): string {
 
   if (!workspace) throw new Error('workspace is required')
   if (!template) throw new Error('template is required')
-  if (!input) throw new Error('input is required')
+  if (input === undefined || input === null)
+    throw new Error('input is required')
 
   const workspaceSlug = encodeURIComponent(workspace)
   const templateSlug = encodeURIComponent(template)
