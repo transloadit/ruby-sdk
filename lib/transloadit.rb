@@ -171,9 +171,9 @@ class Transloadit
     query_params["exp"] = [expire_at.to_s]
 
     # Sort parameters to ensure consistent ordering
-    sorted_params = query_params.sort.map do |key, values|
+    sorted_params = query_params.sort.flat_map do |key, values|
       values.map { |v| "#{CGI.escape(key)}=#{CGI.escape(v)}" }
-    end.flatten.join("&")
+    end.join("&")
 
     string_to_sign = "#{workspace_slug}/#{template_slug}/#{input_field}?#{sorted_params}"
 
