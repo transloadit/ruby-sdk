@@ -140,29 +140,30 @@ class Transloadit
   # @param input [String] Input value that is provided as `${fields.input}` in the template
   # @param url_params [Hash] Additional parameters for the URL query string (optional)
   # @param expire_at_ms [Integer] Expiration time as Unix timestamp in milliseconds (optional)
-  # @param expire_in_ms [Integer] Expiration time in milliseconds from now (optional)
   # @param auth_key [String] Optional authentication key, defaults to instance key
   # @param auth_secret [String] Optional authentication secret, defaults to instance secret
   # @return [String] Signed Smart CDN URL
-  def signed_smart_cdn_url(workspace:, template:, input:, url_params: {}, expire_at_ms: nil, expire_in_ms: nil, auth_key: nil, auth_secret: nil)
-    raise ArgumentError, "workspace is required" if workspace.nil? || workspace.empty?
-    raise ArgumentError, "template is required" if template.nil? || template.empty?
+  def signed_smart_cdn_url(
+    workspace:,
+    template:,
+    input:,
+    expire_at_ms: nil,
+    auth_key: nil,
+    auth_secret: nil,
+    url_params: {}
+  )
+    raise ArgumentError, "workspace is required" if workspace.nil?
+    raise ArgumentError, "template is required" if template.nil?
     raise ArgumentError, "input is required" if input.nil?
 
-    auth_key ||= key
-    auth_secret ||= secret
+    auth_key ||= self.key
+    auth_secret ||= self.secret
 
     workspace_slug = CGI.escape(workspace)
     template_slug = CGI.escape(template)
     input_field = CGI.escape(input)
 
-    expire_at = if expire_at_ms
-      expire_at_ms
-    elsif expire_in_ms
-      (Time.now.to_f * 1000).to_i + expire_in_ms
-    else
-      (Time.now.to_f * 1000).to_i + (1 * 60 * 60 * 1000) # 1 hour default
-    end
+    expire_at = expire_at_ms || (Time.now.to_i * 1000 + 60 * 60 * 1000) # 1 hour default
 
     query_params = {}
     url_params.each do |key, value|
