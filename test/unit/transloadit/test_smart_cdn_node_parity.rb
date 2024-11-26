@@ -89,6 +89,8 @@ describe Transloadit do
         url = @transloadit.signed_smart_cdn_url(**params)
         node_url = run_node_script(params)
         assert_equal node_url, url
+        refute_match(/width=/, url)
+        assert_match(/height=200/, url)
       end
 
       it "handles array values in parameters the same as node" do

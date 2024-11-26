@@ -71,5 +71,20 @@ describe Transloadit do
       )
       assert_match(/auth_key=override-key/, url)
     end
+
+    it "excludes empty width parameter" do
+      url = @transloadit.signed_smart_cdn_url(
+        workspace: @workspace,
+        template: @template,
+        input: @input,
+        expire_at_ms: @expire_at,
+        url_params: {
+          width: "",
+          height: 200
+        }
+      )
+      refute_match(/width=/, url)
+      assert_match(/height=200/, url)
+    end
   end
 end
