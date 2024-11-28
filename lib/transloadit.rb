@@ -148,8 +148,8 @@ class Transloadit
     expire_at_ms: nil,
     url_params: {}
   )
-    raise ArgumentError, "workspace is required" if workspace.nil?
-    raise ArgumentError, "template is required" if template.nil?
+    raise ArgumentError, "workspace is required" if workspace.nil? || workspace.empty?
+    raise ArgumentError, "template is required" if template.nil? || template.empty?
     raise ArgumentError, "input is required" if input.nil?
 
     workspace_slug = CGI.escape(workspace)

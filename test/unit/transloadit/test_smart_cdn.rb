@@ -31,6 +31,14 @@ describe Transloadit do
           input: @input
         )
       end
+
+      assert_raises ArgumentError, "workspace is required" do
+        @transloadit.signed_smart_cdn_url(
+          workspace: "",
+          template: @template,
+          input: @input
+        )
+      end
     end
 
     it "requires template" do
@@ -38,6 +46,14 @@ describe Transloadit do
         @transloadit.signed_smart_cdn_url(
           workspace: @workspace,
           template: nil,
+          input: @input
+        )
+      end
+
+      assert_raises ArgumentError, "template is required" do
+        @transloadit.signed_smart_cdn_url(
+          workspace: @workspace,
+          template: "",
           input: @input
         )
       end
