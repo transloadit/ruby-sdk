@@ -1,3 +1,7 @@
+### 3.1.0 / 2024-11-24
+
+- Add Smart CDN signature support via `signed_smart_cdn_url` method (kvz)
+
 ### 3.0.2 / 2024-03-01
 
 - Upgrade signature algorithm to more secure SHA-384 [#69](https://github.com/transloadit/ruby-sdk/pull/69) (@aduh95)
