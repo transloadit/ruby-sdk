@@ -13,6 +13,5 @@ transloadit-*.gem
 
 .DS_Store
 env.sh
-
-# Bundle directory
+.env
 vendor/bundle/

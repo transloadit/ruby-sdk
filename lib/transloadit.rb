@@ -1,5 +1,9 @@
 require "multi_json"
 require "date"
+require "json"
+require "openssl"
+require "uri"
+require "cgi"
 
 #
 # Implements the Transloadit REST API in Ruby. Check the {file:README.md README}
@@ -11,6 +15,7 @@ class Transloadit
   autoload :Exception, "transloadit/exception"
   autoload :Request, "transloadit/request"
   autoload :Response, "transloadit/response"
+  autoload :SmartCDN, "transloadit/smart_cdn"
   autoload :Step, "transloadit/step"
   autoload :Template, "transloadit/template"
   autoload :VERSION, "transloadit/version"
@@ -128,6 +133,54 @@ class Transloadit
   #
   def to_json
     MultiJson.dump(to_hash)
+  end
+
+  # @param workspace [String] Workspace slug
+  # @param template [String] Template slug or template ID
+  # @param input [String] Input value that is provided as `${fields.input}` in the template
+  # @param url_params [Hash] Additional parameters for the URL query string (optional)
+  # @param expire_at_ms [Integer] Expiration time as Unix timestamp in milliseconds (optional)
+  # @return [String] Signed Smart CDN URL
+  def signed_smart_cdn_url(
+    workspace:,
+    template:,
+    input:,
+    expire_at_ms: nil,
+    url_params: {}
+  )
+    raise ArgumentError, "workspace is required" if workspace.nil? || workspace.empty?
+    raise ArgumentError, "template is required" if template.nil? || template.empty?
+    raise ArgumentError, "input is required" if input.nil?
+
+    workspace_slug = CGI.escape(workspace)
+    template_slug = CGI.escape(template)
+    input_field = CGI.escape(input)
+
+    expire_at = expire_at_ms || (Time.now.to_i * 1000 + 60 * 60 * 1000) # 1 hour default
+
+    query_params = {}
+    url_params.each do |key, value|
+      next if value.nil?
+      Array(value).each do |val|
+        next if val.nil?
+        (query_params[key.to_s] ||= []) << val.to_s
+      end
+    end
+
+    query_params["auth_key"] = [key]
+    query_params["exp"] = [expire_at.to_s]
+
+    # Sort parameters to ensure consistent ordering
+    sorted_params = query_params.sort.flat_map do |key, values|
+      values.map { |v| "#{CGI.escape(key)}=#{CGI.escape(v)}" }
+    end.join("&")
+
+    string_to_sign = "#{workspace_slug}/#{template_slug}/#{input_field}?#{sorted_params}"
+
+    signature = OpenSSL::HMAC.hexdigest("sha256", secret, string_to_sign)
+
+    final_params = "#{sorted_params}&sig=#{CGI.escape("sha256:#{signature}")}"
+    "https://#{workspace_slug}.tlcdn.com/#{template_slug}/#{input_field}?#{final_params}"
   end
 
   private

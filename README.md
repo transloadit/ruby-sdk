@@ -11,7 +11,7 @@ A **Ruby** Integration for [Transloadit](https://transloadit.com)'s file uploadi
 
 This is a **Ruby** SDK to make it easy to talk to the [Transloadit](https://transloadit.com) REST API.
 
-*If you run Ruby on Rails and are looking to integrate with the browser for file uploads, checkout the [rails-sdk](https://github.com/transloadit/rails-sdk).*
+_If you run Ruby on Rails and are looking to integrate with the browser for file uploads, checkout the [rails-sdk](https://github.com/transloadit/rails-sdk)._
 
 ## Install
 
@@ -29,14 +29,14 @@ $ irb -rubygems
 => true
 ```
 
-Then create a Transloadit instance, which will maintain your 
-[authentication credentials](https://transloadit.com/accounts/credentials) 
+Then create a Transloadit instance, which will maintain your
+[authentication credentials](https://transloadit.com/accounts/credentials)
 and allow us to make requests to [the API](https://transloadit.com/docs/api/).
 
 ```ruby
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 ```
 
@@ -49,8 +49,8 @@ and store the result on [Amazon S3](https://aws.amazon.com/s3/).
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 # First, we create two steps: one to resize the image to 320x240, and another to
@@ -60,9 +60,9 @@ resize = transloadit.step 'resize', '/image/resize',
   :height => 240
 
 store  = transloadit.step 'store', '/s3/store',
-  :key    => 'YOUR_AWS_KEY',
-  :secret => 'YOUR_AWS_SECRET',
-  :bucket => 'YOUR_S3_BUCKET'
+  :key    => 'MY_AWS_KEY',
+  :secret => 'MY_AWS_SECRET',
+  :bucket => 'MY_S3_BUCKET'
 
 # Now that we have the steps, we create an assembly (which is just a request to
 # process a file or set of files) and let Transloadit do the rest.
@@ -125,7 +125,7 @@ API at the time the <dfn>Assembly</dfn> was created. You have to explicitly ask 
 # reloads the response's contents from the REST API
 response.reload!
 
-# reloads once per second until all processing is finished, up to number of 
+# reloads once per second until all processing is finished, up to number of
 # times specified in :tries option, otherwise will raise ReloadLimitReached
 response.reload_until_finished! tries: 300 # default is 600
 ```
@@ -147,8 +147,8 @@ than one file in the same request. You can also pass a single <dfn>Step</dfn> fo
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 assembly = transloadit.assembly(steps: store)
@@ -160,7 +160,7 @@ response = assembly.create!(
 )
 ```
 
-You can also pass an array of files to the `create!` method. 
+You can also pass an array of files to the `create!` method.
 Just unpack the array using the splat `*` operator.
 
 ```ruby
@@ -178,8 +178,8 @@ simply need to `use` other <dfn>Steps</dfn>. Following
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 encode = transloadit.step 'encode', '/video/encode', { ... }
@@ -208,17 +208,17 @@ for recurring encoding tasks. In order to use these do the following:
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 transloadit.assembly(
-  :template_id => 'YOUR_TEMPLATE_ID'
+  :template_id => 'MY_TEMPLATE_ID'
 ).create! open('/PATH/TO/FILE.mpg')
 ```
 
 You can use your steps together with this template and even use variables.
-The [Transloadit documentation](https://transloadit.com/docs/#passing-variables-into-a-template) 
+The [Transloadit documentation](https://transloadit.com/docs/#passing-variables-into-a-template)
 has some nice examples for that.
 
 ### 5. Using fields
@@ -231,8 +231,8 @@ to the upload itself. You can use fields like the following:
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 transloadit.assembly(
@@ -252,8 +252,8 @@ a Notify URL for the <dfn>Assembly</dfn>.
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 transloadit.assembly(
@@ -271,8 +271,8 @@ Transloadit also provides methods to retrieve/replay <dfn>Assemblies</dfn> and t
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 assembly = transloadit.assembly
@@ -281,10 +281,10 @@ assembly = transloadit.assembly
 assembly.list
 
 # returns a specific assembly
-assembly.get 'YOUR_ASSEMBLY_ID'
+assembly.get 'MY_ASSEMBLY_ID'
 
 # replays a specific assembly
-response = assembly.replay 'YOUR_ASSEMBLY_ID'
+response = assembly.replay 'MY_ASSEMBLY_ID'
 # should return true if assembly is replaying and false otherwise.
 response.replaying?
 
@@ -292,7 +292,7 @@ response.replaying?
 assembly.get_notifications
 
 # replays an assembly notification
-assembly.replay_notification 'YOUR_ASSEMBLY_ID'
+assembly.replay_notification 'MY_ASSEMBLY_ID'
 ```
 
 ### 8. Templates
@@ -304,8 +304,8 @@ for recurring encoding tasks. Here's how you would create a <dfn>Template</dfn>:
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 template = transloadit.template
@@ -331,8 +331,8 @@ There are also some other methods to retrieve, update and delete a <dfn>Template
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 template = transloadit.template
@@ -341,11 +341,11 @@ template = transloadit.template
 template.list
 
 # returns a specific template.
-template.get 'YOUR_TEMPLATE_ID'
+template.get 'MY_TEMPLATE_ID'
 
 # updates the template whose id is specified.
 template.update(
-  'YOUR_TEMPLATE_ID',
+  'MY_TEMPLATE_ID',
   :name => 'CHANGED_TEMPLATE_NAME',
   :template => {
     :steps => {
@@ -358,7 +358,7 @@ template.update(
 )
 
 # deletes a specific template
-template.delete 'YOUR_TEMPLATE_ID'
+template.delete 'MY_TEMPLATE_ID'
 ```
 
 ### 9. Getting Bill reports
@@ -370,8 +370,8 @@ you can use the `bill` method passing the required month and year like the follo
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 # returns bill report for February, 2016.
@@ -380,7 +380,48 @@ transloadit.bill(2, 2016)
 
 Not specifying the `month` or `year` would default to the current month or year.
 
-### 10. Rate limits
+### 10. Signing Smart CDN URLs
+
+You can generate signed [Smart CDN](https://transloadit.com/services/content-delivery/) URLs using your Transloadit instance:
+
+```ruby
+require 'transloadit'
+
+transloadit = Transloadit.new(
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
+)
+
+# Generate a signed URL using instance credentials
+url = transloadit.signed_smart_cdn_url(
+  workspace: "MY_WORKSPACE",
+  template: "MY_TEMPLATE",
+  input: "avatars/jane.jpg"
+)
+
+# Add URL parameters
+url = transloadit.signed_smart_cdn_url(
+  workspace: "MY_WORKSPACE",
+  template: "MY_TEMPLATE",
+  input: "avatars/jane.jpg",
+  url_params: {
+    width: 100,
+    height: 200
+  }
+)
+
+# Set expiration time
+url = transloadit.signed_smart_cdn_url(
+  workspace: "MY_WORKSPACE",
+  template: "MY_TEMPLATE",
+  input: "avatars/jane.jpg",
+  expire_at_ms: 1732550672867  # Specific timestamp
+)
+```
+
+The generated URL will be signed using your Transloadit credentials and can be used to access files through the Smart CDN in a secure manner.
+
+### 11. Rate limits
 
 Transloadit enforces rate limits to guarantee that no customers are adversely affected by the usage
 of any given customer. See [Rate Limiting](https://transloadit.com/docs/api/#rate-limiting).
@@ -393,8 +434,8 @@ To change the number of attempts that will be made when creating an <dfn>Assembl
 require 'transloadit'
 
 transloadit = Transloadit.new(
-  :key    => 'YOUR_TRANSLOADIT_KEY',
-  :secret => 'YOUR_TRANSLOADIT_SECRET'
+  :key    => 'MY_TRANSLOADIT_KEY',
+  :secret => 'MY_TRANSLOADIT_SECRET'
 )
 
 # would make one extra attempt after a failed attempt.
@@ -423,3 +464,24 @@ Please see [ci.yml](https://github.com/transloadit/ruby-sdk/tree/main/.github/wo
 ### Ruby 2.x
 
 If you still need support for Ruby 2.x, 2.0.1 is the last version that supports it.
+
+## Contributing
+
+### Running tests
+
+```bash
+bundle install
+bundle exec rake test
+```
+
+To also test parity against the Node.js reference implementation, run:
+
+```bash
+TEST_NODE_PARITY=1 bundle exec rake test
+```
+
+To disable coverage reporting, run:
+
+```bash
+COVERAGE=0 bundle exec rake test
+```
