@@ -497,3 +497,4 @@ Let's say you wanted to release version `3.1.0`, here are the steps:
 3. Create a git tag: `git tag -a v3.1.0 -m "Release 3.1.0"`
 4. Push the git tag: `git push origin v3.1.0`
 5. Release on RubyGems: `gem build transloadit.gemspec && gem push transloadit-3.1.0.gem`
+6. Draft a release [here](https://github.com/transloadit/ruby-sdk/releases). Click the `v3.1.0` tag and click `Generate release notes`. Inspect and Publish.
