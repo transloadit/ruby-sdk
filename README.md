@@ -1,7 +1,7 @@
 [![Build Status](https://github.com/transloadit/ruby-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/transloadit/ruby-sdk/actions/workflows/ci.yml)
 [![Code Climate](https://codeclimate.com/github/transloadit/ruby-sdk.png)](https://codeclimate.com/github/transloadit/ruby-sdk)
 
-## ruby-sdk
+# Transloadit Ruby SDK
 
 A **Ruby** Integration for [Transloadit](https://transloadit.com)'s file uploading and encoding service
 
@@ -447,7 +447,7 @@ transloadit.assembly(:tries => 0).create! open('/PATH/TO/FILE.mpg')
 
 ## Example
 
-A small sample tutorial of using the Transloadit ruby-sdk to optimize an image, encode MP3 audio, add ID3 tags,
+A small sample tutorials of using the Transloadit Ruby SDK to optimize an image, encode MP3 audio, add ID3 tags,
 and more can be found [here](https://github.com/transloadit/ruby-sdk/tree/main/examples).
 
 ## Documentation
@@ -467,6 +467,8 @@ If you still need support for Ruby 2.x, 2.0.1 is the last version that supports 
 
 ## Contributing
 
+Contributions are welcome!
+
 ### Running tests
 
 ```bash
@@ -485,3 +487,13 @@ To disable coverage reporting, run:
 ```bash
 COVERAGE=0 bundle exec rake test
 ```
+
+### Releasing on RubyGems
+
+Let's say you wanted to release version `3.1.0`, here are the steps:
+
+1. Update the version number in the version file `version.rb` and `CHANGELOG.md`
+2. Commit: `git add CHANGELOG.md lib/transloadit/version.rb && git commit -m "Release 3.1.0"`
+3. Create a git tag: `git tag -a v3.1.0 -m "Release 3.1.0"`
+4. Push the git tag: `git push origin v3.1.0`
+5. Release on RubyGems: `gem build transloadit.gemspec && gem push transloadit-3.1.0.gem`
