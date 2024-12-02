@@ -6,10 +6,10 @@ if ENV["COVERAGE"] != "0"
   SimpleCov.start do
     add_filter "/test/"
     enable_coverage :branch
-
-    # Use JSON formatter for Codecov
-    SimpleCov.formatter = SimpleCov::Formatter::JSONFormatter if ENV["CI"]
   end
+
+  require 'simplecov-cobertura'
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 end
 
 require "minitest/autorun"
