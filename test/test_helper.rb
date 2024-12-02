@@ -8,7 +8,7 @@ if ENV["COVERAGE"] != "0"
     enable_coverage :branch
   end
 
-  require 'simplecov-cobertura'
+  require "simplecov-cobertura"
   SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 end
 
