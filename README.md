@@ -1,5 +1,5 @@
 [![Build Status](https://github.com/transloadit/ruby-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/transloadit/ruby-sdk/actions/workflows/ci.yml)
-[![Code Climate](https://codeclimate.com/github/transloadit/ruby-sdk.png)](https://codeclimate.com/github/transloadit/ruby-sdk)
+[![Coverage](https://codecov.io/gh/transloadit/ruby-sdk/branch/main/graph/badge.svg)](https://codecov.io/gh/transloadit/ruby-sdk)
 
 # Transloadit Ruby SDK
 
