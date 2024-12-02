@@ -31,4 +31,14 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
       - run: bundle exec standardrb
-      - run: COVERAGE=0 TEST_NODE_PARITY=1 bundle exec rake test
+      - name: Run tests with coverage
+        env:
+          COVERAGE: 1
+          TEST_NODE_PARITY: 1
+        run: bundle exec rake test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/coverage.json
+          fail_ci_if_error: true
