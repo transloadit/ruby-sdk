@@ -37,6 +37,7 @@ jobs:
           TEST_NODE_PARITY: 1
         run: bundle exec rake test
       - name: Upload coverage to Codecov
+        if: matrix.ruby == 3.3
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
