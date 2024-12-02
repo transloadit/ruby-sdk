@@ -3,7 +3,13 @@ $:.unshift File.expand_path("../../lib", __FILE__)
 
 if ENV["COVERAGE"] != "0"
   require "simplecov"
-  SimpleCov.start { add_filter "/test/" }
+  SimpleCov.start do
+    add_filter "/test/"
+    enable_coverage :branch
+  end
+
+  require "simplecov-cobertura"
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 end
 
 require "minitest/autorun"
