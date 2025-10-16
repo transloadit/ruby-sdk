@@ -476,16 +476,43 @@ bundle install
 bundle exec rake test
 ```
 
-To also test parity against the Node.js reference implementation, run:
+To also test parity against the Node.js reference implementation, ensure you can run `npx transloadit smart_sig` and `npx transloadit sig` (the CLI downloads on demand), then run:
 
 ```bash
 TEST_NODE_PARITY=1 bundle exec rake test
+```
+
+You can warm the CLI cache ahead of time with:
+
+```bash
+TRANSLOADIT_KEY=... TRANSLOADIT_SECRET=... \
+  npx --yes transloadit smart_sig --help
+TRANSLOADIT_KEY=... TRANSLOADIT_SECRET=... \
+  npx --yes transloadit sig --algorithm sha384 --help
 ```
 
 To disable coverage reporting, run:
 
 ```bash
 COVERAGE=0 bundle exec rake test
+```
+
+#### Run tests in Docker
+
+```bash
+./scripts/test-in-docker.sh
+```
+
+This builds a local image, runs `bundle install`, and executes `bundle exec rake test`. Pass a custom command to run something else (Bundler still installs first):
+
+```bash
+./scripts/test-in-docker.sh bundle exec ruby -Itest test/unit/transloadit/test_request.rb
+```
+
+The script forwards environment variables such as `TEST_NODE_PARITY` or credentials defined in `.env`, so you can combine parity checks and integration tests inside Docker:
+
+```bash
+TEST_NODE_PARITY=1 ./scripts/test-in-docker.sh
 ```
 
 ### Releasing on RubyGems

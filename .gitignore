@@ -15,3 +15,4 @@ transloadit-*.gem
 env.sh
 .env
 vendor/bundle/
+.docker-cache/

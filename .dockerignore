@@ -1,0 +1,9 @@
+.git
+.gitignore
+.docker-cache
+.bundle
+coverage
+pkg
+node_modules
+vendor/bundle
+.env
