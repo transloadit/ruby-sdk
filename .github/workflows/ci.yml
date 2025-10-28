@@ -55,7 +55,17 @@ jobs:
         with:
           ruby-version: 3.3
           bundler-cache: true
+      - name: Ensure e2e credentials are configured
+        if: >
+          secrets.TRANSLOADIT_KEY == '' || secrets.TRANSLOADIT_KEY == null ||
+          secrets.TRANSLOADIT_SECRET == '' || secrets.TRANSLOADIT_SECRET == null
+        run: |
+          echo "TRANSLOADIT_KEY and TRANSLOADIT_SECRET must be configured in repository secrets to run the e2e job." >&2
+          exit 1
       - name: Run end-to-end upload test
+        if: >
+          secrets.TRANSLOADIT_KEY != '' && secrets.TRANSLOADIT_KEY != null &&
+          secrets.TRANSLOADIT_SECRET != '' && secrets.TRANSLOADIT_SECRET != null
         env:
           RUBY_SDK_E2E: 1
           TRANSLOADIT_KEY: ${{ secrets.TRANSLOADIT_KEY }}
