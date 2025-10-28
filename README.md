@@ -523,6 +523,8 @@ RUBY_SDK_E2E=1 ./scripts/test-in-docker.sh bundle exec ruby -Itest test/integrat
 
 The test uploads `chameleon.jpg`, resizes it, and asserts on the live assembly results.
 
+> **Note:** `./scripts/test-in-docker.sh` now defaults to `RUBY_SDK_E2E=1`. If you want to skip the live upload during local runs, invoke `RUBY_SDK_E2E=0 ./scripts/test-in-docker.sh` instead.
+
 ### Releasing on RubyGems
 
 Let's say you wanted to release version `3.1.0`, here are the steps:

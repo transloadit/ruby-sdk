@@ -61,6 +61,7 @@ DOCKER_ARGS=(
   -e BUNDLE_CACHE_PATH=/workspace/$CACHE_DIR/bundle-cache
   -e npm_config_cache=/workspace/$CACHE_DIR/npm-cache
   -e TEST_NODE_PARITY="${TEST_NODE_PARITY:-0}"
+  -e RUBY_SDK_E2E="${RUBY_SDK_E2E:-1}"
   -v "$PWD":/workspace
   -w /workspace
 )
@@ -77,7 +78,6 @@ PASSTHROUGH_ENV_VARS=(
   TRANSLOADIT_KEY
   TRANSLOADIT_SECRET
   TRANSLOADIT_TEMPLATE_ID
-  RUBY_SDK_E2E
 )
 
 for var in "${PASSTHROUGH_ENV_VARS[@]}"; do
