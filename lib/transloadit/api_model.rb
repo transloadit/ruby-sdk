@@ -68,7 +68,6 @@ class Transloadit::ApiModel
       params = {params: params} if ["post", "put", "delete"].include? method
       params.merge!(extra_params) unless extra_params.nil?
     end
-    request_url = transloadit.request_url_for(path)
-    Transloadit::Request.new(request_url, transloadit.secret).public_send(method, params)
+    Transloadit::Request.new(path, transloadit.secret).public_send(method, params)
   end
 end

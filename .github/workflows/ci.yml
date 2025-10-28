@@ -43,3 +43,21 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/coverage.json
           fail_ci_if_error: true
+  e2e:
+    needs: ci
+    if: >
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+      - name: Run end-to-end upload test
+        env:
+          RUBY_SDK_E2E: 1
+          TRANSLOADIT_KEY: ${{ secrets.TRANSLOADIT_KEY }}
+          TRANSLOADIT_SECRET: ${{ secrets.TRANSLOADIT_SECRET }}
+        run: bundle exec ruby -Itest test/integration/test_e2e_upload.rb

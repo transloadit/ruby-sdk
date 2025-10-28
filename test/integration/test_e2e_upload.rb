@@ -8,20 +8,12 @@ describe "Transloadit end-to-end upload" do
     @secret = ENV["TRANSLOADIT_SECRET"]
     skip "TRANSLOADIT_KEY and TRANSLOADIT_SECRET must be set to run live upload tests" if blank?(@key) || blank?(@secret)
 
-    @service = resolve_service
-
     @fixture_path = File.expand_path("../../chameleon.jpg", __dir__)
     skip "chameleon.jpg fixture missing; run tests from the repository root" unless File.file?(@fixture_path)
   end
 
   it "uploads and processes the chameleon image" do
-    options = {
-      key: @key,
-      secret: @secret
-    }
-    options[:service] = @service if @service
-
-    transloadit = Transloadit.new(options)
+    transloadit = Transloadit.new(key: @key, secret: @secret)
 
     resize_step = transloadit.step(
       "resize",
@@ -79,16 +71,6 @@ describe "Transloadit end-to-end upload" do
     return false if blank?(flag)
 
     %w[1 true yes on].include?(flag.to_s.strip.downcase)
-  end
-
-  def resolve_service
-    host = ENV["TRANSLOADIT_HOST"].to_s.strip
-    return host unless host.empty?
-
-    region = ENV["TRANSLOADIT_REGION"].to_s.strip
-    return nil if region.empty?
-
-    "https://api2-#{region}.transloadit.com"
   end
 
   def integer_if_present(value)
