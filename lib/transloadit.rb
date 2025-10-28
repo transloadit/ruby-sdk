@@ -31,6 +31,7 @@ class Transloadit
   attr_accessor :duration
 
   attr_accessor :max_size
+  attr_accessor :service
 
   #
   # Creates a new instance of the Transloadit API.
@@ -48,6 +49,7 @@ class Transloadit
     self.secret = options[:secret]
     self.duration = options[:duration] || 5 * 60
     self.max_size = options[:max_size]
+    self.service = _normalize_service(options[:service]) || _service_from_region(options[:region])
 
     _ensure_key_provided
   end
@@ -108,7 +110,7 @@ class Transloadit
     month = format "%02d", month
     path = "bill/#{year}-#{month}"
 
-    Transloadit::Request.new(path, secret).get({auth: to_hash})
+    Transloadit::Request.new(request_url_for(path), secret).get({auth: to_hash})
   end
 
   #
@@ -133,6 +135,22 @@ class Transloadit
   #
   def to_json
     MultiJson.dump(to_hash)
+  end
+
+  #
+  # Resolves an absolute URL for API requests, honoring custom service overrides.
+  #
+  # @param [String] path the request path or URL
+  # @return [String] the resolved URL or original path if already absolute
+  #
+  def request_url_for(path)
+    return path if service.nil? || service.empty?
+
+    uri = URI.parse(path.to_s)
+    return path if uri.host
+
+    base = service.end_with?("/") ? service : "#{service}/"
+    URI.join(base, path.to_s.sub(%r{\A/}, "")).to_s
   end
 
   # @param workspace [String] Workspace slug
@@ -184,6 +202,30 @@ class Transloadit
   end
 
   private
+
+  #
+  # Normalizes service URLs, returning nil for blank values.
+  #
+  def _normalize_service(value)
+    return nil if value.nil?
+
+    str = value.to_s.strip
+    return nil if str.empty?
+
+    str
+  end
+
+  #
+  # Builds a service URL from a region hint, if one is provided.
+  #
+  def _service_from_region(region)
+    return nil if region.nil?
+
+    str = region.to_s.strip
+    return nil if str.empty?
+
+    "https://api2-#{str}.transloadit.com"
+  end
 
   #
   # Raises an ArgumentError if no {#key} has been assigned.

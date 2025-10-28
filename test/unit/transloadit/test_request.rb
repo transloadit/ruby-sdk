@@ -78,29 +78,28 @@ describe Transloadit::Request do
   end
 end
 
-  describe "signature parity" do
-    it "matches transloadit CLI sig output" do
-      skip "Parity testing not enabled" unless ENV["TEST_NODE_PARITY"] == "1"
+describe "signature parity" do
+  it "matches transloadit CLI sig output" do
+    skip "Parity testing not enabled" unless ENV["TEST_NODE_PARITY"] == "1"
 
-      expires = "2025-01-02T00:00:00.000Z"
-      params = {
-        auth: {key: "cli-key", expires: expires},
-        steps: {encode: {robot: "/video/encode"}}
-      }
+    expires = "2025-01-02T00:00:00.000Z"
+    params = {
+      auth: {key: "cli-key", expires: expires},
+      steps: {encode: {robot: "/video/encode"}}
+    }
 
-      cli_result = run_transloadit_sig(params, key: "cli-key", secret: "cli-secret", algorithm: "sha384")
-      refute_nil cli_result
+    cli_result = run_transloadit_sig(params, key: "cli-key", secret: "cli-secret", algorithm: "sha384")
+    refute_nil cli_result
 
-      cli_params_json = cli_result["params"]
-      request = Transloadit::Request.new("/", "cli-secret")
-      ruby_signature = request.send(:signature, cli_params_json)
+    cli_params_json = cli_result["params"]
+    request = Transloadit::Request.new("/", "cli-secret")
+    ruby_signature = request.send(:signature, cli_params_json)
 
-      assert_equal cli_result["signature"], ruby_signature
+    assert_equal cli_result["signature"], ruby_signature
 
-      cli_params = JSON.parse(cli_params_json)
-      assert_equal "cli-key", cli_params.dig("auth", "key")
-      assert_equal expires, cli_params.dig("auth", "expires")
-      assert_equal "/video/encode", cli_params.dig("steps", "encode", "robot")
-    end
+    cli_params = JSON.parse(cli_params_json)
+    assert_equal "cli-key", cli_params.dig("auth", "key")
+    assert_equal expires, cli_params.dig("auth", "expires")
+    assert_equal "/video/encode", cli_params.dig("steps", "encode", "robot")
   end
-
+end

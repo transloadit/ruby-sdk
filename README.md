@@ -515,6 +515,14 @@ The script forwards environment variables such as `TEST_NODE_PARITY` or credenti
 TEST_NODE_PARITY=1 ./scripts/test-in-docker.sh
 ```
 
+To exercise the optional end-to-end upload against a real Transloadit account, provide `TRANSLOADIT_KEY` and `TRANSLOADIT_SECRET` (via environment variables or `.env`) and set `RUBY_SDK_E2E=1`:
+
+```bash
+RUBY_SDK_E2E=1 ./scripts/test-in-docker.sh bundle exec ruby -Itest test/integration/test_e2e_upload.rb
+```
+
+The test uploads `chameleon.jpg`, resizes it, and asserts on the live assembly results. It respects `TRANSLOADIT_HOST` and `TRANSLOADIT_REGION` overrides when present.
+
 ### Releasing on RubyGems
 
 Let's say you wanted to release version `3.1.0`, here are the steps:

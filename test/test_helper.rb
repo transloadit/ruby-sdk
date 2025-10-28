@@ -72,4 +72,3 @@ module TransloaditCliHelpers
 end
 
 Minitest::Test.include(TransloaditCliHelpers)
-

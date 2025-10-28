@@ -11,7 +11,6 @@ describe Transloadit do
     @expire_at = 1732550672867
   end
 
-
   describe "#signed_smart_cdn_url" do
     it "requires workspace" do
       assert_raises ArgumentError, "workspace is required" do

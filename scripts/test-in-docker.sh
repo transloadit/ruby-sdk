@@ -73,4 +73,19 @@ if [[ -f .env ]]; then
   DOCKER_ARGS+=(--env-file "$PWD/.env")
 fi
 
+PASSTHROUGH_ENV_VARS=(
+  TRANSLOADIT_KEY
+  TRANSLOADIT_SECRET
+  TRANSLOADIT_HOST
+  TRANSLOADIT_REGION
+  TRANSLOADIT_TEMPLATE_ID
+  RUBY_SDK_E2E
+)
+
+for var in "${PASSTHROUGH_ENV_VARS[@]}"; do
+  if [[ -n "${!var:-}" ]]; then
+    DOCKER_ARGS+=(-e "$var=${!var}")
+  fi
+done
+
 exec docker run "${DOCKER_ARGS[@]}" "$IMAGE_NAME" bash -lc "$RUN_CMD"
