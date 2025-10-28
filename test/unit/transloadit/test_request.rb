@@ -1,5 +1,7 @@
 require "test_helper"
 require "multi_json"
+require "rbconfig"
+require "tmpdir"
 
 describe Transloadit::Request do
   it "must allow initialization" do
@@ -74,6 +76,62 @@ describe Transloadit::Request do
       VCR.use_cassette "delete_template" do
         _(@request.delete["ok"]).must_equal "TEMPLATE_DELETED"
       end
+    end
+  end
+
+  it "loads request when URI was not previously required" do
+    lib_path = File.expand_path("../../../lib", __dir__)
+
+    Dir.mktmpdir do |stub_dir|
+      File.write(File.join(stub_dir, "rest-client.rb"), <<~RUBY)
+        module RestClient
+          class Response; end
+
+          class Resource
+            def initialize(*); end
+            def [](*); self; end
+            def get(*); Response.new; end
+            def post(*); Response.new; end
+            def put(*); Response.new; end
+            def delete(*); Response.new; end
+          end
+
+          module Exceptions
+            class OpenTimeout < StandardError; end
+          end
+        end
+      RUBY
+
+      File.write(File.join(stub_dir, "multi_json.rb"), <<~RUBY)
+        require "json"
+
+        module MultiJson
+          def self.dump(value)
+            JSON.dump(value)
+          end
+
+          def self.load(json)
+            JSON.parse(json)
+          end
+        end
+      RUBY
+
+      script = <<~RUBY
+        $LOAD_PATH.unshift #{stub_dir.inspect}
+        $LOAD_PATH.unshift #{lib_path.inspect}
+
+        begin
+          require "transloadit/request"
+          Transloadit::Request.new("/")
+        rescue StandardError => e
+          warn e.full_message
+          exit 1
+        end
+      RUBY
+
+      stdout, stderr, status = Open3.capture3(RbConfig.ruby, "-e", script)
+      error_output = stderr.empty? ? stdout : stderr
+      assert status.success?, "Expected transloadit/request to load without NameError, got: #{error_output}"
     end
   end
 end

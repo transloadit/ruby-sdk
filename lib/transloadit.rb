@@ -3,6 +3,7 @@ require "date"
 require "json"
 require "openssl"
 require "cgi"
+require "uri"
 
 #
 # Implements the Transloadit REST API in Ruby. Check the {file:README.md README}
