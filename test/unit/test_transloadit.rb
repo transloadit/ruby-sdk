@@ -108,7 +108,10 @@ describe Transloadit do
     end
 
     it "must produce Transloadit-compatible JSON output" do
-      _(@transloadit.to_json).must_equal MultiJson.dump(@transloadit.to_hash)
+      fixed_time = Time.utc(2025, 10, 28, 0, 0, 0)
+      Time.stub :now, fixed_time do
+        _(@transloadit.to_json).must_equal MultiJson.dump(@transloadit.to_hash)
+      end
     end
   end
 
