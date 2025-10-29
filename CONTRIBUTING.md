@@ -83,7 +83,11 @@ The test uploads `chameleon.jpg`, resizes it, and asserts on a real assembly res
    ```bash
    GEM_HOST_API_KEY=... ./scripts/notify-registry.sh
    ```
-6. Draft a GitHub release from the new tag and publish the generated notes.
+6. Publish the GitHub release notes:
+   ```bash
+   gh release create vX.Y.Z --title "vX.Y.Z" --notes "$(ruby -e 'puts File.read("CHANGELOG.md")[/^### #{ARGV[0].dump.gsub(/\"/, "\\\"")}/, /\A### /m] || "")'"
+   ```
+   Adjust the notes if needed before publishing.
 
 ### RubyGems Credentials
 
@@ -92,4 +96,3 @@ The test uploads `chameleon.jpg`, resizes it, and asserts on a real assembly res
 - Export the token as `GEM_HOST_API_KEY` in your environment before running `./scripts/notify-registry.sh`. The script refuses to run if the variable is missing.
 
 That’s it! Thank you for contributing.
-
