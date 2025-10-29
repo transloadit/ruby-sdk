@@ -1,6 +1,4 @@
 require "test_helper"
-require "json"
-require "open3"
 
 describe Transloadit do
   before do
@@ -11,15 +9,6 @@ describe Transloadit do
     @template = "test-smart-cdn"
     @input = "inputs/prinsengracht.jpg"
     @expire_at = 1732550672867
-  end
-
-  def run_node_script(params)
-    return unless ENV["TEST_NODE_PARITY"] == "1"
-    script_path = File.expand_path("./node-smartcdn-sig", __dir__)
-    json_input = JSON.dump(params)
-    stdout, stderr, status = Open3.capture3("tsx #{script_path}", stdin_data: json_input)
-    raise "Node script failed: #{stderr}" unless status.success?
-    stdout.strip
   end
 
   describe "#signed_smart_cdn_url" do
@@ -81,8 +70,8 @@ describe Transloadit do
       url = @transloadit.signed_smart_cdn_url(**params)
       assert_equal expected_url, url
 
-      if (node_url = run_node_script(params.merge(auth_key: "my-key", auth_secret: "my-secret")))
-        assert_equal expected_url, node_url
+      if (cli_url = run_transloadit_smart_sig(params, key: @auth_key, secret: @auth_secret))
+        assert_equal expected_url, cli_url
       end
     end
 
@@ -98,8 +87,8 @@ describe Transloadit do
       url = @transloadit.signed_smart_cdn_url(**params)
       assert_equal expected_url, url
 
-      if (node_url = run_node_script(params.merge(auth_key: "my-key", auth_secret: "my-secret")))
-        assert_equal expected_url, node_url
+      if (cli_url = run_transloadit_smart_sig(params, key: @auth_key, secret: @auth_secret))
+        assert_equal expected_url, cli_url
       end
     end
 
@@ -119,8 +108,8 @@ describe Transloadit do
       url = @transloadit.signed_smart_cdn_url(**params)
       assert_equal expected_url, url
 
-      if (node_url = run_node_script(params.merge(auth_key: "my-key", auth_secret: "my-secret")))
-        assert_equal expected_url, node_url
+      if (cli_url = run_transloadit_smart_sig(params, key: @auth_key, secret: @auth_secret))
+        assert_equal expected_url, cli_url
       end
     end
 
@@ -140,8 +129,8 @@ describe Transloadit do
       url = @transloadit.signed_smart_cdn_url(**params)
       assert_equal expected_url, url
 
-      if (node_url = run_node_script(params.merge(auth_key: "my-key", auth_secret: "my-secret")))
-        assert_equal expected_url, node_url
+      if (cli_url = run_transloadit_smart_sig(params, key: @auth_key, secret: @auth_secret))
+        assert_equal expected_url, cli_url
       end
     end
 
@@ -161,8 +150,8 @@ describe Transloadit do
       url = @transloadit.signed_smart_cdn_url(**params)
       assert_equal expected_url, url
 
-      if (node_url = run_node_script(params.merge(auth_key: "my-key", auth_secret: "my-secret")))
-        assert_equal expected_url, node_url
+      if (cli_url = run_transloadit_smart_sig(params, key: @auth_key, secret: @auth_secret))
+        assert_equal expected_url, cli_url
       end
     end
   end

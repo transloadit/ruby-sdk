@@ -52,6 +52,7 @@ class Transloadit::Response < Delegator
   #
   def extend!(mod)
     extend(mod)
+
     self
   end
 

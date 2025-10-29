@@ -15,3 +15,5 @@ transloadit-*.gem
 env.sh
 .env
 vendor/bundle/
+.docker-cache/
+.cache/rubocop_cache/04e06e0faf5ad652d8bcbcfd85bac5f6c32e711e/3031a80880d8a984708138f0d003f77c4bad2648

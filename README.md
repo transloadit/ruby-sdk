@@ -467,34 +467,4 @@ If you still need support for Ruby 2.x, 2.0.1 is the last version that supports 
 
 ## Contributing
 
-Contributions are welcome!
-
-### Running tests
-
-```bash
-bundle install
-bundle exec rake test
-```
-
-To also test parity against the Node.js reference implementation, run:
-
-```bash
-TEST_NODE_PARITY=1 bundle exec rake test
-```
-
-To disable coverage reporting, run:
-
-```bash
-COVERAGE=0 bundle exec rake test
-```
-
-### Releasing on RubyGems
-
-Let's say you wanted to release version `3.1.0`, here are the steps:
-
-1. Update the version number in the version file `version.rb` and `CHANGELOG.md`
-2. Commit: `git add CHANGELOG.md lib/transloadit/version.rb && git commit -m "Release 3.1.0"`
-3. Create a git tag: `git tag -a v3.1.0 -m "Release 3.1.0"`
-4. Push the git tag: `git push origin v3.1.0`
-5. Release on RubyGems: `gem build transloadit.gemspec && gem push transloadit-3.1.0.gem`
-6. Draft a release [here](https://github.com/transloadit/ruby-sdk/releases). Click the `v3.1.0` tag and click `Generate release notes`. Inspect and Publish.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for local development, testing, and release instructions.

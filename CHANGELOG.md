@@ -1,3 +1,8 @@
+### 3.1.1 / 2025-10-28
+
+- Add optional live end-to-end upload harness and CI job for parity verification, defaulted in Docker tests (kvz)
+- Restore missing `require "uri"` to prevent `NameError` when loading `Transloadit::Request` (kvz)
+
 ### 3.1.0 / 2024-11-24
 
 - Add Smart CDN signature support via `signed_smart_cdn_url` method (kvz)
