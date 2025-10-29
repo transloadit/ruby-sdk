@@ -1,3 +1,9 @@
+### 3.1.2 / 2025-10-29
+
+- Compress e2e fixture asset to keep gem size close to previous releases (kvz)
+- Ensure binary assets (images/audio) are marked via `.gitattributes` to avoid line ending mangling (kvz)
+- Document GitHub release helper and add RubyGems publish script (kvz)
+
 ### 3.1.1 / 2025-10-28
 
 - Add optional live end-to-end upload harness and CI job for parity verification, defaulted in Docker tests (kvz)
