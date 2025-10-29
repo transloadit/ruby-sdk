@@ -71,8 +71,8 @@ The test uploads `chameleon.jpg`, resizes it, and asserts on a real assembly res
 2. Run the full test suite (including Docker, parity, and e2e checks as needed).
 3. Commit the release changes and tag:
    ```bash
-   git commit -am "Release X.Y.Z"
-   git tag -a vX.Y.Z -m "Release X.Y.Z"
+   git commit -am "Release vX.Y.Z"
+   git tag -a vX.Y.Z -m "Release vX.Y.Z"
    ```
 4. Push the commit and tag:
    ```bash
