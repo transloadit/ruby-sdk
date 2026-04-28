@@ -13,15 +13,14 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - 3.0
           - 3.1
           - 3.2
           - 3.3
-          - jruby
-          - truffleruby
       fail-fast: false
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -53,7 +52,9 @@ jobs:
       TRANSLOADIT_KEY: ${{ secrets.TRANSLOADIT_KEY }}
       TRANSLOADIT_SECRET: ${{ secrets.TRANSLOADIT_SECRET }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.3
