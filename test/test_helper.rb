@@ -13,6 +13,7 @@ if ENV["COVERAGE"] != "0"
 end
 
 require "minitest/autorun"
+require "minitest/mock"
 require "transloadit"
 require "vcr"
 require "open3"
