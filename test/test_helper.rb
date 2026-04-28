@@ -75,9 +75,7 @@ Minitest::Test.include(TransloaditCliHelpers)
 
 module SingletonMethodOverrideHelpers
   def with_singleton_method(target, name, implementation)
-    eigenclass = class << target
-      self
-    end
+    eigenclass = target.singleton_class
 
     backup = "__orig_#{name}_for_test__"
     had_method = eigenclass.method_defined?(name) || eigenclass.private_method_defined?(name)
@@ -86,13 +84,15 @@ module SingletonMethodOverrideHelpers
     target.define_singleton_method(name, &implementation)
     yield
   ensure
-    eigenclass = class << target
-      self
+    eigenclass = target.singleton_class
+    if eigenclass.method_defined?(name) || eigenclass.private_method_defined?(name)
+      eigenclass.send(:remove_method, name)
     end
-    eigenclass.send(:remove_method, name) rescue nil
     if had_method
       eigenclass.send(:alias_method, name, backup)
-      eigenclass.send(:remove_method, backup) rescue nil
+      if eigenclass.method_defined?(backup) || eigenclass.private_method_defined?(backup)
+        eigenclass.send(:remove_method, backup)
+      end
     end
   end
 end
