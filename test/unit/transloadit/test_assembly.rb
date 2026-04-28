@@ -146,12 +146,14 @@ describe Transloadit::Assembly do
       it "must call the create! method with the same parameters" do
         VCR.use_cassette "submit_assembly" do
           file = open("lib/transloadit/version.rb")
-          mocker = Minitest::Mock.new
-          mocker.expect :call, nil, [file]
-          @assembly.stub :create!, mocker do
+          create_arg = nil
+          with_singleton_method(@assembly, :create!, proc { |arg|
+            create_arg = arg
+            nil
+          }) do
             @assembly.submit!(file)
           end
-          mocker.verify
+          _(create_arg).must_equal file
         end
       end
     end

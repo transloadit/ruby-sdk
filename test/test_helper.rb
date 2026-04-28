@@ -13,7 +13,6 @@ if ENV["COVERAGE"] != "0"
 end
 
 require "minitest/autorun"
-require "minitest/mock"
 require "transloadit"
 require "vcr"
 require "open3"
@@ -73,3 +72,29 @@ module TransloaditCliHelpers
 end
 
 Minitest::Test.include(TransloaditCliHelpers)
+
+module SingletonMethodOverrideHelpers
+  def with_singleton_method(target, name, implementation)
+    eigenclass = class << target
+      self
+    end
+
+    backup = "__orig_#{name}_for_test__"
+    had_method = eigenclass.method_defined?(name) || eigenclass.private_method_defined?(name)
+    eigenclass.send(:alias_method, backup, name) if had_method
+
+    target.define_singleton_method(name, &implementation)
+    yield
+  ensure
+    eigenclass = class << target
+      self
+    end
+    eigenclass.send(:remove_method, name) rescue nil
+    if had_method
+      eigenclass.send(:alias_method, name, backup)
+      eigenclass.send(:remove_method, backup) rescue nil
+    end
+  end
+end
+
+Minitest::Test.include(SingletonMethodOverrideHelpers)
