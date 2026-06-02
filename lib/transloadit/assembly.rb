@@ -143,11 +143,22 @@ class Transloadit::Assembly < Transloadit::ApiModel
     when nil then steps
     when Hash then steps
     when Transloadit::Step then steps.to_hash
-    else
-      if steps.uniq(&:name) != steps
+    when Array
+      names = steps.inject([]) do |array, step|
+        case step
+        when Transloadit::Step then array << step.name
+        when Hash then array + step.keys.map(&:to_s)
+        else
+          raise ArgumentError, "Unsupported array element"
+        end
+      end
+
+      if names.uniq != names
         raise ArgumentError, "There are different Assembly steps using the same name"
       end
       steps.inject({}) { |h, s| h.update s }
+    else
+      raise ArgumentError, "Unsupported steps class"
     end
   end
 

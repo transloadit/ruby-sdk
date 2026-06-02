@@ -213,6 +213,79 @@ describe Transloadit::Assembly do
     end
   end
 
+  describe "with multiple hash steps" do
+    it "must wrap its steps into one hash" do
+      hash_1 = {encode: {robot: "/video/encode"}, resize: {robot: "/image/resize"}}
+      hash_2 = {thumbs: {robot: "/video/thumbs"}}
+
+      assembly = Transloadit::Assembly.new @transloadit,
+        steps: [hash_1, hash_2]
+      (hash_1.keys + hash_2.keys).each do |key|
+        _(assembly.to_hash[:steps].keys).must_include key
+      end
+    end
+
+    it "must not allow duplicate steps" do
+      thumbs = {thumbs: {robot: "/video/thumbs"}}
+      thumbs_duplicate = {thumbs: {robot: "/video/encode"}}
+      assembly = Transloadit::Assembly.new @transloadit,
+        steps: [thumbs, thumbs_duplicate]
+      assert_raises ArgumentError do
+        assembly.create! open("lib/transloadit/version.rb")
+      end
+    end
+  end
+
+  describe "with mixture of hashes and steps" do
+    it "must wrap its steps into one hash" do
+      hash = {encode: {robot: "/video/encode"}, resize: {robot: "/image/resize"}}
+      step = @transloadit.step "thumbs", "/video/thumbs"
+
+      assembly = Transloadit::Assembly.new @transloadit,
+        steps: [hash, step]
+
+      hash.keys.each do |key|
+        _(assembly.to_hash[:steps].keys).must_include key
+      end
+
+      _(assembly.to_hash[:steps].keys).must_include step.name
+    end
+
+    it "must not allow duplicate steps" do
+      hash = {thumbs: {robot: "/video/thumbs"}}
+      step = @transloadit.step "thumbs", "/video/thumbs"
+
+      assembly = Transloadit::Assembly.new @transloadit,
+        steps: [hash, step]
+
+      assert_raises ArgumentError do
+        assembly.create! open("lib/transloadit/version.rb")
+      end
+    end
+  end
+
+  describe "with unsupported step class" do
+    it "raises error" do
+      assembly = Transloadit::Assembly.new @transloadit,
+        steps: Class.new
+
+      assert_raises ArgumentError do
+        assembly.create! open("lib/transloadit/version.rb")
+      end
+    end
+  end
+
+  describe "with unsupported array element" do
+    it "raises error" do
+      assembly = Transloadit::Assembly.new @transloadit,
+        steps: [Class.new]
+
+      assert_raises ArgumentError do
+        assembly.create! open("lib/transloadit/version.rb")
+      end
+    end
+  end
+
   describe "using assembly API methods" do
     include WebMock::API
 
