@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 20
       - run: npm install -g tsx
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
@@ -37,7 +37,7 @@ jobs:
         run: bundle exec rake test
       - name: Upload coverage to Codecov
         if: matrix.ruby == '3.3'
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@75cd11691c0faa626561e295848008c8a7dddffe
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/coverage.json
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: true
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f
         with:
           ruby-version: 3.3
           bundler-cache: true
