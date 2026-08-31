@@ -1,6 +1,8 @@
 require "transloadit"
 
-require "rest-client"
+require "faraday"
+require "faraday/multipart"
+require "mime/types"
 require "openssl"
 
 #
@@ -47,7 +49,7 @@ class Transloadit::Request
   #
   def get(params = {})
     request! do
-      api[url.path + to_query(params)].get(API_HEADERS)
+      api.get(url.path + to_query(params), nil, API_HEADERS)
     end
   end
 
@@ -60,8 +62,10 @@ class Transloadit::Request
   #
   def delete(payload = {})
     request! do
-      options = {payload: to_payload(payload)}
-      api(options)[url.path].delete(API_HEADERS)
+      api.delete(url.path) do |request|
+        request.headers.update(API_HEADERS)
+        request.body = to_payload(payload)
+      end
     end
   end
 
@@ -74,7 +78,7 @@ class Transloadit::Request
   #
   def post(payload = {})
     request! do
-      api[url.path].post(to_payload(payload), API_HEADERS)
+      api.post(url.path, to_payload(payload), API_HEADERS)
     end
   end
 
@@ -87,7 +91,7 @@ class Transloadit::Request
   #
   def put(payload = {})
     request! do
-      api[url.path].put(to_payload(payload), API_HEADERS)
+      api.put(url.path, to_payload(payload), API_HEADERS)
     end
   end
 
@@ -118,12 +122,20 @@ class Transloadit::Request
   # hostname, then the hostname is used as the base endpoint of the API.
   # Otherwise uses the class-level API base.
   #
-  # @return [RestClient::Resource] the API endpoint for this instance
+  # @return [Faraday::Connection] the API endpoint for this instance
   #
-  def api(options = {})
+  def api
     @api ||= case url.host
-    when String then RestClient::Resource.new("#{url.scheme}://#{url.host}", options)
-    else RestClient::Resource.new("#{API_ENDPOINT.scheme}://#{API_ENDPOINT.host}", options)
+    when String then connection_for("#{url.scheme}://#{url.host}")
+    else connection_for("#{API_ENDPOINT.scheme}://#{API_ENDPOINT.host}")
+    end
+  end
+
+  def connection_for(base_url)
+    Faraday.new(url: base_url) do |connection|
+      connection.request :multipart
+      connection.request :url_encoded
+      connection.adapter Faraday.default_adapter
     end
   end
 
@@ -151,10 +163,31 @@ class Transloadit::Request
     sig = signature(new_payload[:params])
     new_payload[:signature] = sig unless sig.nil?
 
-    # Copy all values, excluding :params and :signature keys.
-    new_payload.update payload.reject { |key, _| key == :params || key == :signature }
+    payload.each do |key, value|
+      next if key == :params || key == :signature
+
+      new_payload[key] = upload?(value) ? multipart_file(value) : value
+    end
 
     new_payload
+  end
+
+  def upload?(value)
+    value.respond_to?(:read)
+  end
+
+  def multipart_file(file)
+    path = file.path if file.respond_to?(:path)
+    filename = file.original_filename if file.respond_to?(:original_filename)
+    filename = File.basename(path) if filename.to_s.empty? && path
+    filename = "upload" if filename.to_s.empty?
+
+    content_type = file.content_type if file.respond_to?(:content_type)
+    content_type = MIME::Types.type_for(path).first&.content_type if content_type.to_s.empty? && path
+    content_type = "application/octet-stream" if content_type.to_s.empty?
+
+    source = path || file
+    Faraday::Multipart::FilePart.new(source, content_type, filename)
   end
 
   #
@@ -181,18 +214,17 @@ class Transloadit::Request
   end
 
   #
-  # Wraps a request's results in a Transloadit::Response, even if an exception
-  # is raised by RestClient.
+  # Wraps a request's result in a Transloadit::Response.
   #
   def request!(&request)
-    Transloadit::Response.new yield
-  rescue RestClient::Exception => e
-    # The response attribute can be nil, for example for RestClient::Exceptions::OpenTimeout exceptions.
-    # Then, we cannot convert them into a Transloadit::Response, so instead we raise them again for
-    # the user to be visible.
-    # See https://github.com/transloadit/ruby-sdk/issues/53
-    raise e if e.response.nil?
-    Transloadit::Response.new e.response
+    response = yield
+    Transloadit::Response.new(
+      body: response.body,
+      headers: response.headers,
+      status: response.status
+    )
+  rescue Faraday::Error
+    raise Transloadit::Exception::RequestFailed, "Transloadit request failed"
   end
 
   #

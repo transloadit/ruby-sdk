@@ -1,16 +1,24 @@
 require "transloadit"
 
-require "rest-client"
-
 module Transloadit::Exception
+  #
+  # Exception raised when an HTTP request cannot be completed.
+  # The original transport error is available through +cause+.
+  #
+  class RequestFailed < StandardError
+  end
+
   #
   # Exception raised when Rate limit error response is returned from the API.
   # See {Rate Limiting}[https://transloadit.com/docs/api-docs/#rate-limiting]
   #
-  class RateLimitReached < RestClient::RequestEntityTooLarge
-    def default_message
-      retry_msg = " Retry in #{@response.wait_time} seconds" if @response
-      "Transloadit Rate Limit Reached.#{retry_msg}"
+  class RateLimitReached < StandardError
+    # @return [Transloadit::Response] the API response that reported the rate limit
+    attr_reader :response
+
+    def initialize(response)
+      @response = response
+      super("Transloadit Rate Limit Reached. Retry in #{response.wait_time} seconds")
     end
   end
 

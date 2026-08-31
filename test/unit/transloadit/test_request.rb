@@ -41,6 +41,24 @@ describe Transloadit::Request do
         end
       end
     end
+
+    it "must wrap transport failures without exposing Faraday as the public exception" do
+      stubs = Faraday::Adapter::Test::Stubs.new do |stub|
+        stub.get("/") { raise Faraday::ConnectionFailed, "connection failed" }
+      end
+      connection = Faraday.new do |builder|
+        builder.adapter :test, stubs
+      end
+      @request.define_singleton_method(:api) { connection }
+
+      error = assert_raises Transloadit::Exception::RequestFailed do
+        @request.get
+      end
+
+      _(error.message).must_equal "Transloadit request failed"
+      _(error.cause).must_be_kind_of Faraday::ConnectionFailed
+      stubs.verify_stubbed_calls
+    end
   end
 
   describe "when performing a POST" do
@@ -83,25 +101,6 @@ describe Transloadit::Request do
     lib_path = File.expand_path("../../../lib", __dir__)
 
     Dir.mktmpdir do |stub_dir|
-      File.write(File.join(stub_dir, "rest-client.rb"), <<~RUBY)
-        module RestClient
-          class Response; end
-
-          class Resource
-            def initialize(*); end
-            def [](*); self; end
-            def get(*); Response.new; end
-            def post(*); Response.new; end
-            def put(*); Response.new; end
-            def delete(*); Response.new; end
-          end
-
-          module Exceptions
-            class OpenTimeout < StandardError; end
-          end
-        end
-      RUBY
-
       File.write(File.join(stub_dir, "multi_json.rb"), <<~RUBY)
         require "json"
 
