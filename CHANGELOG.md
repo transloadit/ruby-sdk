@@ -2,6 +2,7 @@
 
 - BREAKING: Replace the long-dormant `rest-client` transport with Faraday 2 and `faraday-multipart`.
 - Keep HTTP client types out of SDK responses and exceptions while preserving response status, headers, body access, multipart ordering, and rate-limit retries.
+- Add a [v3 to v4 migration guide](MIGRATING_TO_V4.md).
 
 ### 3.1.2 / 2025-10-29
 

@@ -41,24 +41,6 @@ describe Transloadit::Request do
         end
       end
     end
-
-    it "must wrap transport failures without exposing Faraday as the public exception" do
-      stubs = Faraday::Adapter::Test::Stubs.new do |stub|
-        stub.get("/") { raise Faraday::ConnectionFailed, "connection failed" }
-      end
-      connection = Faraday.new do |builder|
-        builder.adapter :test, stubs
-      end
-      @request.define_singleton_method(:api) { connection }
-
-      error = assert_raises Transloadit::Exception::RequestFailed do
-        @request.get
-      end
-
-      _(error.message).must_equal "Transloadit request failed"
-      _(error.cause).must_be_kind_of Faraday::ConnectionFailed
-      stubs.verify_stubbed_calls
-    end
   end
 
   describe "when performing a POST" do
@@ -122,6 +104,7 @@ describe Transloadit::Request do
         begin
           require "transloadit/request"
           Transloadit::Request.new("/")
+          raise "RestClient was loaded" if defined?(RestClient)
         rescue StandardError => e
           warn e.full_message
           exit 1

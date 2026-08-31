@@ -8,6 +8,27 @@ describe Transloadit::Response do
     _(response.class).must_equal Transloadit::Response
   end
 
+  it "must replace body, headers, and status together" do
+    response = Transloadit::Response.new(
+      body: '{"ok":"ASSEMBLY_EXECUTING"}',
+      headers: {"X-Request-Id" => "old-request"},
+      status: 202
+    )
+    replacement = Transloadit::Response.new(
+      body: '{"ok":"ASSEMBLY_COMPLETED"}',
+      headers: {"X-Request-Id" => "new-request"},
+      status: 200
+    )
+
+    returned = response.replace(replacement)
+
+    _(returned).must_be_same_as response
+    _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
+    _(response.headers).must_equal x_request_id: "new-request"
+    _(response.code).must_equal 200
+    _(response.status).must_equal 200
+  end
+
   describe "when initialized" do
     before do
       VCR.use_cassette "fetch_assembly_ok" do
