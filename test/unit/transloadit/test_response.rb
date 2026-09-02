@@ -3,17 +3,36 @@ require "test_helper"
 describe Transloadit::Response do
   request_uri = "https://api2.jane.transloadit.com/assemblies/76fe5df1c93a0a530f3e583805cf98b4"
 
-  it "must allow delegate initialization" do
-    response = Transloadit::Response.new("test")
+  it "must allow initialization" do
+    response = Transloadit::Response.new(body: "{}", headers: {}, status: 200)
     _(response.class).must_equal Transloadit::Response
+  end
+
+  it "must replace body, headers, and status together" do
+    response = Transloadit::Response.new(
+      body: '{"ok":"ASSEMBLY_EXECUTING"}',
+      headers: {"X-Request-Id" => "old-request"},
+      status: 202
+    )
+    replacement = Transloadit::Response.new(
+      body: '{"ok":"ASSEMBLY_COMPLETED"}',
+      headers: {"X-Request-Id" => "new-request"},
+      status: 200
+    )
+
+    returned = response.replace(replacement)
+
+    _(returned).must_be_same_as response
+    _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
+    _(response.headers).must_equal x_request_id: "new-request"
+    _(response.code).must_equal 200
+    _(response.status).must_equal 200
   end
 
   describe "when initialized" do
     before do
       VCR.use_cassette "fetch_assembly_ok" do
-        @response = Transloadit::Response.new(
-          RestClient::Resource.new(request_uri).get
-        )
+        @response = Transloadit::Request.new(request_uri).get
       end
     end
 
@@ -41,9 +60,7 @@ describe Transloadit::Response do
   describe "when extended as an assembly" do
     before do
       VCR.use_cassette "fetch_assembly_ok" do
-        @response = Transloadit::Response.new(
-          RestClient::Resource.new(request_uri).get
-        ).extend!(Transloadit::Response::Assembly)
+        @response = Transloadit::Request.new(request_uri).get.extend!(Transloadit::Response::Assembly)
       end
     end
 
@@ -56,9 +73,6 @@ describe Transloadit::Response do
     # TODO: can this be tested better?
     it "must allow reloading the assembly" do
       VCR.use_cassette "fetch_assembly_ok", allow_playback_repeats: true do
-        _(@response.send(:__getobj__))
-          .wont_be_same_as @response.reload!.send(:__getobj__)
-
         _(@response.object_id)
           .must_equal @response.reload!.object_id
       end
@@ -79,9 +93,7 @@ describe Transloadit::Response do
   describe "long-running assembly" do
     before do
       VCR.use_cassette "fetch_assembly_executing" do
-        @response = Transloadit::Response.new(
-          RestClient::Resource.new(request_uri).get
-        ).extend!(Transloadit::Response::Assembly)
+        @response = Transloadit::Request.new(request_uri).get.extend!(Transloadit::Response::Assembly)
       end
     end
 
@@ -109,9 +121,7 @@ describe Transloadit::Response do
   describe "statuses" do
     it "must allow checking for upload" do
       VCR.use_cassette "fetch_assembly_uploading" do
-        @response = Transloadit::Response.new(
-          RestClient::Resource.new(request_uri).get
-        ).extend!(Transloadit::Response::Assembly)
+        @response = Transloadit::Request.new(request_uri).get.extend!(Transloadit::Response::Assembly)
       end
 
       _(@response.finished?).must_equal false
@@ -121,9 +131,7 @@ describe Transloadit::Response do
 
     it "must allow to check for executing" do
       VCR.use_cassette "fetch_assembly_executing" do
-        @response = Transloadit::Response.new(
-          RestClient::Resource.new(request_uri).get
-        ).extend!(Transloadit::Response::Assembly)
+        @response = Transloadit::Request.new(request_uri).get.extend!(Transloadit::Response::Assembly)
       end
 
       _(@response.finished?).must_equal false
@@ -133,11 +141,9 @@ describe Transloadit::Response do
 
     it "must allow to check for replaying" do
       VCR.use_cassette "replay_assembly" do
-        @response = Transloadit::Response.new(
-          RestClient::Resource.new(
-            "https://api2.transloadit.com/assemblies/55c965a063a311e6ba2d379ef10b28f7/replay"
-          ).post({})
-        ).extend!(Transloadit::Response::Assembly)
+        @response = Transloadit::Request.new(
+          "https://api2.transloadit.com/assemblies/55c965a063a311e6ba2d379ef10b28f7/replay"
+        ).post.extend!(Transloadit::Response::Assembly)
       end
 
       _(@response.finished?).must_equal false
@@ -147,9 +153,7 @@ describe Transloadit::Response do
 
     it "must allow to check for aborted" do
       VCR.use_cassette "fetch_assembly_aborted" do
-        @response = Transloadit::Response.new(
-          RestClient::Resource.new(request_uri).get
-        ).extend!(Transloadit::Response::Assembly)
+        @response = Transloadit::Request.new(request_uri).get.extend!(Transloadit::Response::Assembly)
       end
 
       _(@response.finished?).must_equal true
@@ -158,9 +162,7 @@ describe Transloadit::Response do
 
     it "must allow to check for errors" do
       VCR.use_cassette "fetch_assembly_errors" do
-        @response = Transloadit::Response.new(
-          RestClient::Resource.new(request_uri).get
-        ).extend!(Transloadit::Response::Assembly)
+        @response = Transloadit::Request.new(request_uri).get.extend!(Transloadit::Response::Assembly)
       end
 
       _(@response.error?).must_equal true

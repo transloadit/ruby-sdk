@@ -19,6 +19,9 @@ _If you run Ruby on Rails and are looking to integrate with the browser for file
 gem install transloadit
 ```
 
+Upgrading from v3? See the [v4 migration guide](MIGRATING_TO_V4.md) for response, exception, and
+file-handle compatibility notes.
+
 ## Usage
 
 To get started, you need to require the 'transloadit' gem:

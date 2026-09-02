@@ -83,25 +83,6 @@ describe Transloadit::Request do
     lib_path = File.expand_path("../../../lib", __dir__)
 
     Dir.mktmpdir do |stub_dir|
-      File.write(File.join(stub_dir, "rest-client.rb"), <<~RUBY)
-        module RestClient
-          class Response; end
-
-          class Resource
-            def initialize(*); end
-            def [](*); self; end
-            def get(*); Response.new; end
-            def post(*); Response.new; end
-            def put(*); Response.new; end
-            def delete(*); Response.new; end
-          end
-
-          module Exceptions
-            class OpenTimeout < StandardError; end
-          end
-        end
-      RUBY
-
       File.write(File.join(stub_dir, "multi_json.rb"), <<~RUBY)
         require "json"
 
@@ -123,6 +104,7 @@ describe Transloadit::Request do
         begin
           require "transloadit/request"
           Transloadit::Request.new("/")
+          raise "RestClient was loaded" if defined?(RestClient)
         rescue StandardError => e
           warn e.full_message
           exit 1

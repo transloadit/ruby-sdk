@@ -1,19 +1,29 @@
 require "transloadit"
 
-require "rest-client"
-require "delegate"
-
-class Transloadit::Response < Delegator
+class Transloadit::Response
   autoload :Assembly, "transloadit/response/assembly"
 
   #
-  # Creates an enhanced response wrapped around a RestClient response.
+  # Creates a response without exposing the underlying HTTP client.
   #
-  # @param [RestClient::Response] response the JSON response to wrap
+  # @param [String] body the raw response body
+  # @param [Hash] headers the response headers
+  # @param [Integer] status the HTTP response status
   #
-  def initialize(response)
-    __setobj__(response)
+  def initialize(body:, headers:, status:)
+    @raw_body = body
+    @headers = normalize_headers(headers)
+    @status = status
   end
+
+  # @return [Hash] normalized response headers
+  attr_reader :headers
+
+  # @return [Integer] the HTTP response status
+  attr_reader :status
+
+  # RestClient exposed the status through +code+ in previous SDK versions.
+  alias_method :code, :status
 
   #
   # Returns the attribute from the JSON response.
@@ -31,7 +41,7 @@ class Transloadit::Response < Delegator
   # @return [Hash] the parsed JSON body hash
   #
   def body
-    MultiJson.load __getobj__.body
+    MultiJson.load @raw_body
   end
 
   #
@@ -56,36 +66,28 @@ class Transloadit::Response < Delegator
     self
   end
 
-  protected
-
   #
-  # The object to delegate method calls to.
+  # Replaces this response's HTTP data with another response's data.
   #
-  # @return [RestClient::Response]
-  #
-  def __getobj__
-    @response
-  end
-
-  #
-  # Sets the object to delegate method calls to.
-  #
-  # @param  [RestClient::Response] response the response to delegate to
-  # @return [RestClient::Response]          the delegated response
-  #
-  def __setobj__(response)
-    @response = response
-  end
-
-  #
-  # Replaces the object this instance delegates to with the one the other
-  # object uses.
-  #
-  # @param  [Delegator] other       the object whose delegate to use
+  # @param  [Transloadit::Response] other the response whose data to use
   # @return [Transloadit::Response] this response
   #
   def replace(other)
-    __setobj__ other.__getobj__
+    @raw_body = other.raw_body
+    @headers = other.headers
+    @status = other.status
     self
+  end
+
+  protected
+
+  attr_reader :raw_body
+
+  private
+
+  def normalize_headers(headers)
+    headers.to_h.each_with_object({}) do |(name, value), normalized|
+      normalized[name.to_s.downcase.tr("-", "_").to_sym] = value
+    end
   end
 end

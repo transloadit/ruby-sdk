@@ -21,7 +21,8 @@ Gem::Specification.new do |gem|
   gem.files = `git ls-files`.split("\n")
   gem.require_paths = %w[lib]
 
-  gem.add_dependency "rest-client"
+  gem.add_dependency "faraday", ">= 2.0", "< 3.0"
+  gem.add_dependency "faraday-multipart", "~> 1.0"
   gem.add_dependency "multi_json"
   gem.add_dependency "mime-types"
 

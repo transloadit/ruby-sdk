@@ -64,9 +64,13 @@ describe Transloadit::Assembly do
 
       it "must send the signature before any file" do
         transloadit = Transloadit.new(key: "", secret: "foo")
-        Transloadit::Assembly.new(
-          transloadit
-        ).create! open("lib/transloadit/version.rb")
+        File.open("lib/transloadit/version.rb") do |file|
+          Transloadit::Assembly.new(
+            transloadit
+          ).create! file
+
+          _(file.closed?).must_equal false
+        end
 
         assert_requested(:post, "https://api2.transloadit.com/assemblies") do |req|
           position_params = req.body.index 'name="params"'
@@ -76,6 +80,7 @@ describe Transloadit::Assembly do
           _(position_params).wont_be_nil
           _(position_signature).wont_be_nil
           _(position_file).wont_be_nil
+          _(req.body).must_include 'filename="version.rb"'
 
           _(position_params < position_signature).must_equal true
           _(position_signature < position_file).must_equal true
@@ -173,9 +178,12 @@ describe Transloadit::Assembly do
         @assembly.options[:tries] = 1
 
         VCR.use_cassette "rate_limit_succeed" do
-          assert_raises Transloadit::Exception::RateLimitReached do
+          error = assert_raises Transloadit::Exception::RateLimitReached do
             @assembly.create! open("lib/transloadit/version.rb")
           end
+
+          _(error.response["error"]).must_equal "RATE_LIMIT_REACHED"
+          _(error.message).must_equal "Transloadit Rate Limit Reached. Retry in 0 seconds"
         end
       end
 
