@@ -1,4 +1,5 @@
 require "test_helper"
+require "stringio"
 require "tempfile"
 
 describe "Faraday transport compatibility" do
@@ -170,6 +171,40 @@ describe "Faraday transport compatibility" do
       _(request.body).must_include 'filename="report.csv"'
       _(request.body).must_include "Content-Type: text/csv"
       _(request.body).must_include "csv contents"
+    end
+  end
+
+  it "uses safe metadata defaults for in-memory uploads" do
+    endpoint = "https://api2.transloadit.com/assemblies"
+    stub_request(:post, endpoint)
+      .to_return(status: 200, body: '{"ok":"ASSEMBLY_COMPLETED"}')
+    upload = StringIO.new("memory upload")
+
+    Transloadit::Request.new("/assemblies").post(params: {steps: {}}, file_0: upload)
+
+    _(upload.closed?).must_equal false
+    assert_requested(:post, endpoint) do |request|
+      _(request.body).must_include 'filename="upload"'
+      _(request.body).must_include "Content-Type: application/octet-stream"
+      _(request.body).must_include "memory upload"
+    end
+  end
+
+  it "uses the binary content type when a file extension is unknown" do
+    endpoint = "https://api2.transloadit.com/assemblies"
+    stub_request(:post, endpoint)
+      .to_return(status: 200, body: '{"ok":"ASSEMBLY_COMPLETED"}')
+
+    Tempfile.create(["upload", ".transloadit-unknown"]) do |upload|
+      upload.write("unknown upload")
+      upload.flush
+
+      Transloadit::Request.new("/assemblies").post(params: {steps: {}}, file_0: upload)
+    end
+
+    assert_requested(:post, endpoint) do |request|
+      _(request.body).must_include "Content-Type: application/octet-stream"
+      _(request.body).must_include "unknown upload"
     end
   end
 
