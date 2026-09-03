@@ -1,8 +1,10 @@
-### 4.0.0 / 2026-09-02
+### 4.0.0 / 2026-09-03
 
 - BREAKING: Replace the long-dormant `rest-client` transport with Faraday 2 and `faraday-multipart`.
+- BREAKING: Raise the minimum supported Ruby version from 3.0 to 3.1.
 - Keep HTTP client types out of SDK responses and exceptions while preserving response status, headers, body access, multipart ordering, and rate-limit retries.
 - Add a [v3 to v4 migration guide](MIGRATING_TO_V4.md).
+- Test all Ruby versions from the supported minimum through Ruby 4.0.
 
 ### 3.1.2 / 2025-10-29
 

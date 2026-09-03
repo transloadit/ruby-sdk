@@ -5,7 +5,8 @@ Transloadit API exposed by this gem and do not need code changes. The migration 
 because v3 also delegated undocumented methods to RestClient response objects and exposed
 RestClient exception inheritance.
 
-The minimum supported Ruby version remains 3.1.
+Version 4 requires Ruby 3.1 or newer. The final v3 release allowed Ruby 3.0, so applications still
+running Ruby 3.0 must upgrade Ruby before updating this gem.
 
 ## Update the dependency
 
