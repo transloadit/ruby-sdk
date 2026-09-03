@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ruby:3.3 AS base
+FROM ruby:4.0 AS base
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

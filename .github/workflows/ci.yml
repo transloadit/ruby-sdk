@@ -13,9 +13,11 @@ jobs:
     strategy:
       matrix:
         ruby:
-          - 3.1
-          - 3.2
-          - 3.3
+          - "3.1"
+          - "3.2"
+          - "3.3"
+          - "3.4"
+          - "4.0"
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -32,11 +34,11 @@ jobs:
       - run: bundle exec standardrb
       - name: Run tests
         env:
-          COVERAGE: ${{ matrix.ruby == '3.3' && '1' || '0' }}
-          TEST_NODE_PARITY: ${{ matrix.ruby == '3.3' && '1' || '0' }}
+          COVERAGE: ${{ matrix.ruby == '4.0' && '1' || '0' }}
+          TEST_NODE_PARITY: ${{ matrix.ruby == '4.0' && '1' || '0' }}
         run: bundle exec rake test
       - name: Upload coverage to Codecov
-        if: matrix.ruby == '3.3'
+        if: matrix.ruby == '4.0'
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -57,7 +59,7 @@ jobs:
           lfs: true
       - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f
         with:
-          ruby-version: 3.3
+          ruby-version: "4.0"
           bundler-cache: true
       - name: Ensure e2e credentials are configured
         if: ${{ env.TRANSLOADIT_KEY == '' || env.TRANSLOADIT_SECRET == '' }}

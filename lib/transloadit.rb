@@ -2,7 +2,7 @@ require "multi_json"
 require "date"
 require "json"
 require "openssl"
-require "cgi"
+require "cgi/escape"
 require "uri"
 
 #
