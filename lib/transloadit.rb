@@ -135,6 +135,37 @@ class Transloadit
     MultiJson.dump(to_hash)
   end
 
+  #
+  # Verifies an Assembly notification before parsing its status. Pass the received
+  # form fields unchanged: reserializing the JSON changes the signed bytes.
+  #
+  # @param [Hash] fields the transloadit and signature notification form fields
+  # @return [Hash] the verified Assembly status
+  # @raise [Transloadit::Exception::InvalidSignature] if authentication fails
+  # @raise [MultiJson::ParseError] if the authenticated body contains invalid JSON
+  #
+  def verify_notification!(fields)
+    unless fields.is_a?(Hash) && secret.is_a?(String) && !secret.empty?
+      raise Transloadit::Exception::InvalidSignature
+    end
+
+    payload = fields["transloadit"] || fields[:transloadit]
+    signature = fields["signature"] || fields[:signature]
+    unless payload.is_a?(String) && signature.is_a?(String)
+      raise Transloadit::Exception::InvalidSignature
+    end
+
+    match = /\A(?:sha1:)?([0-9a-f]{40})\z/.match(signature)
+    raise Transloadit::Exception::InvalidSignature unless match
+
+    expected = OpenSSL::HMAC.hexdigest("SHA1", secret, payload)
+    unless OpenSSL.fixed_length_secure_compare(expected, match[1])
+      raise Transloadit::Exception::InvalidSignature
+    end
+
+    MultiJson.load(payload)
+  end
+
   # @param workspace [String] Workspace slug
   # @param template [String] Template slug or template ID
   # @param input [String] Input value that is provided as `${fields.input}` in the template

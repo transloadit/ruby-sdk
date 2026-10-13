@@ -8,6 +8,13 @@ module Transloadit::Exception
   class RequestFailed < StandardError
   end
 
+  # Exception raised when an Assembly notification cannot be authenticated.
+  class InvalidSignature < StandardError
+    def initialize
+      super("Invalid notification signature")
+    end
+  end
+
   #
   # Exception raised when Rate limit error response is returned from the API.
   # See {Rate Limiting}[https://transloadit.com/docs/api-docs/#rate-limiting]
