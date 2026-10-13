@@ -1,12 +1,22 @@
 require "transloadit"
+require "securerandom"
 
 module Transloadit::Response::Assembly
+  # @return [Transloadit, nil] the client used to authenticate Assembly actions
+  attr_accessor :transloadit
+
   def reload!
     replace Transloadit::Request.new(self["assembly_ssl_url"]).get
   end
 
   def cancel!
-    replace Transloadit::Request.new(self["assembly_ssl_url"]).delete
+    return replace Transloadit::Request.new(self["assembly_ssl_url"]).delete unless transloadit
+
+    auth = transloadit.to_hash
+    # Separate cancellation attempts must not produce the same signed payload.
+    auth[:nonce] = SecureRandom.uuid unless transloadit.secret.to_s.empty?
+    replace Transloadit::Request.new(self["assembly_ssl_url"], transloadit.secret)
+      .delete(params: {auth: auth})
   end
 
   def aborted?

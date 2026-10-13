@@ -302,6 +302,94 @@ describe Transloadit::Assembly do
       @assembly = Transloadit::Assembly.new @transloadit
     end
 
+    after do
+      WebMock.reset!
+    end
+
+    it "must sign cancellations of created assemblies with the originating client" do
+      client = Transloadit.new(key: "workspace-key", secret: "workspace-secret")
+      endpoint = "https://api2-jane.transloadit.com/assemblies/assembly-id"
+      status = MultiJson.dump(ok: "ASSEMBLY_EXECUTING", assembly_ssl_url: endpoint)
+      stub_request(:post, "https://api2.transloadit.com/assemblies").to_return(body: status)
+      stub_request(:delete, endpoint).to_return(
+        body: MultiJson.dump(ok: "ASSEMBLY_CANCELED", assembly_ssl_url: endpoint)
+      )
+
+      response = client.assembly.create!
+      _(response.transloadit).must_be_same_as client
+      _(response.cancel!).must_be_same_as response
+      _(response.canceled?).must_equal true
+
+      assert_requested(:delete, endpoint) do |request|
+        fields = URI.decode_www_form(request.body).to_h
+        params = MultiJson.load(fields.fetch("params"))
+        _(params.dig("auth", "key")).must_equal "workspace-key"
+        _(params.dig("auth", "expires")).wont_be_nil
+        _(params.dig("auth", "nonce")).must_match(/\A[0-9a-f-]{36}\z/)
+        expected = "sha384:" + OpenSSL::HMAC.hexdigest("SHA384", client.secret, fields.fetch("params"))
+        _(fields.fetch("signature")).must_equal expected
+        _(request.body).wont_include client.secret
+      end
+    end
+
+    it "must keep cancellation authentication after reloading a fetched assembly" do
+      client = Transloadit.new(key: "workspace-key", secret: "workspace-secret")
+      endpoint = "https://api2-jane.transloadit.com/assemblies/assembly-id"
+      status = MultiJson.dump(ok: "ASSEMBLY_EXECUTING", assembly_ssl_url: endpoint)
+      stub_request(:get, "https://api2.transloadit.com/assemblies/assembly-id").to_return(body: status)
+      stub_request(:get, endpoint).to_return(body: status)
+      stub_request(:delete, endpoint).to_return(body: '{"ok":"ASSEMBLY_CANCELED"}')
+
+      response = client.assembly.get("assembly-id")
+      response.reload!
+      _(response.transloadit).must_be_same_as client
+      response.cancel!
+
+      assert_requested(:delete, endpoint) do |request|
+        fields = URI.decode_www_form(request.body).to_h
+        _(fields.fetch("signature")).must_equal(
+          "sha384:" + OpenSSL::HMAC.hexdigest("SHA384", client.secret, fields.fetch("params"))
+        )
+      end
+    end
+
+    it "must authenticate cancellation of replayed assemblies with fresh nonces" do
+      client = Transloadit.new(key: "workspace-key", secret: "workspace-secret")
+      endpoint = "https://api2-jane.transloadit.com/assemblies/replayed-id"
+      status = MultiJson.dump(ok: "ASSEMBLY_REPLAYING", assembly_ssl_url: endpoint)
+      stub_request(:post, "https://api2.transloadit.com/assemblies/assembly-id/replay")
+        .to_return(body: status)
+      nonces = []
+      stub_request(:delete, endpoint).to_return do |request|
+        fields = URI.decode_www_form(request.body).to_h
+        nonces << MultiJson.load(fields.fetch("params")).dig("auth", "nonce")
+        {body: MultiJson.dump(ok: "ASSEMBLY_CANCELED", assembly_ssl_url: endpoint)}
+      end
+
+      response = client.assembly.replay("assembly-id")
+      response.cancel!
+      response.cancel!
+
+      _(response.transloadit).must_be_same_as client
+      _(nonces.length).must_equal 2
+      _(nonces.uniq.length).must_equal 2
+    end
+
+    it "must include the client key without a signature when no secret was configured" do
+      endpoint = "https://api2-jane.transloadit.com/assemblies/assembly-id"
+      status = MultiJson.dump(ok: "ASSEMBLY_EXECUTING", assembly_ssl_url: endpoint)
+      stub_request(:get, "https://api2.transloadit.com/assemblies/assembly-id").to_return(body: status)
+      stub_request(:delete, endpoint).to_return(body: '{"ok":"ASSEMBLY_CANCELED"}')
+
+      @assembly.get("assembly-id").cancel!
+
+      assert_requested(:delete, endpoint) do |request|
+        fields = URI.decode_www_form(request.body).to_h
+        _(MultiJson.load(fields.fetch("params"))).must_equal "auth" => {"key" => ""}
+        _(fields).wont_include "signature"
+      end
+    end
+
     describe "when fetching all assemblies" do
       it "must perform GET request to /assemblies" do
         stub = stub_request(:get, "https://api2.transloadit.com/assemblies?params=%7B%22auth%22:%7B%22key%22:%22%22%7D%7D")
