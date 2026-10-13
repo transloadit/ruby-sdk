@@ -30,4 +30,19 @@ module Transloadit::Exception
       "reload_until_finished! reached limit specified in :tries option. This is not a rate limit and you may continue to poll for updates."
     end
   end
+
+  # Exception raised when an API response does not contain valid JSON.
+  class InvalidResponse < StandardError
+    # @return [Integer] the HTTP status of the invalid response
+    attr_reader :status
+
+    # @return [String] the original body, which may contain sensitive diagnostics
+    attr_reader :raw_body
+
+    def initialize(status:, raw_body:)
+      @status = status
+      @raw_body = raw_body
+      super("Transloadit returned invalid JSON (HTTP #{status})")
+    end
+  end
 end

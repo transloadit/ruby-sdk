@@ -41,7 +41,16 @@ class Transloadit::Response
   # @return [Hash] the parsed JSON body hash
   #
   def body
-    MultiJson.load @raw_body
+    return @body if instance_variable_defined?(:@body)
+
+    # Some MultiJson adapters accept empty input as nil instead of reporting a parse error.
+    if @raw_body.to_s.strip.empty?
+      raise Transloadit::Exception::InvalidResponse.new(status: status, raw_body: @raw_body)
+    end
+
+    @body = MultiJson.load(@raw_body)
+  rescue MultiJson::ParseError => error
+    raise Transloadit::Exception::InvalidResponse.new(status: status, raw_body: @raw_body), cause: error
   end
 
   #
@@ -76,6 +85,7 @@ class Transloadit::Response
     @raw_body = other.raw_body
     @headers = other.headers
     @status = other.status
+    remove_instance_variable(:@body) if instance_variable_defined?(:@body)
     self
   end
 

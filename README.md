@@ -140,6 +140,14 @@ state (e.g., `assembly.completed?` vs. checking the result of
 `assembly[:ok]`). Methods suffixed by a bang make a live query against the
 Transloadit HTTP API.
 
+Responses parse their JSON body once and discard that cached value when reloaded
+or replaced. If the API or an upstream proxy returns invalid JSON, accessing
+`body` or a response attribute raises `Transloadit::Exception::InvalidResponse`.
+The exception exposes `status`, `raw_body`, and the original parser error through
+`cause` when available. Its message includes the HTTP status without including the
+response body. Treat the raw diagnostics as potentially sensitive when handling
+the exception.
+
 ### 2. Uploading multiple files
 
 Multiple files can be given to the `create!` method in order to upload more
