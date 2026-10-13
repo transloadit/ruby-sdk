@@ -133,6 +133,11 @@ response.reload!
 response.reload_until_finished! tries: 300 # default is 600
 ```
 
+Assembly status rate limits are temporary polling errors. `reload_until_finished!`
+keeps polling the original status URL and waits at least the server’s `info.retryIn`
+seconds before retrying. The `tries` limit still applies. A status rate limit does
+not make `finished?` return `true`; `status_rate_limit?` identifies this response.
+
 In general, you use hash accessor syntax to query any direct attribute from
 the [response](https://transloadit.com/docs/api/#assembly-status-response).
 Methods suffixed by a question mark provide a more readable way of querying
