@@ -56,9 +56,9 @@ class Transloadit::Assembly < Transloadit::ApiModel
       # update the payload with file entries
       ios.each_with_index { |f, i| extra_params.update "file_#{i}": f }
 
-      response = _do_request(
+      response = _assembly_response(_do_request(
         "/assemblies", params, "post", extra_params
-      ).extend!(Transloadit::Response::Assembly)
+      ))
 
       return response unless response.rate_limit?
 
@@ -89,7 +89,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # @param [String]     id    id of the desired assembly
   #
   def get(id)
-    _do_request("/assemblies/#{id}").extend!(Transloadit::Response::Assembly)
+    _assembly_response(_do_request("/assemblies/#{id}"))
   end
 
   #
@@ -99,7 +99,7 @@ class Transloadit::Assembly < Transloadit::ApiModel
   #
   def replay(id, params = {})
     params[:wait] = false
-    _do_request("/assemblies/#{id}/replay", params, "post").extend!(Transloadit::Response::Assembly)
+    _assembly_response(_do_request("/assemblies/#{id}/replay", params, "post"))
   end
 
   #
@@ -130,6 +130,12 @@ class Transloadit::Assembly < Transloadit::ApiModel
   end
 
   private
+
+  def _assembly_response(response)
+    response.extend!(Transloadit::Response::Assembly)
+    response.transloadit = transloadit
+    response
+  end
 
   #
   # Returns a Transloadit-compatible Hash wrapping the +steps+ passed to it.

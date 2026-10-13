@@ -119,6 +119,12 @@ response.completed? # => true
 response.error? # => false
 ```
 
+Assembly responses returned by `create!`, `get`, and `replay` retain their client
+for cancellation. `cancel!` includes authentication and signs the DELETE request
+when that client has an Auth Secret, so it works with Workspaces that require
+correct signatures. Responses constructed directly without a client retain
+the existing unsigned cancellation behavior.
+
 It's important to note that none of these queries are "live" (with the
 exception of the `cancel!` method). They all check the response given by the
 API at the time the <dfn>Assembly</dfn> was created. You have to explicitly ask the
