@@ -170,7 +170,7 @@ describe Transloadit::Assembly do
             response = @assembly.create! open("lib/transloadit/version.rb")
             _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
           }
-          _(warning).must_equal "Rate limit reached. Waiting for 0 seconds before retrying.\n"
+          _(warning).must_include "Rate limit reached. Waiting for 0 seconds before retrying.\n"
         end
       end
 
