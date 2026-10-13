@@ -8,6 +8,85 @@ describe Transloadit do
     @max_size = 100
   end
 
+  describe "notification verification" do
+    before do
+      @client = Transloadit.new(key: "workspace-key", secret: "notification-secret")
+      @payload = "{\n  \"ok\": \"ASSEMBLY_COMPLETED\", \"assembly_id\": \"assembly-id\"\n}"
+      @signature = OpenSSL::HMAC.hexdigest("SHA1", @client.secret, @payload)
+    end
+
+    it "must verify prefixed signatures over the exact received JSON" do
+      status = @client.verify_notification!(
+        "transloadit" => @payload, "signature" => "sha1:#{@signature}"
+      )
+
+      _(status).must_equal "ok" => "ASSEMBLY_COMPLETED", "assembly_id" => "assembly-id"
+    end
+
+    it "must accept legacy signatures and symbol form-field keys" do
+      status = @client.verify_notification!(transloadit: @payload, signature: @signature)
+
+      _(status.fetch("assembly_id")).must_equal "assembly-id"
+    end
+
+    it "must reject a notification signed with a different secret" do
+      signature = OpenSSL::HMAC.hexdigest("SHA1", "other-secret", @payload)
+
+      assert_raises Transloadit::Exception::InvalidSignature do
+        @client.verify_notification!(transloadit: @payload, signature: signature)
+      end
+    end
+
+    it "must reject changed payload bytes even when the parsed status is identical" do
+      compact = MultiJson.dump(MultiJson.load(@payload))
+
+      assert_raises Transloadit::Exception::InvalidSignature do
+        @client.verify_notification!(transloadit: compact, signature: @signature)
+      end
+    end
+
+    it "must reject malformed signatures before comparing or parsing" do
+      assert_raises Transloadit::Exception::InvalidSignature do
+        @client.verify_notification!(transloadit: "invalid JSON", signature: "sha1:short")
+      end
+      assert_raises Transloadit::Exception::InvalidSignature do
+        @client.verify_notification!(transloadit: @payload, signature: "sha256:#{@signature}")
+      end
+      assert_raises Transloadit::Exception::InvalidSignature do
+        @client.verify_notification!(transloadit: @payload, signature: "g" * 40)
+      end
+    end
+
+    it "must reject missing or incorrectly typed fields" do
+      assert_raises(Transloadit::Exception::InvalidSignature) { @client.verify_notification!({}) }
+      assert_raises(Transloadit::Exception::InvalidSignature) { @client.verify_notification!(nil) }
+      assert_raises Transloadit::Exception::InvalidSignature do
+        @client.verify_notification!(transloadit: {}, signature: @signature)
+      end
+      assert_raises Transloadit::Exception::InvalidSignature do
+        @client.verify_notification!(transloadit: @payload, signature: nil)
+      end
+    end
+
+    it "must require an Auth Secret without exposing notification contents" do
+      client = Transloadit.new(key: "workspace-key")
+      error = assert_raises Transloadit::Exception::InvalidSignature do
+        client.verify_notification!(transloadit: @payload, signature: @signature)
+      end
+
+      _(error.message).must_equal "Invalid notification signature"
+    end
+
+    it "must only parse malformed JSON after successfully verifying its signature" do
+      payload = "invalid JSON"
+      signature = OpenSSL::HMAC.hexdigest("SHA1", @client.secret, payload)
+
+      assert_raises MultiJson::ParseError do
+        @client.verify_notification!(transloadit: payload, signature: signature)
+      end
+    end
+  end
+
   it "must allow initialization" do
     t = Transloadit.new(key: @key, secret: @secret)
     _(t).must_be_kind_of Transloadit
