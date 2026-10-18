@@ -44,25 +44,45 @@ class Transloadit::Assembly < Transloadit::ApiModel
   #   @option params [String] :template_id the ID of a
   #     {template}[https://transloadit.com/templates] to use instead of
   #     specifying params here directly
+  #   @option params [Hash] :fields custom metadata, retained as typed JSON
+  #   @option params [Hash<String, IO>] :uploads named multipart uploads;
+  #     overrides the Assembly's uploads when supplied (use {} to clear them)
   #
   def create!(*ios, **params)
     params[:steps] = _wrap_steps_in_hash(params[:steps]) unless params[:steps].nil?
 
+    legacy_uploads, = _split_fields(options[:fields])
+    if params.key?(:fields)
+      uploads, params[:fields] = _split_fields(params[:fields])
+      legacy_uploads.merge!(uploads)
+    end
+    unless legacy_uploads.empty?
+      warn "Passing upload IOs in fields is deprecated; use uploads: {name => io} instead."
+    end
+
     extra_params = {}
-    extra_params.merge!(options[:fields]) if options[:fields]
+    [legacy_uploads, params.delete(:uploads) { options[:uploads] }].compact.each do |uploads|
+      uploads.each do |name, io|
+        name = name.to_s
+        raise ArgumentError, "Upload name #{name.inspect} is reserved" if %w[params signature].include?(name)
+        raise ArgumentError, "Upload #{name.inspect} must be an IO responding to read" unless io.respond_to?(:read)
+
+        extra_params[name] = io
+      end
+    end
+    # Keep positional file_N uploads and their precedence for existing callers.
+    ios.each_with_index { |io, i| extra_params["file_#{i}"] = io }
+    upload_positions = _upload_positions(extra_params.values)
 
     trials = options[:tries] || DEFAULT_TRIES
     (1..trials).each do |trial|
-      # update the payload with file entries
-      ios.each_with_index { |f, i| extra_params.update "file_#{i}": f }
-
       response = _do_request(
         "/assemblies", params, "post", extra_params
       ).extend!(Transloadit::Response::Assembly)
 
       return response unless response.rate_limit?
 
-      _handle_rate_limit!(response, ios, trial < trials)
+      _handle_rate_limit!(response, upload_positions, trial < trials)
     end
   end
 
@@ -123,13 +143,36 @@ class Transloadit::Assembly < Transloadit::ApiModel
   # @return [Hash] a Transloadit-compatible Hash of the Assembly's contents
   #
   def to_hash
-    options.merge(
+    result = options.merge(
       auth: transloadit.to_hash,
       steps: steps
-    ).delete_if { |k, v| v.nil? }
+    )
+    result.delete(:uploads)
+    _, result[:fields] = _split_fields(result[:fields]) if result[:fields]
+    result.delete_if { |_, value| value.nil? }
   end
 
   private
+
+  # Legacy fields may contain both named IOs and metadata. Only metadata belongs
+  # in the signed JSON; the IOs remain supported as uploads throughout v4.
+  def _split_fields(fields)
+    return [{}, nil] if fields.nil?
+
+    fields.partition { |_, value| value.respond_to?(:read) }.map(&:to_h)
+  end
+
+  def _upload_positions(uploads)
+    uploads.filter_map do |io|
+      # The transport reopens path-backed uploads for each attempt.
+      next if io.respond_to?(:path) && io.path
+
+      position = io.pos if io.respond_to?(:pos) && io.respond_to?(:seek)
+      [io, position]
+    rescue IOError, SystemCallError
+      [io, nil]
+    end
+  end
 
   #
   # Returns a Transloadit-compatible Hash wrapping the +steps+ passed to it.
@@ -163,14 +206,21 @@ class Transloadit::Assembly < Transloadit::ApiModel
   end
 
   #
-  # Stays idle for certain time and then reopens assembly files for reprocessing.
+  # Restores in-memory upload positions and waits before retrying.
   # Should be called when assembly rate limit is reached.
   #
   # @param  [Response] response  assembly response that comes with a rate limit
-  # @param [Array<IO>] ios the files sent for the assembly to process.
+  # @param [Array<Array>] upload_positions IOs and their positions before upload
   #
-  def _handle_rate_limit!(response, ios, is_retrying)
+  def _handle_rate_limit!(response, upload_positions, is_retrying)
     if is_retrying
+      upload_positions.each do |io, position|
+        raise IOError if position.nil?
+
+        io.seek(position)
+      rescue IOError, SystemCallError
+        raise IOError, "Cannot retry a non-seekable upload; use a file or an IO supporting pos and seek"
+      end
       warn "Rate limit reached. Waiting for #{response.wait_time} seconds before retrying."
       sleep response.wait_time
     else

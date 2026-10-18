@@ -1,3 +1,10 @@
+### Unreleased
+
+- Add `uploads: {name => io}` to Assembly options and `create!` for named multipart uploads, separate from signed JSON Instructions.
+- Send custom `fields` only in signed JSON, preserving numbers, booleans, arrays, objects, and null without duplicate form fields.
+- Keep IOs in legacy `fields` working as named uploads throughout v4, omit them from JSON, and warn to migrate to `uploads` before the next major release. Positional `file_N` uploads and `create!(fields: metadata)` overrides remain supported.
+- Restore in-memory uploads to their original position on rate-limit retries and raise a clear `IOError` when a non-seekable upload cannot be retried.
+
 ### 4.0.0 / 2026-09-03
 
 - BREAKING: Replace the long-dormant `rest-client` transport with Faraday 2 and `faraday-multipart`.

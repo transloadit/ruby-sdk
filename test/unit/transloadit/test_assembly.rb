@@ -121,7 +121,7 @@ describe Transloadit::Assembly do
 
         assert_requested(:post, "https://api2.transloadit.com/assemblies") do |req|
           values = values_from_post_body(req.body)
-          _(values["tag"]).must_equal "ninja-cat"
+          _(values.keys).must_equal ["params"]
           _(MultiJson.load(values["params"])["fields"]["tag"]).must_equal "ninja-cat"
         end
       end
