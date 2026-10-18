@@ -310,6 +310,25 @@ transloadit.assembly(
 
 Read up more on the <dfn>Notifications</dfn> [on Transloadit's documentation page](https://transloadit.com/docs/#notifications)
 
+Verify a notification before trusting its status:
+
+```ruby
+# The original POST form values, without parsing or reserializing the JSON first.
+status = transloadit.verify_notification!(request.POST)
+assembly_id = status.fetch('assembly_id')
+```
+
+The client must have an Auth Secret; without one the helper raises
+`Transloadit::Exception::MissingSecret`, a configuration error rather than an
+authentication failure. This helper accepts string or symbol field
+keys and both the legacy SHA-1 signature and its `sha1:`-prefixed form. It compares
+the signature in constant time and raises `Transloadit::Exception::InvalidSignature`
+for missing, malformed, or mismatched authentication. A successfully authenticated
+body that contains invalid JSON raises `MultiJson::ParseError`.
+
+Authenticate and process notifications idempotently using your Assembly IDs;
+signature verification alone does not prevent a valid notification from being replayed.
+
 ### 7. Other Assembly methods
 
 Transloadit also provides methods to retrieve/replay <dfn>Assemblies</dfn> and their <dfn>Notifications</dfn>.

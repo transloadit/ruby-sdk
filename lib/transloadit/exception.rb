@@ -8,6 +8,21 @@ module Transloadit::Exception
   class RequestFailed < StandardError
   end
 
+  # Exception raised when a notification is verified without a trusted Auth Secret.
+  # This is a configuration error, unlike a notification that fails authentication.
+  class MissingSecret < StandardError
+    def initialize
+      super("An Auth Secret is required to verify notifications")
+    end
+  end
+
+  # Exception raised when an Assembly notification cannot be authenticated.
+  class InvalidSignature < StandardError
+    def initialize
+      super("Invalid notification signature")
+    end
+  end
+
   #
   # Exception raised when Rate limit error response is returned from the API.
   # See {Rate Limiting}[https://transloadit.com/docs/api-docs/#rate-limiting]
