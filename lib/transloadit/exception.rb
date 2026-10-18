@@ -8,6 +8,14 @@ module Transloadit::Exception
   class RequestFailed < StandardError
   end
 
+  # Exception raised when a notification is verified without a trusted Auth Secret.
+  # This is a configuration error, unlike a notification that fails authentication.
+  class MissingSecret < StandardError
+    def initialize
+      super("An Auth Secret is required to verify notifications")
+    end
+  end
+
   # Exception raised when an Assembly notification cannot be authenticated.
   class InvalidSignature < StandardError
     def initialize

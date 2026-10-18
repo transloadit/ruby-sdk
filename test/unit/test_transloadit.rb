@@ -68,10 +68,18 @@ describe Transloadit do
       end
     end
 
-    it "must require an Auth Secret without exposing notification contents" do
+    it "must fail as a configuration error without an Auth Secret" do
       client = Transloadit.new(key: "workspace-key")
-      error = assert_raises Transloadit::Exception::InvalidSignature do
+      error = assert_raises Transloadit::Exception::MissingSecret do
         client.verify_notification!(transloadit: @payload, signature: @signature)
+      end
+
+      _(error.message).must_equal "An Auth Secret is required to verify notifications"
+    end
+
+    it "must report authentication failures without exposing notification contents" do
+      error = assert_raises Transloadit::Exception::InvalidSignature do
+        @client.verify_notification!(transloadit: @payload, signature: "0" * 40)
       end
 
       _(error.message).must_equal "Invalid notification signature"

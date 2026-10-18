@@ -141,13 +141,13 @@ class Transloadit
   #
   # @param [Hash] fields the transloadit and signature notification form fields
   # @return [Hash] the verified Assembly status
+  # @raise [Transloadit::Exception::MissingSecret] if the client has no Auth Secret
   # @raise [Transloadit::Exception::InvalidSignature] if authentication fails
   # @raise [MultiJson::ParseError] if the authenticated body contains invalid JSON
   #
   def verify_notification!(fields)
-    unless fields.is_a?(Hash) && secret.is_a?(String) && !secret.empty?
-      raise Transloadit::Exception::InvalidSignature
-    end
+    raise Transloadit::Exception::MissingSecret unless secret.is_a?(String) && !secret.empty?
+    raise Transloadit::Exception::InvalidSignature unless fields.is_a?(Hash)
 
     payload = fields["transloadit"] || fields[:transloadit]
     signature = fields["signature"] || fields[:signature]

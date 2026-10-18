@@ -274,7 +274,9 @@ status = transloadit.verify_notification!(request.POST)
 assembly_id = status.fetch('assembly_id')
 ```
 
-The client must have an Auth Secret. This helper accepts string or symbol field
+The client must have an Auth Secret; without one the helper raises
+`Transloadit::Exception::MissingSecret`, a configuration error rather than an
+authentication failure. This helper accepts string or symbol field
 keys and both the legacy SHA-1 signature and its `sha1:`-prefixed form. It compares
 the signature in constant time and raises `Transloadit::Exception::InvalidSignature`
 for missing, malformed, or mismatched authentication. A successfully authenticated
