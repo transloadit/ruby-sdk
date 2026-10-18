@@ -1,5 +1,7 @@
 ### Unreleased
 
+### 4.1.0 / 2026-10-18
+
 - Add `uploads: {name => io}` to Assembly options and `create!` for named multipart uploads, separate from signed JSON Instructions.
 - Send custom `fields` only in signed JSON, preserving numbers, booleans, arrays, objects, and null without duplicate form fields.
 - Keep IOs in legacy `fields` working as named uploads throughout v4, omit them from JSON, and warn to migrate to `uploads` before the next major release. Positional `file_N` uploads and `create!(fields: metadata)` overrides remain supported.
