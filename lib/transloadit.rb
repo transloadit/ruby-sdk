@@ -79,6 +79,10 @@ class Transloadit
   # @option options [String] :template_id the ID of a
   #   {template}[https://transloadit.com/templates] to use instead of
   #   specifying options here directly
+  # @option options [Hash] :fields custom metadata, retained as typed JSON;
+  #   passing upload IOs here is deprecated in favor of :uploads
+  # @option options [Hash<String, IO>] :uploads named multipart uploads, kept
+  #   separate from the signed JSON Instructions
   #
   def assembly(options = {})
     Transloadit::Assembly.new(self, options)

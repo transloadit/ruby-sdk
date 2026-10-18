@@ -171,6 +171,38 @@ files = [open('puppies.jpg'), open('kittens.jpg'), open('ferrets.jpg')]
 response = assembly.create! *files
 ```
 
+For names that match a Step's `use.fields` selector, pass `uploads: {name => io}`
+to `assembly` or `create!`. Uploads are multipart parts and are excluded from
+the signed JSON Instructions. Open files in binary mode and close them after
+the request; the SDK leaves caller-owned files open.
+
+```ruby
+File.open('puppies.jpg', 'rb') do |photo|
+  response = transloadit.assembly(
+    steps: {
+      resize: {
+        robot: '/image/resize',
+        use: {fields: ['photo']},
+        width: 320,
+        height: 240
+      }
+    },
+    uploads: {photo: photo},
+    fields: {count: 2, enabled: false, details: {caption: 'Puppies'}}
+  ).create!
+end
+```
+
+Alternatively, use `assembly.create!(uploads: {photo: photo}, fields: metadata)`.
+Per-call `uploads` and `fields` each replace the corresponding Assembly option;
+`uploads: {}` clears only the `uploads` option. Legacy IOs configured in `fields`
+remain uploads for compatibility. Positional files still use `file_0`,
+`file_1`, and so on, and take precedence over named uploads with those names.
+Upload values must respond to `read`; the names `params` and `signature` are reserved.
+For rate-limit retries, in-memory uploads must also support `pos` and `seek`;
+the SDK restores their original position. A non-seekable upload raises `IOError`
+if a retry is needed, instead of sending consumed bytes again.
+
 ### 3. Parallel Assembly
 
 Transloadit allows you to perform several processing steps in parallel. You
@@ -226,9 +258,10 @@ has some nice examples for that.
 
 ### 5. Using fields
 
-Transloadit allows you to submit form field values that you'll get back in the
-notification. This is quite handy if you want to add additional custom metadata
-to the upload itself. You can use fields like the following:
+Transloadit allows you to submit custom metadata that you'll get back in the
+notification. `fields` is included once in the signed JSON Instructions and is
+never duplicated as form fields. Numbers, booleans, arrays, objects, and null
+retain their JSON types. You can use fields like the following:
 
 ```ruby
 require 'transloadit'
@@ -245,6 +278,17 @@ transloadit.assembly(
   }
 ).create! open('/PATH/TO/FILE.mpg')
 ```
+
+`create!(fields: metadata)` also sets custom fields and replaces any metadata
+configured on the Assembly. Uploads and metadata may use the same name.
+
+For compatibility, IO values passed directly in a `fields` hash still upload
+under their field names throughout v4, but emit a deprecation warning. They are
+excluded from JSON; other values in that hash remain custom metadata. Migrate
+from `assembly(fields: {photo: file, count: 2})` to
+`assembly(uploads: {photo: file}, fields: {count: 2})` before the next major release.
+Explicit `uploads` take precedence over legacy IOs with the same name. Existing
+`assembly(fields: {photo: file}).create!(fields: metadata)` calls continue working.
 
 ### 6. Notify URL
 
@@ -463,6 +507,11 @@ for the latest [git main](https://rubydoc.info/github/transloadit/ruby-sdk/main/
 
 Please see [ci.yml](https://github.com/transloadit/ruby-sdk/tree/main/.github/workflows/ci.yml) for a list of supported ruby versions. It may also work on older Rubies, but support for those is not guaranteed. If it doesn't work on one of the officially supported Rubies, please file a
 [bug report](https://github.com/transloadit/ruby-sdk/issues). Compatibility patches for other Rubies are welcome.
+
+On Ruby 3.1, add `gem "json", "< 3.0"` to your application's Gemfile while
+[the older MultiJson/JSON compatibility issue](https://github.com/transloadit/ruby-sdk/issues/89)
+is open. Ruby 3.2 and newer can use JSON 3 with
+[MultiJson 1.21.2 or newer](https://github.com/sferik/multi_json/releases/tag/v1.21.2).
 
 ### Ruby 2.x
 
