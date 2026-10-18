@@ -20,6 +20,7 @@ describe Transloadit::Response do
       status: 200
     )
 
+    _(response.body.fetch("ok")).must_equal "ASSEMBLY_EXECUTING"
     returned = response.replace(replacement)
 
     _(returned).must_be_same_as response
@@ -27,6 +28,79 @@ describe Transloadit::Response do
     _(response.headers).must_equal x_request_id: "new-request"
     _(response.code).must_equal 200
     _(response.status).must_equal 200
+  end
+
+  it "must parse a successful body only once" do
+    response = Transloadit::Response.new(body: '{"ok":"ASSEMBLY_COMPLETED"}', headers: {}, status: 200)
+    calls = 0
+    parser = MultiJson.method(:load)
+    with_singleton_method(MultiJson, :load, proc { |raw|
+      calls += 1
+      parser.call(raw)
+    }) do
+      parsed = response.body
+      _(response.body).must_be_same_as parsed
+      _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
+      _(response.inspect).must_equal parsed.inspect
+    end
+
+    _(calls).must_equal 1
+  end
+
+  it "must preserve array bodies" do
+    response = Transloadit::Response.new(body: '[{"assembly_id":"assembly-id"}]', headers: {}, status: 200)
+
+    _(response.body).must_equal [{"assembly_id" => "assembly-id"}]
+  end
+
+  it "must memoize JSON null and false without changing their values" do
+    null_response = Transloadit::Response.new(body: "null", headers: {}, status: 200)
+    false_response = Transloadit::Response.new(body: "false", headers: {}, status: 200)
+    assert_nil null_response.body
+    _(false_response.body).must_equal false
+
+    with_singleton_method(MultiJson, :load, proc { |_raw| raise "Body was parsed again" }) do
+      assert_nil null_response.body
+      _(false_response.body).must_equal false
+    end
+  end
+
+  it "must expose invalid-response diagnostics without including the body in the message" do
+    raw_body = "<html>Proxy error: sensitive upstream diagnostics</html>"
+    response = Transloadit::Response.new(body: raw_body, headers: {}, status: 502)
+
+    error = assert_raises(Transloadit::Exception::InvalidResponse) { response.body }
+
+    _(error.status).must_equal 502
+    _(error.raw_body).must_equal raw_body
+    _(error.cause).must_be_kind_of MultiJson::ParseError
+    _(error.message).must_equal "Transloadit returned invalid JSON (HTTP 502)"
+  end
+
+  it "must wrap parse failures raised through attribute access" do
+    response = Transloadit::Response.new(body: "", headers: {}, status: 503)
+
+    error = assert_raises(Transloadit::Exception::InvalidResponse) { response["ok"] }
+    _(error.status).must_equal 503
+  end
+
+  it "must reject whitespace-only bodies" do
+    response = Transloadit::Response.new(body: " \n\t", headers: {}, status: 502)
+
+    assert_raises(Transloadit::Exception::InvalidResponse) { response.body }
+  end
+
+  it "must discard a parsed body when a replacement contains invalid JSON" do
+    response = Transloadit::Response.new(body: '{"ok":"ASSEMBLY_EXECUTING"}', headers: {}, status: 200)
+    _(response.body.fetch("ok")).must_equal "ASSEMBLY_EXECUTING"
+    replacement = Transloadit::Response.new(body: "upstream failure", headers: {}, status: 502)
+
+    response.replace(replacement)
+    error = assert_raises(Transloadit::Exception::InvalidResponse) { response.body }
+    _(error.status).must_equal 502
+
+    response.replace(Transloadit::Response.new(body: '{"ok":"ASSEMBLY_COMPLETED"}', headers: {}, status: 200))
+    _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
   end
 
   describe "when initialized" do
