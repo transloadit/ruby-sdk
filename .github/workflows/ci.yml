@@ -25,7 +25,7 @@ jobs:
           lfs: true
       - uses: actions/setup-node@v4
         with:
-          node-version: "22.23.4"
+          node-version: "26.12.1"
       - run: npm install -g tsx
       - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f
         with:
