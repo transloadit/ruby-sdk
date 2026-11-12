@@ -30,15 +30,15 @@ describe Transloadit::Assembly do
 
     it "must not wrap a hash step" do
       @assembly.options[:steps] = {foo: 1}
-      _(@assembly.steps).must_equal foo: 1
+      _(@assembly.steps).must_equal({foo: 1})
     end
 
     it "must produce Transloadit-compatible hash output" do
-      _(@assembly.to_hash).must_equal(
+      _(@assembly.to_hash).must_equal({
         auth: @transloadit.to_hash,
         steps: @assembly.steps,
         redirect_url: @redirect
-      )
+      })
     end
 
     it "must submit files for upload" do

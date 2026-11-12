@@ -29,11 +29,11 @@ describe Transloadit::Step do
     end
 
     it "must remember the parameters" do
-      _(@step.options).must_equal(
+      _(@step.options).must_equal({
         key: @key,
         secret: @secret,
         bucket: @bucket
-      )
+      })
     end
 
     it "must inspect like a hash" do
@@ -41,14 +41,14 @@ describe Transloadit::Step do
     end
 
     it "must produce Transloadit-compatible hash output" do
-      _(@step.to_hash).must_equal(
+      _(@step.to_hash).must_equal({
         @step.name => {
           robot: @robot,
           key: @key,
           secret: @secret,
           bucket: @bucket
         }
-      )
+      })
     end
 
     it "must produce Transloadit-compatible JSON output" do

@@ -62,7 +62,7 @@ describe Transloadit do
       _(step).must_be_kind_of Transloadit::Step
       _(step.name).must_equal "resize"
       _(step.robot).must_equal "/image/resize"
-      _(step.options).must_equal width: 320
+      _(step.options).must_equal({width: 320})
     end
 
     it "must create assembly api instances" do
