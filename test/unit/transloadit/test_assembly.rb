@@ -170,7 +170,8 @@ describe Transloadit::Assembly do
             response = @assembly.create! open("lib/transloadit/version.rb")
             _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
           }
-          _(warning).must_equal "Rate limit reached. Waiting for 0 seconds before retrying.\n"
+          # Dependencies may emit deprecation warnings on their first use.
+          _(warning.lines.count("Rate limit reached. Waiting for 0 seconds before retrying.\n")).must_equal 1
         end
       end
 
