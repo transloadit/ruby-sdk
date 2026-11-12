@@ -24,7 +24,7 @@ describe Transloadit::Response do
 
     _(returned).must_be_same_as response
     _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
-    _(response.headers).must_equal x_request_id: "new-request"
+    _(response.headers).must_equal({x_request_id: "new-request"})
     _(response.code).must_equal 200
     _(response.status).must_equal 200
   end

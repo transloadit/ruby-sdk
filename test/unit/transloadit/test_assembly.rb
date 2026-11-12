@@ -30,15 +30,15 @@ describe Transloadit::Assembly do
 
     it "must not wrap a hash step" do
       @assembly.options[:steps] = {foo: 1}
-      _(@assembly.steps).must_equal foo: 1
+      _(@assembly.steps).must_equal({foo: 1})
     end
 
     it "must produce Transloadit-compatible hash output" do
-      _(@assembly.to_hash).must_equal(
+      _(@assembly.to_hash).must_equal({
         auth: @transloadit.to_hash,
         steps: @assembly.steps,
         redirect_url: @redirect
-      )
+      })
     end
 
     it "must submit files for upload" do
@@ -170,7 +170,8 @@ describe Transloadit::Assembly do
             response = @assembly.create! open("lib/transloadit/version.rb")
             _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
           }
-          _(warning).must_equal "Rate limit reached. Waiting for 0 seconds before retrying.\n"
+          # Dependencies may emit deprecation warnings on their first use.
+          _(warning.lines.count("Rate limit reached. Waiting for 0 seconds before retrying.\n")).must_equal 1
         end
       end
 

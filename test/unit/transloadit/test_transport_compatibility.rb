@@ -23,7 +23,7 @@ describe "Faraday transport compatibility" do
     _(response["ok"]).must_equal "ASSEMBLY_COMPLETED"
     assert_requested(:get, /\A#{Regexp.escape(endpoint)}/) do |request|
       query = Addressable::URI.parse(request.uri.to_s).query_values
-      _(MultiJson.load(query.fetch("params"))).must_equal "wait" => true
+      _(MultiJson.load(query.fetch("params"))).must_equal({"wait" => true})
       _(query.fetch("signature")).must_match(/\Asha384:[0-9a-f]{96}\z/)
       _(request.headers.fetch("Transloadit-Client")).must_equal "ruby-sdk:#{Transloadit::VERSION}"
     end
@@ -38,7 +38,7 @@ describe "Faraday transport compatibility" do
 
     assert_requested(:post, endpoint) do |request|
       form = URI.decode_www_form(request.body).to_h
-      _(MultiJson.load(form.fetch("params"))).must_equal "template_id" => "template-id"
+      _(MultiJson.load(form.fetch("params"))).must_equal({"template_id" => "template-id"})
       _(form.fetch("signature")).must_match(/\Asha384:[0-9a-f]{96}\z/)
       _(request.headers.fetch("Content-Type")).must_match(/\Aapplication\/x-www-form-urlencoded/)
     end
@@ -53,7 +53,7 @@ describe "Faraday transport compatibility" do
 
     assert_requested(:put, endpoint) do |request|
       form = URI.decode_www_form(request.body).to_h
-      _(MultiJson.load(form.fetch("params"))).must_equal "name" => "Updated"
+      _(MultiJson.load(form.fetch("params"))).must_equal({"name" => "Updated"})
       _(form.fetch("signature")).must_match(/\Asha384:[0-9a-f]{96}\z/)
     end
   end
@@ -67,7 +67,7 @@ describe "Faraday transport compatibility" do
 
     assert_requested(:delete, endpoint) do |request|
       form = URI.decode_www_form(request.body).to_h
-      _(MultiJson.load(form.fetch("params"))).must_equal "reason" => "cleanup"
+      _(MultiJson.load(form.fetch("params"))).must_equal({"reason" => "cleanup"})
       _(form.fetch("signature")).must_match(/\Asha384:[0-9a-f]{96}\z/)
     end
   end
@@ -86,7 +86,7 @@ describe "Faraday transport compatibility" do
     _(response).wont_be_kind_of Faraday::Response
     _(response.code).must_equal 422
     _(response.status).must_equal 422
-    _(response.headers).must_equal retry_after: "5", x_request_id: "request-id"
+    _(response.headers).must_equal({retry_after: "5", x_request_id: "request-id"})
     _(response["error"]).must_equal "ASSEMBLY_NOT_FOUND"
   end
 

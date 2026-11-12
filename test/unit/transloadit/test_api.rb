@@ -27,10 +27,10 @@ describe Transloadit::ApiModel do
     end
 
     it "must remember the options passed" do
-      _(api.options).must_equal(
+      _(api.options).must_equal({
         foo: foo,
         bar: bar
-      )
+      })
     end
 
     it "must inspect like a hash" do
@@ -38,11 +38,11 @@ describe Transloadit::ApiModel do
     end
 
     it "must produce Transloadit-compatible hash output" do
-      _(api.to_hash).must_equal(
+      _(api.to_hash).must_equal({
         auth: transloadit.to_hash,
         foo: foo,
         bar: bar
-      )
+      })
     end
 
     it "must produce Transloadit-compatible JSON output" do
