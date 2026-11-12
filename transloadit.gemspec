@@ -23,6 +23,8 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency "faraday", ">= 2.0", "< 3.0"
   gem.add_dependency "faraday-multipart", "~> 1.0"
+  # Ruby 3.1 uses MultiJson 1.19, whose positional parse options are incompatible with JSON 3.
+  gem.add_dependency "json", "< 3.0"
   gem.add_dependency "multi_json"
   gem.add_dependency "mime-types"
 

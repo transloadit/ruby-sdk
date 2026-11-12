@@ -2,7 +2,10 @@ require "transloadit"
 
 module Transloadit::Response::Assembly
   def reload!
-    replace Transloadit::Request.new(self["assembly_ssl_url"]).get
+    url = assembly_ssl_url
+    raise ArgumentError, "Assembly response does not include a status URL" if url.nil? || url.empty?
+
+    replace Transloadit::Request.new(url).get
   end
 
   def cancel!
@@ -34,7 +37,7 @@ module Transloadit::Response::Assembly
   end
 
   def finished?
-    aborted? || canceled? || completed? || error?
+    aborted? || canceled? || completed? || (error? && !status_rate_limit?)
   end
 
   def uploading?
@@ -45,8 +48,22 @@ module Transloadit::Response::Assembly
     self["error"] == "RATE_LIMIT_REACHED"
   end
 
+  def status_rate_limit?
+    self["error"] == "ASSEMBLY_STATUS_FETCHING_RATE_LIMIT_REACHED"
+  end
+
   def wait_time
-    self["info"]["retryIn"] || 0
+    self["info"]&.fetch("retryIn", 0) || 0
+  end
+
+  def replace(other)
+    assembly_ssl_url
+    super
+  end
+
+  # Status rate-limit responses omit this URL, so retain it across reloads.
+  def assembly_ssl_url
+    @assembly_ssl_url ||= self["assembly_ssl_url"]
   end
 
   DEFAULT_RELOAD_TRIES = 600
@@ -55,7 +72,7 @@ module Transloadit::Response::Assembly
     tries = options[:tries] || DEFAULT_RELOAD_TRIES
 
     tries.times do
-      sleep 1
+      sleep(status_rate_limit? ? [1, wait_time].max : 1)
       reload!
       return self if finished?
     end

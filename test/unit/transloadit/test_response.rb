@@ -116,6 +116,74 @@ describe Transloadit::Response do
         end
       end
     end
+
+    it "must retry status rate limits at the original URL after retryIn" do
+      WebMock.reset!
+      response = Transloadit::Response.new(
+        body: MultiJson.dump(ok: "ASSEMBLY_EXECUTING", assembly_ssl_url: request_uri),
+        headers: {}, status: 200
+      ).extend!(Transloadit::Response::Assembly)
+      WebMock.stub_request(:get, request_uri).to_return(
+        {status: 429, body: '{"error":"ASSEMBLY_STATUS_FETCHING_RATE_LIMIT_REACHED","info":{"retryIn":5}}'},
+        {status: 200, body: '{"ok":"ASSEMBLY_COMPLETED"}'}
+      )
+      delays = []
+
+      with_singleton_method(response, :sleep, proc { |delay| delays << delay }) do
+        _(response.reload_until_finished!(tries: 2)).must_be_same_as response
+      end
+
+      _(delays).must_equal [1, 5]
+      _(response.completed?).must_equal true
+      _(response.assembly_ssl_url).must_equal request_uri
+      WebMock.assert_requested(:get, request_uri, times: 2)
+    ensure
+      WebMock.reset!
+    end
+
+    it "must retain the status URL when manually reloading after a rate limit" do
+      WebMock.reset!
+      WebMock.stub_request(:get, request_uri).to_return(
+        {status: 429, body: '{"error":"ASSEMBLY_STATUS_FETCHING_RATE_LIMIT_REACHED"}'},
+        {status: 200, body: '{"ok":"ASSEMBLY_COMPLETED"}'}
+      )
+
+      @response.reload!
+      _(@response.status_rate_limit?).must_equal true
+      _(@response.finished?).must_equal false
+      _(@response.wait_time).must_equal 0
+      @response.reload!
+
+      _(@response.completed?).must_equal true
+      WebMock.assert_requested(:get, request_uri, times: 2)
+    ensure
+      WebMock.reset!
+    end
+
+    it "must still stop polling at the tries limit when status requests are rate limited" do
+      WebMock.reset!
+      WebMock.stub_request(:get, request_uri).to_return(
+        status: 429, body: '{"error":"ASSEMBLY_STATUS_FETCHING_RATE_LIMIT_REACHED"}'
+      )
+
+      with_singleton_method(@response, :sleep, proc { |_delay| }) do
+        assert_raises Transloadit::Exception::ReloadLimitReached do
+          @response.reload_until_finished!(tries: 2)
+        end
+      end
+
+      _(@response.finished?).must_equal false
+      WebMock.assert_requested(:get, request_uri, times: 2)
+    ensure
+      WebMock.reset!
+    end
+
+    it "must reject a reload without a status URL before making a request" do
+      response = Transloadit::Response.new(body: "{}", headers: {}, status: 200)
+        .extend!(Transloadit::Response::Assembly)
+
+      assert_raises(ArgumentError) { response.reload! }
+    end
   end
 
   describe "statuses" do
